@@ -1,10 +1,12 @@
 package com.example.shoppingsystem;
 
+import java.io.Serializable;
+
 /**
  * Created by 79124 on 2019/4/1.
  */
 
-public class Product {
+public class Product implements Serializable{
     private String productId;//编号
     private String productName;//名字
     private int productImageId;//图片

@@ -3,7 +3,7 @@ package com.example.shoppingsystem;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class OrderActivity extends AppCompatActivity {
+public class OrderActivity extends BaseActiity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

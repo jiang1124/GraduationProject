@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActiity {
 
     private List<Product> productList = new ArrayList<>();
 
@@ -22,11 +22,10 @@ public class MainActivity extends AppCompatActivity {
         if(actionBar!=null)
             actionBar.hide();
         initFruits();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.product_view);
-        StaggeredGridLayoutManager layoutManager = new
-                StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.product_list_fragment);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        ProductListAdapter adapter = new ProductListAdapter(productList);
+        ProductListAdapter adapter = new ProductListAdapter(productList,MainActivity.this);
         recyclerView.setAdapter(adapter);
     }
 

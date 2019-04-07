@@ -18,7 +18,7 @@
         <activity android:name=".ProductActivity" />
         <activity android:name=".OrderActivity" />
         <activity android:name=".CollectionActivity" />
-        <activity android:name=".HistoryActivity"></activity>
+        <activity android:name=".HistoryActivity" />
     </application>
 
 </manifest>

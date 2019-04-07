@@ -9,9 +9,9 @@ import android.widget.LinearLayout;
  * Created by 79124 on 2019/4/1.
  */
 
-public class ProductListLayout extends LinearLayout {
-    public ProductListLayout(Context context, AttributeSet attrs){
+public class ProductLayout extends LinearLayout {
+    public ProductLayout(Context context, AttributeSet attrs){
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.product_list_layout,this);
+        LayoutInflater.from(context).inflate(R.layout.product_layout,this);
     }
 }
