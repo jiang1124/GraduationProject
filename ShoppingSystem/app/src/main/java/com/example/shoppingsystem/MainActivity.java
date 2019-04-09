@@ -5,12 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends BaseActiity {
+public class MainActivity extends BaseActiity implements View.OnClickListener{
 
     private List<Product> productList = new ArrayList<>();
 
@@ -22,11 +25,51 @@ public class MainActivity extends BaseActiity {
         if(actionBar!=null)
             actionBar.hide();
         initFruits();
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.product_list_fragment);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.product_list_layout_recycler);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         ProductListAdapter adapter = new ProductListAdapter(productList,MainActivity.this);
         recyclerView.setAdapter(adapter);
+
+        Button homeButton = (Button) findViewById(R.id.home_button);
+        Button sortButton = (Button) findViewById(R.id.sort_button);
+        Button shoppingCartButton =(Button) findViewById(R.id.shopping_cart_button);
+        Button personButton =(Button) findViewById(R.id.person_button);
+        homeButton.setOnClickListener(this);
+        sortButton.setOnClickListener(this);
+        shoppingCartButton.setOnClickListener(this);
+        personButton.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v){
+        LinearLayout homeView = (LinearLayout) findViewById(R.id.product_list_layout_main);
+        LinearLayout sortView = (LinearLayout) findViewById(R.id.sort_layout_main);
+        LinearLayout shoppingCartView = (LinearLayout) findViewById(R.id.shopping_cart_layout_main);
+        LinearLayout personView = (LinearLayout) findViewById(R.id.person_layout_main);
+        switch (v.getId()){
+            case R.id.home_button:
+                PageSwitch(sortView, shoppingCartView, personView, homeView);
+                break;
+            case R.id.sort_button:
+                PageSwitch(homeView, shoppingCartView, personView, sortView);
+                break;
+            case R.id.shopping_cart_button:
+                PageSwitch(homeView, sortView, personView, shoppingCartView);
+                break;
+            case R.id.person_button:
+                PageSwitch(homeView, sortView, shoppingCartView, personView);
+                break;
+            default:
+                break;
+        }
+    }
+//页面切换
+    private final void PageSwitch(LinearLayout goneView1,LinearLayout goneView2,LinearLayout goneView3,LinearLayout visibleView){
+        goneView1.setVisibility(View.GONE);
+        goneView2.setVisibility(View.GONE);
+        goneView3.setVisibility(View.GONE);
+        visibleView.setVisibility(View.VISIBLE);
     }
 
     private void initFruits() {
@@ -51,6 +94,7 @@ public class MainActivity extends BaseActiity {
             Product mango = new Product("11",getRandomLengthName("Mango"), R.drawable.mango_pic);
             productList.add(mango);
     }
+
     private String getRandomLengthName(String name) {
         Random random = new Random();
         int length = random.nextInt(20) + 1;

@@ -3,17 +3,15 @@ package com.example.shoppingsystem;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 
 /**
  * Created by 79124 on 2019/4/1.
  */
 
-public class MenuLayout extends LinearLayout{
-    public MenuLayout(Context context, AttributeSet attrs){
+public class ProductListLayout extends LinearLayout {
+    public ProductListLayout(Context context, AttributeSet attrs){
         super(context, attrs);
-        LayoutInflater.from(context).inflate(R.layout.menu_layout,this);
+        LayoutInflater.from(context).inflate(R.layout.product_list_layout,this);
     }
 }

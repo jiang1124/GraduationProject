@@ -10,12 +10,36 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <FrameLayout
-        android:id="@+id/product_list_fragment"
-        android:name="com.example.shoppingsystem.ProductListFrament"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4"
+    <com.example.shoppingsystem.ProductListLayout
+        android:id="@+id/product_list_layout_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:visibility="visible"
+        />
+
+    <com.example.shoppingsystem.SortLayout
+        android:id="@+id/sort_layout_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:visibility="gone"
+        />
+
+    <com.example.shoppingsystem.ShoppingCartLayout
+        android:id="@+id/shopping_cart_layout_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:visibility="gone"
+        />
+
+    <com.example.shoppingsystem.PersonLayout
+        android:id="@+id/person_layout_main"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:visibility="gone"
         />
 
     <com.example.shoppingsystem.MenuLayout
