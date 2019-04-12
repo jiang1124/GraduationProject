@@ -3,22 +3,27 @@
     package="com.example.shoppingsystem">
 
     <application
+        android:name="com.example.shoppingsystem.classfile.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".activity.MainActivity"
+            android:label="客户端">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProductActivity" />
-        <activity android:name=".OrderActivity" />
-        <activity android:name=".CollectionActivity" />
-        <activity android:name=".HistoryActivity" />
+        <activity android:name=".activity.ProductActivity" />
+        <activity android:name=".activity.OrderActivity" />
+        <activity android:name=".activity.CollectionActivity" />
+        <activity android:name=".activity.HistoryActivity" />
+        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.SearchActivity"></activity>
     </application>
 
 </manifest>

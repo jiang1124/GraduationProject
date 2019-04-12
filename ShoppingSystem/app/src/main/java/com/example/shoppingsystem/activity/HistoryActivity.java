@@ -1,9 +1,11 @@
-package com.example.shoppingsystem;
+package com.example.shoppingsystem.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class HistoryActivity extends BaseActiity {
+import com.example.shoppingsystem.R;
+import com.example.shoppingsystem.classfile.BaseActivity;
+
+public class HistoryActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

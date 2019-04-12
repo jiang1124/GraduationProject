@@ -1,50 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-
-    <com.example.shoppingsystem.SearchLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1">
 
-    <com.example.shoppingsystem.ProductListLayout
-        android:id="@+id/product_list_layout_main"
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_main"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:layout_scrollFlags="scroll|enterAlways|snap">
+
+                <!--搜索栏-->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:id="@+id/search_layout_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true">
+
+                    <EditText
+                        android:id="@+id/search_edit"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:background="#fff"
+                        android:textColor="#000"
+                        />
+
+                    <Button
+                        android:id="@+id/search_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🔍"
+                        />
+
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.AppBarLayout>
+
+        <!--商品列表页-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/product_list_layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
+
+        <!--分类页-->
+        <com.example.shoppingsystem.layout.SortLayout
+            android:id="@+id/sort_layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"/>
+
+        <!--购物车页-->
+        <com.example.shoppingsystem.layout.ShoppingCartLayout
+            android:id="@+id/shopping_cart_layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            />
+
+        <!--个人页-->
+        <com.example.shoppingsystem.layout.PersonLayout
+            android:id="@+id/person_layout_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            />
+    </android.support.design.widget.CoordinatorLayout>
+
+    <View  android:layout_height="1px"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:visibility="visible"
-        />
-
-    <com.example.shoppingsystem.SortLayout
-        android:id="@+id/sort_layout_main"
+        android:background="#ddf"/>
+    <!--下菜单栏-->
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:visibility="gone"
-        />
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
 
-    <com.example.shoppingsystem.ShoppingCartLayout
-        android:id="@+id/shopping_cart_layout_main"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:visibility="gone"
-        />
 
-    <com.example.shoppingsystem.PersonLayout
-        android:id="@+id/person_layout_main"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="5"
-        android:visibility="gone"
-        />
+        <Button
+            android:id="@+id/home_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="首页"
+            />
 
-    <com.example.shoppingsystem.MenuLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        <Button
+            android:id="@+id/sort_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="分类"
+            />
 
-</LinearLayout>
+        <Button
+            android:id="@+id/shopping_cart_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="购物车"
+            />
+
+        <Button
+            android:id="@+id/person_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="我的"
+            />
+    </LinearLayout>
+
+    </LinearLayout>

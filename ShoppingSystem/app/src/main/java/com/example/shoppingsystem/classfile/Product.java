@@ -1,4 +1,4 @@
-package com.example.shoppingsystem;
+package com.example.shoppingsystem.classfile;
 
 import java.io.Serializable;
 

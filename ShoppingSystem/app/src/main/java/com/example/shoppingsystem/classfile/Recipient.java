@@ -1,4 +1,4 @@
-package com.example.shoppingsystem;
+package com.example.shoppingsystem.classfile;
 
 /**
  * Created by 79124 on 2019/4/3.

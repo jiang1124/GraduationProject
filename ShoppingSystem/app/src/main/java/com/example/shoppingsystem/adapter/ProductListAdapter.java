@@ -1,4 +1,4 @@
-package com.example.shoppingsystem;
+package com.example.shoppingsystem.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.shoppingsystem.R;
+import com.example.shoppingsystem.activity.ProductActivity;
+import com.example.shoppingsystem.classfile.Product;
 
 import java.util.List;
 
@@ -46,7 +49,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType){
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_list_item,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_simple_item,parent,false);
         final ViewHolder holder = new ViewHolder(view);
         holder.productView.setOnClickListener(new View.OnClickListener(){
             @Override
