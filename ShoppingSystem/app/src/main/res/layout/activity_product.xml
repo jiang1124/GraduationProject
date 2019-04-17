@@ -78,15 +78,27 @@
                                 android:layout_weight="1"
                                 android:layout_marginRight="10dp"
                                 android:layout_height="wrap_content"
-                                android:text="realPrice"/>
+                                android:text="salePrice"/>
                         </LinearLayout>
 
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/additional_charges"
-                            android:layout_width="match_parent"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
+                            android:text="additionalCharges"/>
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="10dp"
                             android:text="another"/>
+                        </LinearLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
 

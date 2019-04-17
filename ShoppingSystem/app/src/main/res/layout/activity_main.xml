@@ -11,57 +11,12 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_main"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:layout_scrollFlags="scroll|enterAlways|snap">
-
-                <!--搜索栏-->
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:id="@+id/search_layout_main"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true">
-
-                    <EditText
-                        android:id="@+id/search_edit"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:background="#fff"
-                        android:textColor="#000"
-                        />
-
-                    <Button
-                        android:id="@+id/search_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="🔍"
-                        />
-
-                </LinearLayout>
-            </android.support.v7.widget.Toolbar>
-        </android.support.design.widget.AppBarLayout>
-
-        <!--商品列表页-->
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/product_list_layout_main"
+        <!--首页列表页-->
+        <com.example.shoppingsystem.layout.HomeLayout
+            android:id="@+id/home_layout_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+            android:visibility="visible"/>
 
         <!--分类页-->
         <com.example.shoppingsystem.layout.SortLayout

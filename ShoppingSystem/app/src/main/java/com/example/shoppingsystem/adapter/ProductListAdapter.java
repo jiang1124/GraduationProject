@@ -2,6 +2,7 @@ package com.example.shoppingsystem.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.activity.ProductActivity;
-import com.example.shoppingsystem.classfile.Product;
+import com.example.shoppingsystem.emtity.Product;
 
 import java.util.List;
 
@@ -21,24 +22,24 @@ import java.util.List;
 
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ViewHolder> {
     private List<Product> mProductList;
-    private Context context;
+    private Context mContext;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        View productView;
+        CardView cardView;
         ImageView productImage;
         TextView productName;
 
         public ViewHolder(View view) {
             super(view);
-            productView = view;
-            productImage = (ImageView) view.findViewById(R.id.product_image);
-            productName = (TextView) view.findViewById(R.id.product_name);
+            cardView = (CardView) view;
+            productImage = (ImageView) view.findViewById(R.id.iv_product_image);
+            productName = (TextView) view.findViewById(R.id.tv_product_name);
         }
     }
 
-    public ProductListAdapter(List<Product> productList,Context context){
+    public ProductListAdapter(List<Product> productList){
         mProductList = productList;
-        this.context = context;
+        notifyDataSetChanged();
     }
 
     public static void actionStart(Context context,Product product){
@@ -49,14 +50,18 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
 
     @Override
     public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType){
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_simple_item,parent,false);
+        if(mContext == null)
+        {
+            mContext = parent.getContext();
+        }
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product_card,parent,false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.productView.setOnClickListener(new View.OnClickListener(){
+        holder.cardView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
                 int position = holder.getAdapterPosition();
                 Product product = mProductList.get(position);
-                ProductListAdapter.actionStart(context,product);
+                ProductListAdapter.actionStart(mContext,product);
             }
         });
         holder.productImage.setOnClickListener(new View.OnClickListener(){
@@ -64,7 +69,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             public void onClick(View v){
                 int position = holder.getAdapterPosition();
                 Product product = mProductList.get(position);
-                ProductListAdapter.actionStart(context,product);
+                ProductListAdapter.actionStart(mContext,product);
             }
         });
         return holder;

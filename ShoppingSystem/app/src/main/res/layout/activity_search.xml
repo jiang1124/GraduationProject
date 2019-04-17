@@ -1,18 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_search"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.shoppingsystem.activity.SearchActivity">
+    >
 
-    <TextView
+    <!--搜索栏-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        >
+
+        <EditText
+            android:id="@+id/et_search_in_search"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#fff"
+            android:textColor="#000"
+            android:hint="输入搜索内容"
+            />
+
+        <Button
+            android:id="@+id/btn_search_in_search"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="搜索"
+            />
+
+    </LinearLayout>
+    <View  android:layout_height="1px"
+        android:layout_width="match_parent"
+        android:background="#ddf"/>
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <TextView
+            android:id="@+id/tv_default_queue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="#1a1a1a"
+            android:textSize="18sp"
+            android:text="默认排序"/>
+
+        <TextView
+            android:id="@+id/tv_sales_volume_queue"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:maxLength="18"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="#4c4c4c"
+            android:textSize="15sp"
+            android:text="销量排序"/>
+
+        <TextView
+            android:id="@+id/tv_price_queue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:gravity="center"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="#4c4c4c"
+            android:textSize="15sp"
+            android:text="价格排序"/>
+
+
+    </RelativeLayout>
+    <View  android:layout_height="1px"
+        android:layout_width="match_parent"
+        android:background="#ddf"/>
+    <!--商品列表页-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_product_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="搜索页"/>
+        android:visibility="visible"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
-</RelativeLayout>
+
+</LinearLayout>
+

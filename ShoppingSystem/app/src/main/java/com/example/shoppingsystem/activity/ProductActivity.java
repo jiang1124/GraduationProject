@@ -10,17 +10,44 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.shoppingsystem.classfile.BaseActivity;
-import com.example.shoppingsystem.classfile.Product;
+import com.example.shoppingsystem.emtity.Product;
 import com.example.shoppingsystem.R;
+import com.example.shoppingsystem.util.ToastUtil;
 
-public class ProductActivity extends BaseActivity implements View.OnClickListener{
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.OnClick;
+
+public class ProductActivity extends BaseActivity{
+    @InjectView(R.id.collect_button)
+    Button collectButton;
+    @InjectView(R.id.in_shopping_cart_button)
+    Button inCartButton;
+    @InjectView(R.id.buy_button)
+    Button buyButton;
+    @InjectView(R.id.product_price_text)
+    TextView productPriceText;
+    @InjectView(R.id.product_sale_price)
+    TextView productSalePriceText;
+    @InjectView(R.id.additional_charges)
+    TextView additionalCharges;
+    @InjectView(R.id.product_name_text)
+    TextView productNameText;
+    @InjectView(R.id.product_detail_text)
+    TextView productDetailText;
+    @InjectView(R.id.collapsing_toolbar)
+    CollapsingToolbarLayout collapsingToolbar;
+    @InjectView(R.id.toolbar)
+    Toolbar toolbar;
+    @InjectView(R.id.product_image_product)
+    ImageView productImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product);
+        ButterKnife.inject(this);
         /*
          * 接收上一活动传输的数据
          */
@@ -29,28 +56,21 @@ public class ProductActivity extends BaseActivity implements View.OnClickListene
         /*
          * 设置图片及文本内容
          */
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        ImageView productImageView = (ImageView) findViewById(R.id.product_image_product);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        String priceStr = "价格："+product.getProductPrice();
+        String salePriceStr = "促销价："+product.getProductSalePrice();
+        String addStr = "运费:"+product.getAdditionalCharges();
         collapsingToolbar.setTitle(product.getProductName());
         productImageView.setImageResource(product.getProductImageId());
-        setTextViewContent(R.id.product_price_text,"价格："+product.getProductPrice());
-        setTextViewContent(R.id.product_sale_price,"促销价："+product.getProductSalePrice());
-        setTextViewContent(R.id.additional_charges,"运费:"+product.getAdditionalCharges());
-        setTextViewContent(R.id.product_name_text,product.getProductName());
-        setTextViewContent(R.id.product_detail_text,product.getProductDetail());
-
-        Button collectButton = (Button) findViewById(R.id.collect_button);
-        collectButton.setOnClickListener(this);
-        Button inCartButton = (Button) findViewById(R.id.in_shopping_cart_button);
-        inCartButton.setOnClickListener(this);
-        Button buyButton = (Button) findViewById(R.id.buy_button);
-        buyButton.setOnClickListener(this);
+        productPriceText.setText(priceStr);
+        productSalePriceText.setText(salePriceStr);
+        additionalCharges.setText(addStr);
+        productNameText.setText(product.getProductName());
+        productDetailText.setText(product.getProductDetail());
     }
 
     @Override
@@ -63,24 +83,20 @@ public class ProductActivity extends BaseActivity implements View.OnClickListene
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    @OnClick({R.id.collect_button,R.id.in_shopping_cart_button,R.id.buy_button})
     public void onClick(View v){
         switch (v.getId()){
             case R.id.collect_button:
-                Toast.makeText(v.getContext(),"已收藏",Toast.LENGTH_SHORT).show();
+                ToastUtil.makeText(v.getContext(),"已收藏");
                 break;
             case R.id.in_shopping_cart_button:
-                Toast.makeText(v.getContext(),"已入购物车",Toast.LENGTH_SHORT).show();
+                ToastUtil.makeText(v.getContext(),"已入购物车");
                 break;
             case R.id.buy_button:
-                Toast.makeText(v.getContext(),"Buy",Toast.LENGTH_SHORT).show();
+                ToastUtil.makeText(v.getContext(),"Buy");
                 break;
             default:
                 break;
         }
-    }
-    final private void setTextViewContent(int textViewId,String textContent){
-        TextView textView = (TextView) findViewById(textViewId);
-        textView.setText(textContent);
     }
 }
