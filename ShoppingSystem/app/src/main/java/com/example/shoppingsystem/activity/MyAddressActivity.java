@@ -6,21 +6,15 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.telecom.Call;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.adapter.AddressAdapter;
-import com.example.shoppingsystem.adapter.ProductListAdapter;
 import com.example.shoppingsystem.emtity.Recipient;
-import com.example.shoppingsystem.util.HttpCallbackListener;
 import com.example.shoppingsystem.util.HttpUtil;
 import com.example.shoppingsystem.util.LogUtil;
 import com.example.shoppingsystem.util.ResponseUtil;
 import com.example.shoppingsystem.util.ToastUtil;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
