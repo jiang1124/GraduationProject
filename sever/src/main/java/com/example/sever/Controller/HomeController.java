@@ -18,11 +18,11 @@ public class HomeController {
         List<Product> productsList = new ArrayList<>();
         Product apple = new Product("1", "Apple", "http://10.0.2.2:8080/image/apple_pic.png",15,9,"苹果",99,"水果",10,"红色");
         productsList.add(apple);
-        Product banana = new Product("2", "Banana", "http://10.0.2.2:8080/image/apple_pic.png",25,19,"香蕉",34,"水果",10,"黄色");
+        Product banana = new Product("2", "Banana", "http://10.0.2.2:8080/image/banana_pic.png",25,19,"香蕉",34,"水果",10,"黄色");
         productsList.add(banana);
-        Product orange = new Product("3", "Orange", "http://10.0.2.2:8080/image/apple_pic.png",35,29,"橘子",659,"水果",10,"橙色");
+        Product orange = new Product("3", "Orange", "http://10.0.2.2:8080/image/orange_pic.png",35,29,"橘子",659,"水果",10,"橙色");
         productsList.add(orange);
-        Product watermelon = new Product("4", "Watermelon", "http://10.0.2.2:8080/image/apple_pic.png",45,39,"西瓜",95,"水果",10,"绿色");
+        Product watermelon = new Product("4", "Watermelon", "http://10.0.2.2:8080/image/watermelon_pic.png",45,39,"西瓜",95,"水果",10,"绿色");
         productsList.add(watermelon);
         Product pear = new Product("5", "Pear", "http://10.0.2.2:8080/image/pear_pic",55,49,"梨子",94,"水果",10,"黄色");
         productsList.add(pear);

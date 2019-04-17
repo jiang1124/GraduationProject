@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.emtity.ShoppingCarDataBean;
-import com.example.shoppingsystem.util.LogUtil;
 import com.example.shoppingsystem.util.ToastUtil;
 
 import java.text.DecimalFormat;

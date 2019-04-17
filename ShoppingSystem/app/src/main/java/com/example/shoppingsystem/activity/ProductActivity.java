@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.shoppingsystem.emtity.Product;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.util.ToastUtil;
@@ -65,7 +66,10 @@ public class ProductActivity extends BaseActivity{
         String salePriceStr = "促销价："+product.getProductSalePrice();
         String addStr = "运费:"+product.getAdditionalCharges();
         collapsingToolbar.setTitle(product.getProductName());
-        productImageView.setImageResource(product.getProductImageId());
+        Glide.with(ProductActivity.this)
+                .load(product.getProductImageId())
+                .placeholder(R.mipmap.ic_launcher)
+                .into(productImageView);
         productPriceText.setText(priceStr);
         productSalePriceText.setText(salePriceStr);
         additionalCharges.setText(addStr);

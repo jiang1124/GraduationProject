@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.activity.ProductActivity;
 import com.example.shoppingsystem.emtity.Product;
@@ -77,7 +78,10 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder,int position){
         Product product = mProductList.get(position);
-        holder.productImage.setImageResource(product.getProductImageId());
+        Glide.with(mContext)
+                .load(product.getProductImageId())
+                .placeholder(R.mipmap.ic_launcher)
+                .into(holder.productImage);
         holder.productName.setText(product.getProductName());
     }
     @Override

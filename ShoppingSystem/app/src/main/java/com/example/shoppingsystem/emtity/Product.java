@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class Product implements Serializable{
     private String productId;//编号
     private String productName;//名字
-    private int productImageId;//图片
+    private String productImageId;//图片
     private double productPrice;//定价
     private double productSalePrice;//促销价
     private String productDetail;//简介
@@ -18,7 +18,7 @@ public class Product implements Serializable{
     private double additionalCharges;//额外费用，例如运费
     private String productAttribute;//商品属性，例如尺寸大小
 
-    public Product(String productId,String productName,int productImageId,double productPrice,double productSalePrice,
+    public Product(String productId,String productName,String productImageId,double productPrice,double productSalePrice,
                    String productDetail,int productSalesVolume,String productCategory,double additionalCharges,String productAttribute)
     {
         this.productId = productId;
@@ -32,7 +32,7 @@ public class Product implements Serializable{
         this.additionalCharges = additionalCharges;
         this.productAttribute = productAttribute;
     }
-    public Product(String productId,String productName,int productImageId){
+    public Product(String productId,String productName,String productImageId){
         this.productId = productId;
         this.productName = productName;
         this.productImageId = productImageId;
@@ -44,7 +44,7 @@ public class Product implements Serializable{
     public void setProductName(String productName){
         this.productName = productName;
     }
-    public void setProductImageId(int productImageId){
+    public void setProductImageId(String productImageId){
         this.productImageId = productImageId;
     }
     public void setProductPrice(double productPrice){
@@ -75,7 +75,7 @@ public class Product implements Serializable{
     public String getProductName(){
         return productName;
     }
-    public int getProductImageId(){
+    public String getProductImageId(){
         return productImageId;
     }
     public double getProductPrice(){
