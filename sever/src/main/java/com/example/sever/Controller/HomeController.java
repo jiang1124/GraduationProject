@@ -24,17 +24,17 @@ public class HomeController {
         productsList.add(orange);
         Product watermelon = new Product("4", "Watermelon", "http://10.0.2.2:8080/image/watermelon_pic.png",45,39,"西瓜",95,"水果",10,"绿色");
         productsList.add(watermelon);
-        Product pear = new Product("5", "Pear", "http://10.0.2.2:8080/image/pear_pic",55,49,"梨子",94,"水果",10,"黄色");
+        Product pear = new Product("5", "Pear", "http://10.0.2.2:8080/image/pear_pic.png",55,49,"梨子",94,"水果",10,"黄色");
         productsList.add(pear);
-        Product grape = new Product("6", "Grape", "http://10.0.2.2:8080/image/grape_pic",65,59,"葡萄",96,"水果",10,"紫色");
+        Product grape = new Product("6", "Grape", "http://10.0.2.2:8080/image/grape_pic.png",65,59,"葡萄",96,"水果",10,"紫色");
         productsList.add(grape);
-        Product pineapple = new Product("7", "Pineapple", "http://10.0.2.2:8080/image/pineapple_pic",75,69,"菠萝",39,"水果",10,"黄色");
+        Product pineapple = new Product("7", "Pineapple", "http://10.0.2.2:8080/image/pineapple_pic.png",75,69,"菠萝",39,"水果",10,"黄色");
         productsList.add(pineapple);
-        Product strawberry = new Product("8", "Strawberry", "http://10.0.2.2:8080/image/strawberry_pic",85,79,"草莓",89,"水果",10,"红色");
+        Product strawberry = new Product("8", "Strawberry", "http://10.0.2.2:8080/image/strawberry_pic.png",85,79,"草莓",89,"水果",10,"红色");
         productsList.add(strawberry);
-        Product cherry = new Product("9", "Cherry", "http://10.0.2.2:8080/image/cherry_pic",95,89,"樱桃",19,"水果",10,"红色");
+        Product cherry = new Product("9", "Cherry", "http://10.0.2.2:8080/image/cherry_pic.png",95,89,"樱桃",19,"水果",10,"红色");
         productsList.add(cherry);
-        Product mango = new Product("10", "Mango", "http://10.0.2.2:8080/image/mango_pic",105,99,"芒果",84,"水果",10,"黄色");
+        Product mango = new Product("10", "Mango", "http://10.0.2.2:8080/image/mango_pic.png",105,99,"芒果",84,"水果",10,"黄色");
         productsList.add(mango);
         return productsList;
     }

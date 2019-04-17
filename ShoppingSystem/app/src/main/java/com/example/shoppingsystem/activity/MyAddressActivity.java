@@ -41,7 +41,7 @@ public class MyAddressActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        requestRecipientList("http://10.0.2.2:8080/test/recipientTran/recipientList");
+        requestRecipientList("http://10.0.2.2:8080/recipientTran/recipientList");
 
     }
 

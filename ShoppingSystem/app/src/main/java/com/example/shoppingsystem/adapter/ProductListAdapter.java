@@ -79,7 +79,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public void onBindViewHolder(ViewHolder holder,int position){
         Product product = mProductList.get(position);
         Glide.with(mContext)
-                .load(product.getProductImageId())
+                .load(product.getProductImageId()).override(200,200)
                 .placeholder(R.mipmap.ic_launcher)
                 .into(holder.productImage);
         holder.productName.setText(product.getProductName());

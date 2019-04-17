@@ -42,33 +42,32 @@ public class HomeLayout extends LinearLayout {
         LayoutInflater.from(context).inflate(R.layout.home_layout,this);
 
         ButterKnife.inject(this);
-        initProductList("http://10.0.2.2:8080//home");
-        if(productList !=null ){
-            GridLayoutManager layoutManager = new GridLayoutManager(BaseApplication.getContext(), 2);
-            recyclerView.setLayoutManager(layoutManager);
-            ProductListAdapter productListAdapter = new ProductListAdapter(productList);
-            recyclerView.setAdapter(productListAdapter);
-        }
-        else {
-            ToastUtil.makeText(BaseApplication.getContext(),"获取数据失败");
-        }
+//        initProductList("http://10.0.2.2:8080//home");
+//        if(productList !=null ){
+//            GridLayoutManager layoutManager = new GridLayoutManager(BaseApplication.getContext(), 2);
+//            recyclerView.setLayoutManager(layoutManager);
+//            ProductListAdapter productListAdapter = new ProductListAdapter(productList);
+//            recyclerView.setAdapter(productListAdapter);
+//        }
+//        else {
+//            ToastUtil.makeText(BaseApplication.getContext(),"获取数据失败");
+//        }
 
     }
 
     /*
      * 初始化
      */
-    private void initProductList(String websiteAddress) {
-        HttpUtil.sendOkHttpRequest(websiteAddress, new okhttp3.Callback() {
-            @Override
-            public void onResponse(okhttp3.Call call, Response response) throws IOException {
-                final String responseText = response.body().string();
-                productList = ResponseUtil.handleProductList(responseText);
-
+//    private void initProductList(String websiteAddress) {
+//        HttpUtil.sendOkHttpRequest(websiteAddress, new okhttp3.Callback() {
+//            @Override
+//            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+//                final String responseText = response.body().string();
+//                final List<Product> productList = ResponseUtil.handleProductList(responseText);
 //                runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
-//                        if(recipientList !=null ){
+//                        if(productList !=null ){
 //                            GridLayoutManager layoutManager = new GridLayoutManager(BaseApplication.getContext(), 2);
 //                            recyclerView.setLayoutManager(layoutManager);
 //                            ProductListAdapter productListAdapter = new ProductListAdapter(productList);
@@ -79,11 +78,11 @@ public class HomeLayout extends LinearLayout {
 //                        }
 //                    }
 //                });
-            }
-
-            @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                e.printStackTrace();
+//            }
+//
+//            @Override
+//            public void onFailure(okhttp3.Call call, IOException e) {
+//                e.printStackTrace();
 //                runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
@@ -92,7 +91,5 @@ public class HomeLayout extends LinearLayout {
 //                });
 //            }
 //        });
-            }
-        });
-    }
+//    }
 }
