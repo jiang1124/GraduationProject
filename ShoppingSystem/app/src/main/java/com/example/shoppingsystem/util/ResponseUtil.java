@@ -2,6 +2,7 @@ package com.example.shoppingsystem.util;
 
 import com.example.shoppingsystem.emtity.Product;
 import com.example.shoppingsystem.emtity.Recipient;
+import com.example.shoppingsystem.emtity.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -52,6 +53,19 @@ public class ResponseUtil {
             List<Product> productList = new ArrayList<>();
             productList =gson.fromJson(Response, new TypeToken<List<Product>>() {}.getType());
             return productList;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /**
+     * 将返回的JSon数据解析成ProductList
+     */
+    public static User handleUser(String Response){
+        try{
+            Gson gson = new Gson();
+            User user =gson.fromJson(Response, User.class);
+            return user;
         }catch (Exception e){
             e.printStackTrace();
         }

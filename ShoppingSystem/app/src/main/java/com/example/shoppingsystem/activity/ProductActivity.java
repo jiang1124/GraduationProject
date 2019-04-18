@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.shoppingsystem.emtity.Product;
 import com.example.shoppingsystem.R;
+import com.example.shoppingsystem.emtity.Product;
 import com.example.shoppingsystem.util.ToastUtil;
 
 import butterknife.ButterKnife;
@@ -27,21 +27,23 @@ public class ProductActivity extends BaseActivity{
     Button inCartButton;
     @InjectView(R.id.buy_button)
     Button buyButton;
-    @InjectView(R.id.product_price_text)
+    @InjectView(R.id.tv_product_price_detail)
     TextView productPriceText;
-    @InjectView(R.id.product_sale_price)
+    @InjectView(R.id.tv_product_favl_detail)
     TextView productSalePriceText;
-    @InjectView(R.id.additional_charges)
+    @InjectView(R.id.tv_extra_money_detail)
     TextView additionalCharges;
-    @InjectView(R.id.product_name_text)
+    @InjectView(R.id.tv_product_name_detail)
     TextView productNameText;
-    @InjectView(R.id.product_detail_text)
+    @InjectView(R.id.tv_product_sale_detail)
+    TextView productSaleVolume;
+    @InjectView(R.id.tv_product_detail_detail)
     TextView productDetailText;
     @InjectView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbar;
     @InjectView(R.id.toolbar)
     Toolbar toolbar;
-    @InjectView(R.id.product_image_product)
+    @InjectView(R.id.iv_product_image_detail)
     ImageView productImageView;
 
     @Override
@@ -62,19 +64,21 @@ public class ProductActivity extends BaseActivity{
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        String priceStr = "价格："+product.getProductPrice();
-        String salePriceStr = "促销价："+product.getProductSalePrice();
-        String addStr = "运费:"+product.getAdditionalCharges();
-        collapsingToolbar.setTitle(product.getProductName());
+        String priceStr = "价格："+product.getPro_price();
+        String salePriceStr = "促销价："+product.getPro_favl();
+        String exMoneyStr = "运费:"+product.getExtra_money();
+        String saVolumeStr = "销量：" + product.getPro_sale();
+        collapsingToolbar.setTitle(product.getPro_name());
         Glide.with(ProductActivity.this)
-                .load(product.getProductImageId())
+                .load(product.getPro_image())
                 .placeholder(R.mipmap.ic_launcher)
                 .into(productImageView);
         productPriceText.setText(priceStr);
         productSalePriceText.setText(salePriceStr);
-        additionalCharges.setText(addStr);
-        productNameText.setText(product.getProductName());
-        productDetailText.setText(product.getProductDetail());
+        additionalCharges.setText(exMoneyStr);
+        productSaleVolume.setText(saVolumeStr);
+        productNameText.setText(product.getPro_name());
+        productDetailText.setText(product.getPro_detail());
     }
 
     @Override

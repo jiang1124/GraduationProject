@@ -16,6 +16,7 @@ import com.example.shoppingsystem.adapter.ProductListAdapter;
 import com.example.shoppingsystem.Application.BaseApplication;
 import com.example.shoppingsystem.emtity.Product;
 import com.example.shoppingsystem.util.HttpUtil;
+import com.example.shoppingsystem.util.LogUtil;
 import com.example.shoppingsystem.util.ResponseUtil;
 import com.example.shoppingsystem.util.ToastUtil;
 
@@ -29,8 +30,8 @@ import butterknife.OnClick;
 import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
-    @InjectView(R.id.rv_product_list)
-    RecyclerView recyclerView;
+    @InjectView(R.id.rv_search_list)
+    RecyclerView SearchRecyclerView;
     @InjectView(R.id.et_search_in_search)
     EditText searchEdit;
     @InjectView(R.id.btn_search_in_search)
@@ -42,7 +43,8 @@ public class SearchActivity extends AppCompatActivity {
     @InjectView(R.id.tv_sales_volume_queue)
     TextView salesVolumeQueueText;
 
-    private List<Product> productList = new ArrayList<>();
+    private List<Product> productList=new ArrayList<>();
+    private String netAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,23 +55,21 @@ public class SearchActivity extends AppCompatActivity {
         String sort = intent.getStringExtra("sort");
         ButterKnife.inject(this);
 
-        initSearchProductList("http://10.0.2.2:8080//home");
-        GridLayoutManager layoutManager = new GridLayoutManager(SearchActivity.this, 2);
-        recyclerView.setLayoutManager(layoutManager);
-        ProductListAdapter productListAdapter = new ProductListAdapter(productList);
-        recyclerView.setAdapter(productListAdapter);
-
+        netAddress = "http://10.0.2.2:8080/search";
         if(key!=null)
-            searchEdit.setText(key);
-        else
-            searchEdit.setText(sort);
+            netAddress = netAddress +"/k?key="+ key;
+        else if(sort!=null)
+            netAddress = netAddress +"/s?sort=" + sort;
+        LogUtil.d("searchNetAddress:",netAddress);
+        initSearchProductList(netAddress);
     }
 
     @OnClick({R.id.btn_search_in_search,R.id.tv_default_queue,R.id.tv_price_queue,R.id.tv_sales_volume_queue})
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.btn_search_in_search:
-                ToastUtil.makeText(BaseApplication.getContext(),"You click search");
+                String addressStr = "http://10.0.2.2:8080/search/k?key="+searchEdit.getText().toString();
+                initSearchProductList(addressStr);
                 break;
             case R.id.tv_default_queue:
                 shiftQueueText(priceQueueText,salesVolumeQueueText,defaultQueueText);
@@ -89,22 +89,26 @@ public class SearchActivity extends AppCompatActivity {
      * 初始化
      */
     private void initSearchProductList(String websiteAddress) {
+        LogUtil.d("搜索内容：",websiteAddress);
         HttpUtil.sendOkHttpRequest(websiteAddress, new okhttp3.Callback() {
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
-                final String responseText = response.body().string();
-                final List<Product> productList = ResponseUtil.handleProductList(responseText);
-
+                String responseText = response.body().string();
+                LogUtil.d("searchStr:",responseText);
+                productList.clear();
+                productList = ResponseUtil.handleProductList(responseText);
+                LogUtil.d("searchResult:",productList.toString());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         if (productList != null) {
                             GridLayoutManager layoutManager = new GridLayoutManager(BaseApplication.getContext(), 2);
-                            recyclerView.setLayoutManager(layoutManager);
+                            SearchRecyclerView.setLayoutManager(layoutManager);
                             ProductListAdapter productListAdapter = new ProductListAdapter(productList);
-                            recyclerView.setAdapter(productListAdapter);
+                            SearchRecyclerView.setAdapter(productListAdapter);
+                            productListAdapter.notifyDataSetChanged();
                         } else {
-                            ToastUtil.makeText(BaseApplication.getContext(), "获取数据失败");
+                            ToastUtil.makeText(BaseApplication.getContext(), "没有该商品");
                         }
                     }
                 });

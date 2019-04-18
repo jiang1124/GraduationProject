@@ -8,13 +8,11 @@
     android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="180sp"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -24,12 +22,47 @@
 
             <com.example.shoppingsystem.View.CircleImageView
                 android:id="@+id/iv_my_head"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="250sp"
+                android:layout_height="250sp"
                 android:scaleType="centerCrop"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"
-                android:layout_gravity="center"/>
+                android:layout_gravity="left"
+                />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="80sp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center|right">
+                <TextView
+                    android:id="@+id/tv_my_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="未登陆"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    />
+                <TextView
+                    android:id="@+id/tv_my_grade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="等级"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    />
+                <TextView
+                    android:id="@+id/tv_my_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="积分"
+                    android:textSize="20sp"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    />
+
+            </LinearLayout>
+
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -82,11 +115,6 @@
         <View  android:layout_height="1px"
             android:layout_width="match_parent"
             android:background="#ddf"/>
-        <Button
-            android:id="@+id/btn_quit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="退出登录"/>
 
     </LinearLayout>
 

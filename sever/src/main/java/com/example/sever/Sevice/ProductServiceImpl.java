@@ -19,8 +19,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findKeyMany(String id) {
-        return productRepo.findKeyMany(id);
+    public List<Product> findKeyMany(String key) {
+        return productRepo.findKeyMany(key);
+    }
+
+    @Override
+    public List<Product> findSortMany(String sort) {
+        return productRepo.findSortMany(sort);
     }
 
     @Override

@@ -16,15 +16,27 @@ public class ProductRepoImpl implements ProductRepo{
 
     @Override
     public List<Product> findSVTopFive() {
-        List<Product> res = jdbcTemplate.query("select * from product order by productSaleVolume desc  limit 5", new Object[]{},
+        List<Product> res = jdbcTemplate.query("select * from product order by pro_sale desc  limit 10", new Object[]{},
                 new BeanPropertyRowMapper(Product.class));
 
         return res;
     }
 
     @Override
-    public List<Product> findKeyMany(String id) {
-        List<Product> res = jdbcTemplate.query("select * from product where productId = ?", new Object[]{id},
+    public List<Product> findKeyMany(String key) {
+        if(key !="") {
+            List<Product> res = jdbcTemplate.query("select * from product where pro_name like ?;", new Object[]{"%" + key + "%"},
+                    new BeanPropertyRowMapper(Product.class));
+            if (res != null && res.size() > 0) {
+                return res;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<Product> findSortMany(String sort) {
+        List<Product> res = jdbcTemplate.query("select * from product where type = ?;", new Object[]{sort},
                 new BeanPropertyRowMapper(Product.class));
         if(res!=null && res.size()>0){
             return res;

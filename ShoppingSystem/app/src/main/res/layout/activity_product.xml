@@ -22,7 +22,7 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
-                android:id="@+id/product_image_product"
+                android:id="@+id/iv_product_image_detail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -53,6 +53,23 @@
                     android:layout_marginLeft="15dp"
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="5dp"
+                    app:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/tv_product_name_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="name"/>
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="5dp"
                     app:cardCornerRadius="4dp"
                     >
 
@@ -66,19 +83,19 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
                             <TextView
-                                android:id="@+id/product_price_text"
+                                android:id="@+id/tv_product_price_detail"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:layout_marginLeft="10dp"
                                 android:text="price"/>
                             <TextView
-                                android:id="@+id/product_sale_price"
+                                android:id="@+id/tv_product_favl_detail"
                                 android:layout_width="0dp"
                                 android:layout_weight="1"
                                 android:layout_marginRight="10dp"
                                 android:layout_height="wrap_content"
-                                android:text="salePrice"/>
+                                android:text="favlPrice"/>
                         </LinearLayout>
 
                     <LinearLayout
@@ -86,18 +103,39 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
-                            android:id="@+id/additional_charges"
+                            android:id="@+id/tv_extra_money_detail"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginLeft="10dp"
-                            android:text="additionalCharges"/>
+                            android:text="extraMoney"/>
                         <TextView
+                            android:id="@+id/tv_product_sale_detail"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:layout_marginLeft="10dp"
-                            android:text="another"/>
+                            android:text="sale"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                            <TextView
+                                android:id="@+id/tv_product_num_detail"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginLeft="10dp"
+                                android:text="销量"/>
+                            <TextView
+                                android:id="@+id/tv_product_type_detail"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:layout_marginLeft="10dp"
+                                android:text="分类"/>
                         </LinearLayout>
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -112,13 +150,12 @@
                     app:cardCornerRadius="4dp">
 
                     <TextView
-                        android:id="@+id/product_name_text"
+                        android:id="@+id/tv_product_detail_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="name"/>
+                        android:text="detail"/>
                 </android.support.v7.widget.CardView>
-
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -129,14 +166,16 @@
                     app:cardCornerRadius="4dp">
 
                     <TextView
-                        android:id="@+id/product_detail_text"
+                        android:id="@+id/tv_store_name_detail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="detail"/>
+                        android:text="商店名"/>
                 </android.support.v7.widget.CardView>
             </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
+
 
     <!--下菜单栏-->
     <LinearLayout
@@ -171,11 +210,12 @@
             android:background="#FF4081"/>
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:src="@drawable/ic_comment"
-        app:layout_anchor="@id/appBar"
-        app:layout_anchorGravity="bottom|end" />
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_margin="16dp"-->
+        <!--android:src="@drawable/ic_comment"-->
+        <!--app:layout_anchor="@id/appBar"-->
+        <!--app:layout_anchorGravity="bottom|end" />-->
+
 </android.support.design.widget.CoordinatorLayout>

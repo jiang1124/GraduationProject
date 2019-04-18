@@ -7,96 +7,103 @@ import java.io.Serializable;
  */
 
 public class Product implements Serializable{
-    private String productId;//编号
-    private String productName;//名字
-    private String productImageId;//图片
-    private double productPrice;//定价
-    private double productSalePrice;//促销价
-    private String productDetail;//简介
-    private int productSalesVolume;//销量
-    private String productCategory;//分类
-    private double additionalCharges;//额外费用，例如运费
-    private String productAttribute;//商品属性，例如尺寸大小
+    private int product_id;//商品id
+    private int store_id;//商店id
+    private String pro_name;//商品名
+    private String pro_detail;//商品描述
+    private double pro_price;//定价
+    private double pro_favl;//促销价
+    private int pro_num;//库存
+    private String type;//种类
+    private int pro_sale;//销量
+    private String pro_image;//图片
+    private double extra_money;//运费
 
-    public Product(String productId,String productName,String productImageId,double productPrice,double productSalePrice,
-                   String productDetail,int productSalesVolume,String productCategory,double additionalCharges,String productAttribute)
-    {
-        this.productId = productId;
-        this.productName = productName;
-        this.productImageId = productImageId;
-        this.productPrice = productPrice;
-        this.productSalePrice = productSalePrice;
-        this.productDetail = productDetail;
-        this.productSalesVolume = productSalesVolume;
-        this.productCategory = productCategory;
-        this.additionalCharges = additionalCharges;
-        this.productAttribute = productAttribute;
-    }
-    public Product(String productId,String productName,String productImageId){
-        this.productId = productId;
-        this.productName = productName;
-        this.productImageId = productImageId;
+    public int getProduct_id() {
+        return product_id;
     }
 
-    public void setProductId(String productId){
-        this.productId = productId;
-    }
-    public void setProductName(String productName){
-        this.productName = productName;
-    }
-    public void setProductImageId(String productImageId){
-        this.productImageId = productImageId;
-    }
-    public void setProductPrice(double productPrice){
-        this.productPrice = productPrice;
-    }
-    public void setProductSalePrice(double productSalePrice){
-        this.productSalePrice = productSalePrice;
-    }
-    public void setProductDetail(String productDetail){
-        this.productDetail = productDetail;
-    }
-    public void setProductSalesVolume(int productSalesVolume){
-        this.productSalesVolume = productSalesVolume;
-    }
-    public void setProductCategory(String productCategory){
-        this.productCategory = productCategory;
-    }
-    public void setAdditionalCharges(double additionalCharges){
-        this.additionalCharges = additionalCharges;
-    }
-    public void setProductAttribute(String productAttribute){
-        this.productAttribute = productAttribute;
+    public void setProduct_id(int product_id) {
+        this.product_id = product_id;
     }
 
-    public String getProductId(){
-        return productId;
+    public int getStore_id() {
+        return store_id;
     }
-    public String getProductName(){
-        return productName;
+
+    public void setStore_id(int store_id) {
+        this.store_id = store_id;
     }
-    public String getProductImageId(){
-        return productImageId;
+
+    public String getPro_name() {
+        return pro_name;
     }
-    public double getProductPrice(){
-        return productPrice;
+
+    public void setPro_name(String pro_name) {
+        this.pro_name = pro_name;
     }
-    public double getProductSalePrice(){
-        return productSalePrice;
+
+    public String getPro_detail() {
+        return pro_detail;
     }
-    public String getProductDetail(){
-        return  productDetail;
+
+    public void setPro_detail(String pro_detail) {
+        this.pro_detail = pro_detail;
     }
-    public int getProductSalesVolume(){
-        return  productSalesVolume;
+
+    public double getPro_price() {
+        return pro_price;
     }
-    public String getProductCategory(){
-        return  productCategory;
+
+    public void setPro_price(double pro_price) {
+        this.pro_price = pro_price;
     }
-    public double getAdditionalCharges(){
-        return  additionalCharges;
+
+    public double getPro_favl() {
+        return pro_favl;
     }
-    public String getProductAttribute(){
-        return  productAttribute;
+
+    public void setPro_favl(double pro_favl) {
+        this.pro_favl = pro_favl;
+    }
+
+    public int getPro_num() {
+        return pro_num;
+    }
+
+    public void setPro_num(int pro_num) {
+        this.pro_num = pro_num;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public int getPro_sale() {
+        return pro_sale;
+    }
+
+    public void setPro_sale(int pro_sale) {
+        this.pro_sale = pro_sale;
+    }
+
+    public String getPro_image() {
+        return pro_image;
+    }
+
+    public void setPro_image(String pro_image) {
+        this.pro_image = pro_image;
+    }
+
+    public double getExtra_money() {
+        return extra_money;
+    }
+
+    public void setExtra_money(double extra_money) {
+        this.extra_money = extra_money;
     }
 }

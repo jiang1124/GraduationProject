@@ -14,16 +14,22 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="首页">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
         <activity android:name=".activity.ProductActivity" />
         <activity
             android:name=".activity.LoginActivity"
-            android:label="登录/注册" />
+            android:label="登录/注册" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity android:name=".activity.SearchActivity" />
         <activity
             android:name=".activity.MyOrderActivity"
@@ -37,7 +43,8 @@
         <activity
             android:name=".activity.MyAddressActivity"
             android:label="地址信息" />
-        <activity android:name=".activity.EditRecipientActivity"></activity>
+        <activity android:name=".activity.EditRecipientActivity"
+            android:label="编辑"></activity>
     </application>
 
 </manifest>

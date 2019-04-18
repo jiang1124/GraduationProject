@@ -15,11 +15,19 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.shoppingsystem.R;
+import com.example.shoppingsystem.emtity.User;
+import com.example.shoppingsystem.util.HttpUtil;
+import com.example.shoppingsystem.util.LogUtil;
+import com.example.shoppingsystem.util.ResponseUtil;
 import com.example.shoppingsystem.util.ToastUtil;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.Call;
+import okhttp3.Response;
 
 public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
@@ -52,28 +60,37 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    private User user;
+    private boolean isLogin = false;
+    private boolean isOff = true;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
+        setSupportActionBar(tbLogin);
+
+        Intent intentGet =getIntent();
+        isOff = intentGet.getBooleanExtra("isOff",true);
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRemember = pref.getBoolean("remember_password",false);
-
-        setSupportActionBar(tbLogin);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
-        if(isRemember){
+        if(isRemember&&isOff) {
             //将帐号和密码都设置到文本框中
-            String account = pref.getString("account","");
-            String password = pref.getString("password","");
+            String account = pref.getString("account", "");
+            String password = pref.getString("password", "");
             accountInputEdit.setText(account);
             passwordInputEdit.setText(password);
             rememberPass.setChecked(true);
+            String webAddress = "http://10.0.2.2:8080/login/verification?name=" + account + "&password=" + password;
+            getLoginAnswer(webAddress);
+        }else if(isOff){
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.putExtra("isLogin",isLogin);
+            intent.putExtra("User",user);
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -81,45 +98,18 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.btn_login:
-            getLoginAnswer();
-            String account = accountInputEdit.getText().toString();
-            String password = passwordInputEdit.getText().toString();
-            if (getLoginAnswer()) {
-                editor = pref.edit();
-                if (rememberPass.isChecked()) {
-                    editor.putBoolean("remember_password", true);
-                    editor.putString("account", account);
-                    editor.putString("password", password);
-                } else {
-                    editor.clear();
-                }
-                editor.apply();
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            } else {
-                ToastUtil.makeText(LoginActivity.this, "帐号或密码错误");
-            }
+                String account = accountInputEdit.getText().toString();
+                String password = passwordInputEdit.getText().toString();
+                String webAddress ="http://10.0.2.2:8080/login/verification?name="+account+"&password="+password;
+                type="login";
+                getLoginAnswer(webAddress);
                 break;
             case R.id.btn_registered:
                 String registeredAccount = accountInputEdit.getText().toString();
                 String registeredPassword = passwordInputEdit.getText().toString();
-                if (getRegisteredAnswer()) {
-                    editor = pref.edit();
-                    if (registeredRememberPass.isChecked()) {
-                        editor.putBoolean("remember_password", true);
-                        editor.putString("account", registeredAccount);
-                        editor.putString("password", registeredPassword);
-                    } else {
-                        editor.clear();
-                    }
-                    editor.apply();
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    ToastUtil.makeText(LoginActivity.this, "注册失败");
-                }
+                String netAddress = "http://10.0.2.2:8080/login/registered?name="+registeredAccount+"&password="+registeredPassword;
+                type="registered";
+                getLoginAnswer(netAddress);
                 break;
             case R.id.btn_login_to_registered:
                 loginLinearLayout.setVisibility(View.GONE);
@@ -133,21 +123,55 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 break;
         }
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
 
-    public boolean getLoginAnswer(){
-        return  true;
-    }
+    public void getLoginAnswer(String webAddress){
+        HttpUtil.sendOkHttpRequest(webAddress,new okhttp3.Callback(){
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String responseText = response.body().string();
+                LogUtil.d("loginHttp:",responseText);
+                user = ResponseUtil.handleUser(responseText);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(user!=null){
+                            isLogin = true;
+                            editor = pref.edit();
+                            if (rememberPass.isChecked()) {
+                                editor.putBoolean("remember_password", true);
+                                editor.putString("account", user.getUser_name());
+                                editor.putString("password", user.getUser_password());
+                            } else {
+                                editor.clear();
+                            }
+                            editor.apply();
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            intent.putExtra("isLogin",isLogin);
+                            intent.putExtra("User",user);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else {
+                            if(type == "login") {
+                                ToastUtil.makeText(LoginActivity.this, "帐号或密码错误");
+                            }else {
+                                ToastUtil.makeText(LoginActivity.this, "错误");
+                            }
+                        }
+                    }
+                });
+            }
 
-    public boolean getRegisteredAnswer(){
-        return true;
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.makeText(LoginActivity.this, "网络出错");
+                    }
+                });
+            }
+        });
     }
 }

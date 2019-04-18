@@ -8,7 +8,9 @@ public interface ProductRepo {
 
     public List<Product> findSVTopFive();
 
-    public List<Product> findKeyMany(String id);
+    public List<Product> findKeyMany(String key);
+
+    public List<Product> findSortMany(String sort);
 
     public int add(Product product);
 

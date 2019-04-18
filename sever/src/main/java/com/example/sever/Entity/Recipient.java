@@ -7,78 +7,68 @@ import java.io.Serializable;
  */
 
 public class Recipient implements Serializable {
-    //收件人id，收件人名，地址，电话号码，用户id，状态
-    private String recipientId;
-    private String recipientName;
-    private String recipientCity;
+    //收件人id，用户id，收件人名，地址，电话号码，状态
+    private int address_id;
+    private int user_id;
+    private String recipient_name;
+    private  String phone;
+    private String city;
+    private String address;
+    private String state;
 
-    public String getRecipientCity() {
-        return recipientCity;
-    }
-
-    public void setRecipientCity(String recipientCity) {
-        this.recipientCity = recipientCity;
-    }
-
-    private String recipientAddress;
-    private String recipientPhone;
-    private String userId;
-    private String recipientState;
-
-    public Recipient(String recipientName, String recipientAddress,
-                     String recipientPhone,String userId){
-        this.recipientName = recipientName;
-        this.recipientAddress = recipientAddress;
-        this.recipientPhone = recipientPhone;
-        this.userId = userId;
+    public int getAddress_id() {
+        return address_id;
     }
 
-    public Recipient(String recipientId,String recipientName,String recipientCity,String recipientAddress,
-                     String recipientPhone,String userId,String recipientState) {
-        this.recipientId = recipientId;
-        this.recipientName = recipientName;
-        this.recipientCity = recipientCity;
-        this.recipientAddress = recipientAddress;
-        this.recipientPhone = recipientPhone;
-        this.userId = userId;
-        this.recipientState = recipientState;
+    public void setAddress_id(int address_id) {
+        this.address_id = address_id;
     }
 
-    public void setRecipientId(String recipientId){
-        this.recipientId = recipientId;
-    }
-    public void setRecipientName(String recipientName){
-        this.recipientName = recipientName;
-    }
-    public void setRecipientAddress(String recipientAddress){
-        this.recipientAddress = recipientAddress;
-    }
-    public void setRecipientPhone(String recipientPhone) {
-        this.recipientPhone = recipientPhone;
-    }
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-    public void setRecipientState(String recipientState) {
-        this.recipientState = recipientState;
+    public int getUser_id() {
+        return user_id;
     }
 
-    public String getRecipientId() {
-        return recipientId;
+    public void setUser_id(int user_id) {
+        this.user_id = user_id;
     }
-    public String getRecipientName() {
-        return recipientName;
+
+    public String getRecipient_name() {
+        return recipient_name;
     }
-    public String getRecipientAddress() {
-        return recipientAddress;
+
+    public void setRecipient_name(String recipient_name) {
+        this.recipient_name = recipient_name;
     }
-    public String getRecipientPhone() {
-        return recipientPhone;
+
+    public String getPhone() {
+        return phone;
     }
-    public String getUserId() {
-        return userId;
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
-    public String getRecipientState() {
-        return recipientState;
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

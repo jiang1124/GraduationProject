@@ -1,8 +1,8 @@
-package com.example.shoppingsystem.emtity;
+package com.example.sever.Entity;
 
 import java.io.Serializable;
 
-public class User implements Serializable{
+public class User implements Serializable {
     private int user_id;
     private String user_name;
     private int user_score;
