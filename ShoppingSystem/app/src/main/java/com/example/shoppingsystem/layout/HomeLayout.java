@@ -29,39 +29,12 @@ import okhttp3.Response;
  */
 
 public class HomeLayout extends LinearLayout {
-    @InjectView(R.id.rv_home_list)
-    RecyclerView recyclerView;
 
-    private List<Product> productList = new ArrayList<>();
 
     public HomeLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         LayoutInflater.from(context).inflate(R.layout.home_layout,this);
 
-        ButterKnife.inject(this);
-        initProductList("http://10.0.2.2:8080/home");
     }
 
-    /*
-     * 初始化
-     */
-    private void initProductList(String websiteAddress) {
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(websiteAddress)
-                .build();
-        try {
-            Response response = client.newCall(request).execute();
-            String responseData = response.body().string();
-            LogUtil.d("jihao",responseData);
-            productList = ResponseUtil.handleProductList(responseData);
-            GridLayoutManager layoutManager = new GridLayoutManager(BaseApplication.getContext(), 2);
-            recyclerView.setLayoutManager(layoutManager);
-            ProductListAdapter productListAdapter = new ProductListAdapter(productList);
-            recyclerView.setAdapter(productListAdapter);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
 }

@@ -18,6 +18,8 @@ public class Product implements Serializable{
     private double additionalCharges;//额外费用，例如运费
     private String productAttribute;//商品属性，例如尺寸大小
 
+    public Product(){};
+
     public Product(String productId,String productName,String productImageId,double productPrice,double productSalePrice,
                    String productDetail,int productSalesVolume,String productCategory,double additionalCharges,String productAttribute)
     {
