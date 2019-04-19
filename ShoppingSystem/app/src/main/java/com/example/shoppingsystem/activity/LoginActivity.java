@@ -124,10 +124,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         }
     }
 
-    public void getLoginAnswer(String webAddress){
+    public void getLoginAnswer(final String webAddress){
         HttpUtil.sendOkHttpRequest(webAddress,new okhttp3.Callback(){
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                LogUtil.d("注册/登陆地址：",webAddress);
                 final String responseText = response.body().string();
                 LogUtil.d("loginHttp:",responseText);
                 user = ResponseUtil.handleUser(responseText);

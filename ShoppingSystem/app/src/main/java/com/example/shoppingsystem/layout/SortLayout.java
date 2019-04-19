@@ -24,8 +24,8 @@ public class SortLayout extends LinearLayout implements AdapterView.OnItemClickL
     private String[] sortData = new String[]{};
     public SortLayout(Context context, AttributeSet attrs){
         super(context, attrs);
-        initSort();
         LayoutInflater.from(context).inflate(R.layout.sort_layout,this);
+        initSort();
         ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(context,android.R.layout.simple_list_item_1,sortData);
         ListView sortListView = (ListView) findViewById(R.id.sort_list_view);
         sortListView.setAdapter(sortAdapter);

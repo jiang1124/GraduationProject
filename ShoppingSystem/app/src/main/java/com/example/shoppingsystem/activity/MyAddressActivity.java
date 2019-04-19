@@ -59,10 +59,13 @@ public class MyAddressActivity extends AppCompatActivity {
         HttpUtil.sendOkHttpRequest(websiteAddress,new okhttp3.Callback(){
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException{
-                final  String responseText =response.body().string();
+                String responseText =response.body().string();
                 LogUtil.d("标记0",responseText);
-                final List<Recipient> recipientList = ResponseUtil.handleRecipientListResponse(responseText);
-                LogUtil.d("标记1",recipientList.get(0).getRecipientName());
+                if (recipientList!=null)
+                    recipientList.clear();
+                recipientList = ResponseUtil.handleRecipientListResponse(responseText);
+                if (recipientList!=null)
+                    LogUtil.d("标记1",recipientList.get(0).getRecipientName());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

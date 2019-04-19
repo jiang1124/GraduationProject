@@ -21,7 +21,7 @@ import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.adapter.ProductListAdapter;
 import com.example.shoppingsystem.adapter.ShoppingCarAdapter;
 import com.example.shoppingsystem.emtity.Product;
-import com.example.shoppingsystem.emtity.ShoppingCarDataBean;
+import com.example.shoppingsystem.emtity.ShoppingCar;
 import com.example.shoppingsystem.emtity.User;
 import com.example.shoppingsystem.layout.RoundCornerDialog;
 import com.example.shoppingsystem.util.*;
@@ -63,6 +63,8 @@ public class MainActivity extends BaseActivity {
     TextView myCollectionTV;
     @InjectView(R.id.tv_my_history)
     TextView myHistoryTV;
+    @InjectView(R.id.tv_my_name)
+    TextView myNameTV;
     @InjectView(R.id.tv_my_order)
     TextView myOrderTV;
     @InjectView(R.id.tv_my_grade)
@@ -71,10 +73,8 @@ public class MainActivity extends BaseActivity {
     TextView myScore;
     @InjectView(R.id.iv_my_head)
     ImageView myHead;
-    @InjectView(R.id.tv_titlebar_center)
-    TextView tvTitlebarCenter;
-    @InjectView(R.id.tv_titlebar_right)
-    TextView tvTitlebarRight;
+    @InjectView(R.id.tv_edit_cart)
+    TextView EditCartTV;
     @InjectView(R.id.elv_shopping_car)
     ExpandableListView elvShoppingCar;
     @InjectView(R.id.iv_select_all)
@@ -95,9 +95,9 @@ public class MainActivity extends BaseActivity {
     ImageView ivNoContant;
     @InjectView(R.id.rl_no_contant)
     RelativeLayout rlNoContant;
-    @InjectView(R.id.tv_titlebar_left)
-    TextView tvTitlebarLeft;
-    private List<ShoppingCarDataBean.DatasBean> datas;
+    @InjectView(R.id.tv_refresh_cart)
+    TextView RefreshTV;
+    private List<ShoppingCar.Store> stores;
     private ShoppingCarAdapter shoppingCarAdapter;
 
     private boolean isLogin;
@@ -140,7 +140,7 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.shopping_cart_button:
                 initExpandableListView();
-                initData();
+                initShoppingCart("http://10.0.2.2:8080/shoppingCart");
                 PageSwitch(homeView, sortView, personView, shoppingCartView);
                 break;
             case R.id.person_button:
@@ -197,7 +197,7 @@ public class MainActivity extends BaseActivity {
     /*
      * 页面切换
      */
-    private final void PageSwitch(View goneView1,View goneView2,View goneView3,View visibleView){
+    public final void PageSwitch(View goneView1,View goneView2,View goneView3,View visibleView){
         goneView1.setVisibility(View.GONE);
         goneView2.setVisibility(View.GONE);
         goneView3.setVisibility(View.GONE);
@@ -214,7 +214,8 @@ public class MainActivity extends BaseActivity {
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 String responseText = response.body().string();
 //                LogUtil.d("Main标记0",responseText);
-                productList.clear();
+                if(productList!=null)
+                    productList.clear();
                 productList = ResponseUtil.handleProductList(responseText);
 //                LogUtil.d("Main标记1",productList.get(0).getPro_name());
                 runOnUiThread(new Runnable() {
@@ -251,32 +252,34 @@ public class MainActivity extends BaseActivity {
                     .load(user.getHead_image())
                     .placeholder(R.mipmap.ic_launcher)
                     .into(myHead);
-            myGrade.setText(user.getUser_grade());
+            myNameTV.setText(user.getUser_name());
+            myGrade.setText("等级"+user.getUser_grade());
             myGrade.setVisibility(View.VISIBLE);
-            myScore.setText(user.getUser_score());
+            myScore.setText("积分"+user.getUser_score()+"");
             myScore.setVisibility(View.VISIBLE);
         }else{
+            myNameTV.setText("未登录");
             myHead.setImageResource(R.mipmap.ic_launcher);
             myGrade.setVisibility(View.GONE);
             myScore.setVisibility(View.GONE);
         }
     }
 
-    @OnClick({R.id.tv_titlebar_left, R.id.tv_titlebar_right})
+    @OnClick({R.id.tv_refresh_cart, R.id.tv_edit_cart})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_titlebar_left://刷新数据
-                initData();
+            case R.id.tv_refresh_cart://刷新数据
+                initShoppingCart("http://10.0.2.2:8080/shoppingCart");
                 break;
-            case R.id.tv_titlebar_right://编辑
-                String edit = tvTitlebarRight.getText().toString().trim();
+            case R.id.tv_edit_cart://编辑
+                String edit = EditCartTV.getText().toString().trim();
                 if (edit.equals("编辑")) {
-                    tvTitlebarRight.setText("完成");
+                    EditCartTV.setText("完成");
                     rlTotalPrice.setVisibility(View.GONE);
                     btnOrder.setVisibility(View.GONE);
                     btnDelete.setVisibility(View.VISIBLE);
                 } else {
-                    tvTitlebarRight.setText("编辑");
+                    EditCartTV.setText("编辑");
                     rlTotalPrice.setVisibility(View.VISIBLE);
                     btnOrder.setVisibility(View.VISIBLE);
                     btnDelete.setVisibility(View.GONE);
@@ -289,83 +292,46 @@ public class MainActivity extends BaseActivity {
     /**
      * 初始化数据
      */
-    private void initData() {
-        //使用Gson解析购物车数据，
-        //ShoppingCarDataBean为bean类，Gson按照bean类的格式解析数据
-        /**
-         * 实际开发中，通过请求后台接口获取购物车数据并解析
-         */
-        //模拟的购物车数据（实际开发中使用后台返回的数据）
-        String shoppingCarData = "{\n" +
-                "    \"code\": 200,\n" +
-                "    \"datas\": [\n" +
-                "        {\n" +
-                "            \"goods\": [\n" +
-                "                {\n" +
-                "                    \"goods_id\": \"1\",\n" +
-                "                    \"goods_image\": \""+R.drawable.apple_pic+"\",\n" +
-                "                    \"goods_name\": \"Apple\",\n" +
-                "                    \"goods_num\": \"1\",\n" +
-                "                    \"goods_price\": \"9.00\"\n" +
-                "                }\n" +
-                "            ],\n" +
-                "            \"store_id\": \"1\",\n" +
-                "            \"store_name\": \"一号店\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"goods\": [\n" +
-                "                {\n" +
-                "                    \"goods_id\": \"2\",\n" +
-                "                    \"goods_image\": \""+R.drawable.banana_pic+"\",\n" +
-                "                    \"goods_name\": \"Banana\",\n" +
-                "                    \"goods_num\": \"2\",\n" +
-                "                    \"goods_price\": \"19.00\"\n" +
-                "                },\n" +
-                "                {\n" +
-                "                    \"goods_id\": \"222222\",\n" +
-                "                    \"goods_image\": \""+ R.drawable.orange_pic+"\",\n" +
-                "                    \"goods_name\": \"Orange\",\n" +
-                "                    \"goods_num\": \"2\",\n" +
-                "                    \"goods_price\": \"29.00\"\n" +
-                "                }\n" +
-                "            ],\n" +
-                "            \"store_id\": \"2\",\n" +
-                "            \"store_name\": \"二号店\"\n" +
-                "        },\n" +
-                "        {\n" +
-                "            \"goods\": [\n" +
-                "                {\n" +
-                "                    \"goods_id\": \"333331\",\n" +
-                "                    \"goods_image\": \""+R.drawable.watermelon_pic+"\",\n" +
-                "                    \"goods_name\": \"Watermelon\",\n" +
-                "                    \"goods_num\": \"3\",\n" +
-                "                    \"goods_price\": \"39.00\"\n" +
-                "                },\n" +
-                "                {\n" +
-                "                    \"goods_id\": \"333332\",\n" +
-                "                    \"goods_image\": \""+R.drawable.pear_pic+"\",\n" +
-                "                    \"goods_name\": \"Pear\",\n" +
-                "                    \"goods_num\": \"3\",\n" +
-                "                    \"goods_price\": \"49.00\"\n" +
-                "                },\n" +
-                "                {\n" +
-                "                    \"goods_id\": \"333333\",\n" +
-                "                    \"goods_image\": \""+R.drawable.grape_pic+"\",\n" +
-                "                    \"goods_name\": \"Grape\",\n" +
-                "                    \"goods_num\": \"3\",\n" +
-                "                    \"goods_price\": \"59.00\"\n" +
-                "                }\n" +
-                "            ],\n" +
-                "            \"store_id\": \"3\",\n" +
-                "            \"store_name\": \"三号店\"\n" +
-                "        }\n" +
-                "    ]\n" +
-                "}";
-        Gson gson = new Gson();
-        ShoppingCarDataBean shoppingCarDataBean = gson.fromJson(shoppingCarData, ShoppingCarDataBean.class);
-        datas = shoppingCarDataBean.getDatas();
-        initExpandableListViewData(datas);
+    private void initShoppingCart(String websiteAddress) {
+
+//        HttpUtil.sendOkHttpRequest(websiteAddress, new okhttp3.Callback() {
+//            @Override
+//            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+//                String responseText = response.body().string();
+//                LogUtil.d("Car标记0",responseText);
+//                ShoppingCar shoppingCar = ResponseUtil.handleShoppingCart(responseText);
+//                if(stores!=null)
+//                    stores.clear();
+//                stores = shoppingCar.getStores();
+//                LogUtil.d("Car标记1",stores.get(0).getStore_name());
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        if (stores != null) {
+//                            initExpandableListViewData(stores);
+//                        } else {
+//                            ToastUtil.makeText(BaseApplication.getContext(), "获取数据失败");
+//                        }
+//                    }
+//                });
+//            }
+//            @Override
+//            public void onFailure(okhttp3.Call call, IOException e) {
+//                e.printStackTrace();
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        ToastUtil.makeText(BaseApplication.getContext(), "获取数据失败");
+//                    }
+//                });
+//            }
+//        });
+        ShoppingCar shoppingCar=initShoppingCartStr();
+        stores = shoppingCar.getStores();
+        initExpandableListViewData(stores);
     }
+
+
 
     /**
      * 初始化ExpandableListView
@@ -406,12 +372,12 @@ public class MainActivity extends BaseActivity {
      * 初始化ExpandableListView的数据
      * 并在数据刷新时，页面保持当前位置
      *
-     * @param datas 购物车的数据
+     * @param storeList 购物车的数据
      */
-    private void initExpandableListViewData(List<ShoppingCarDataBean.DatasBean> datas) {
-        if (datas != null && datas.size() > 0) {
+    private void initExpandableListViewData(List<ShoppingCar.Store> storeList) {
+        if (storeList != null && storeList.size() > 0) {
             //刷新数据时，保持当前位置
-            shoppingCarAdapter.setData(datas);
+            shoppingCarAdapter.setData(storeList);
 
             //使所有组展开
             for (int i = 0; i < shoppingCarAdapter.getGroupCount(); i++) {
@@ -422,14 +388,13 @@ public class MainActivity extends BaseActivity {
             elvShoppingCar.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
 
                 @Override
-                public boolean onGroupClick(ExpandableListView parent, View v,
-                                            int groupPosition, long id) {
+                public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                     return true;
                 }
             });
 
-            tvTitlebarRight.setVisibility(View.VISIBLE);
-            tvTitlebarRight.setText("编辑");
+            EditCartTV.setVisibility(View.VISIBLE);
+            EditCartTV.setText("编辑");
             rlNoContant.setVisibility(View.GONE);
             elvShoppingCar.setVisibility(View.VISIBLE);
             rl.setVisibility(View.VISIBLE);
@@ -437,7 +402,7 @@ public class MainActivity extends BaseActivity {
             btnOrder.setVisibility(View.VISIBLE);
             btnDelete.setVisibility(View.GONE);
         } else {
-            tvTitlebarRight.setVisibility(View.GONE);
+            EditCartTV.setVisibility(View.GONE);
             rlNoContant.setVisibility(View.VISIBLE);
             elvShoppingCar.setVisibility(View.GONE);
             rl.setVisibility(View.GONE);
@@ -454,35 +419,35 @@ public class MainActivity extends BaseActivity {
         //true为有，则需要刷新数据；反之，则不需要；
         boolean hasSelect = false;
         //创建临时的List，用于存储没有被选中的购物车数据
-        List<ShoppingCarDataBean.DatasBean> datasTemp = new ArrayList<>();
+        List<ShoppingCar.Store> storesTemp = new ArrayList<>();
 
-        for (int i = 0; i < datas.size(); i++) {
-            List<ShoppingCarDataBean.DatasBean.GoodsBean> goods = datas.get(i).getGoods();
-            boolean isSelect_shop = datas.get(i).getIsSelect_shop();
+        for (int i = 0; i < stores.size(); i++) {
+            List<ShoppingCar.Store.Goods> goods = stores.get(i).getGoods();
+            boolean isSelect_shop = stores.get(i).getIsSelect_shop();
 
             if (isSelect_shop) {
                 hasSelect = true;
                 //跳出本次循环，继续下次循环。
                 continue;
             } else {
-                datasTemp.add(datas.get(i));
-                datasTemp.get(datasTemp.size() - 1).setGoods(new ArrayList<ShoppingCarDataBean.DatasBean.GoodsBean>());
+                storesTemp.add(stores.get(i));
+                storesTemp.get(storesTemp.size() - 1).setGoods(new ArrayList<ShoppingCar.Store.Goods>());
             }
 
             for (int y = 0; y < goods.size(); y++) {
-                ShoppingCarDataBean.DatasBean.GoodsBean goodsBean = goods.get(y);
-                boolean isSelect = goodsBean.getIsSelect();
+                ShoppingCar.Store.Goods good = goods.get(y);
+                boolean isSelect = good.getIsSelect_product();
 
                 if (isSelect) {
                     hasSelect = true;
                 } else {
-                    datasTemp.get(datasTemp.size() - 1).getGoods().add(goodsBean);
+                    storesTemp.get(storesTemp.size() - 1).getGoods().add(good);
                 }
             }
         }
 
         if (hasSelect) {
-            showDeleteDialog(datasTemp);
+            showDeleteDialog(storesTemp);
         } else {
             ToastUtil.makeText(MainActivity.this, "请选择要删除的商品");
         }
@@ -491,14 +456,14 @@ public class MainActivity extends BaseActivity {
     /**
      * 展示删除的dialog
      *
-     * @param datasTemp
+     * @param storesTemp
      */
-    private void showDeleteDialog(final List<ShoppingCarDataBean.DatasBean> datasTemp) {
+    private void showDeleteDialog(final List<ShoppingCar.Store> storesTemp) {
         View view = View.inflate(MainActivity.this, R.layout.dialog_two_btn, null);
         final RoundCornerDialog roundCornerDialog = new RoundCornerDialog(MainActivity.this, 0, 0, view, R.style.RoundCornerDialog);
         roundCornerDialog.show();
         roundCornerDialog.setCanceledOnTouchOutside(false);// 设置点击屏幕Dialog不消失
-        roundCornerDialog.setOnKeyListener(keylistener);//设置点击返回键Dialog不消失
+        roundCornerDialog.setOnKeyListener(keyListener);//设置点击返回键Dialog不消失
 
         TextView tv_message = (TextView) view.findViewById(R.id.tv_message);
         TextView tv_logout_confirm = (TextView) view.findViewById(R.id.tv_logout_confirm);
@@ -510,8 +475,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 roundCornerDialog.dismiss();
-                datas = datasTemp;
-                initExpandableListViewData(datas);
+                stores = storesTemp;
+                initExpandableListViewData(stores);
             }
         });
         //取消
@@ -523,7 +488,7 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-    DialogInterface.OnKeyListener keylistener = new DialogInterface.OnKeyListener() {
+    DialogInterface.OnKeyListener keyListener = new DialogInterface.OnKeyListener() {
         public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
             if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
                 return true;
@@ -533,4 +498,31 @@ public class MainActivity extends BaseActivity {
         }
     };
 
+    public ShoppingCar initShoppingCartStr() {
+        ShoppingCar shoppingCar =new ShoppingCar();
+        Product product = new Product();
+        product.setProduct_id(1);
+        product.setPro_name("Apple");
+        product.setPro_favl(12);
+        product.setExtra_money(10);
+        product.setPro_detail("苹果");
+        product.setPro_image("http://10.0.2.2:8080/image/product/apple_pic.png");
+        product.setType("水果");
+        product.setStore_id(1);
+        product.setPro_sale(10);
+        product.setPro_num(10);
+        ShoppingCar.Store.Goods good = new ShoppingCar.Store.Goods();
+        good.setProduct(product);
+        List<ShoppingCar.Store.Goods>gs = new ArrayList<>();
+        gs.add(good);
+        ShoppingCar.Store store =new ShoppingCar.Store();
+        store.setGoods(gs);
+        store.setStore_id(1);
+        store.setStore_name("一号店");
+        List<ShoppingCar.Store> ss=new ArrayList<>();
+        ss.add(store);
+        shoppingCar.setStores(ss);
+        shoppingCar.setUser_id(1);
+        return shoppingCar;
+    }
 }

@@ -1,30 +1,11 @@
 package com.example.shoppingsystem.layout;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.example.shoppingsystem.R;
-import com.example.shoppingsystem.adapter.ShoppingCarAdapter;
-import com.example.shoppingsystem.emtity.ShoppingCarDataBean;
-import com.example.shoppingsystem.util.ToastUtil;
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 
 /**
  * Created by 79124 on 2019/4/9.

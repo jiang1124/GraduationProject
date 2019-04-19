@@ -95,9 +95,11 @@ public class SearchActivity extends AppCompatActivity {
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 String responseText = response.body().string();
                 LogUtil.d("searchStr:",responseText);
-                productList.clear();
+                if(productList!=null)
+                    productList.clear();
                 productList = ResponseUtil.handleProductList(responseText);
-                LogUtil.d("searchResult:",productList.toString());
+                if(productList!=null)
+                    LogUtil.d("searchResult:",productList.toString());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

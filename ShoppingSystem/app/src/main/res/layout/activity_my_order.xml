@@ -20,9 +20,61 @@
             />
     </android.support.design.widget.AppBarLayout>
 
-    <TextView
+    <RelativeLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="订单页面"/>
+        android:layout_height="48dp">
+
+        <TextView
+            android:id="@+id/tv_nopay_queue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:gravity="center"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="#1a1a1a"
+            android:textSize="18sp"
+            android:text="未支付"/>
+
+        <TextView
+            android:id="@+id/tv_pay_queue"
+            android:layout_width="200dp"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:maxLength="18"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="#4c4c4c"
+            android:textSize="15sp"
+            android:text="已支付"/>
+
+        <TextView
+            android:id="@+id/tv_finish_queue"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@null"
+            android:gravity="center"
+            android:paddingLeft="13dp"
+            android:paddingRight="13dp"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="#4c4c4c"
+            android:textSize="15sp"
+            android:text="已完成"/>
+
+
+    </RelativeLayout>
+    <View  android:layout_height="1px"
+        android:layout_width="match_parent"
+        android:background="#ddf"/>
+    <ListView
+        android:id="@+id/lv_order_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

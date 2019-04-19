@@ -12,6 +12,8 @@ public interface ProductRepo {
 
     public List<Product> findSortMany(String sort);
 
+    public Product test(int id);
+
     public int add(Product product);
 
     public int update(Product product);
