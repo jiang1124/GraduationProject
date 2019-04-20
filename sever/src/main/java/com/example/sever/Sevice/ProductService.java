@@ -13,6 +13,10 @@ public interface ProductService {
 
         public List<Product> findSortMany(String sort);
 
+        public List<Product> findKeyByPrice(String key);
+
+        public List<Product> findKeyBySale(String key);
+
         public int add(Product product);
 
         public int update(Product product);

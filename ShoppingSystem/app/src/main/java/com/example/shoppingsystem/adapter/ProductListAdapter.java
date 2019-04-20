@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.activity.ProductActivity;
-import com.example.shoppingsystem.emtity.Product;
+import com.example.shoppingsystem.Entity.Product;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ import java.util.List;
 public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.ViewHolder> {
     private List<Product> mProductList;
     private Context mContext;
+    private int user_id = -1;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -43,10 +44,15 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         notifyDataSetChanged();
     }
 
-    public static void actionStart(Context context,Product product){
+    public void actionStart(Context context,Product product){
         Intent intent = new Intent(context,ProductActivity.class);
         intent.putExtra("Product",product);
+        intent.putExtra("user_id",user_id);
         context.startActivity(intent);
+    }
+
+    public void setUserId(int user_id){
+        this.user_id=user_id;
     }
 
     @Override
@@ -62,7 +68,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             public void onClick(View v){
                 int position = holder.getAdapterPosition();
                 Product product = mProductList.get(position);
-                ProductListAdapter.actionStart(mContext,product);
+                actionStart(mContext,product);
             }
         });
         holder.productImage.setOnClickListener(new View.OnClickListener(){
@@ -70,7 +76,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
             public void onClick(View v){
                 int position = holder.getAdapterPosition();
                 Product product = mProductList.get(position);
-                ProductListAdapter.actionStart(mContext,product);
+                actionStart(mContext,product);
             }
         });
         return holder;

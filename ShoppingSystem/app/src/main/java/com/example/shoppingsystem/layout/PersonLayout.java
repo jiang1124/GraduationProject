@@ -16,7 +16,7 @@ import com.example.shoppingsystem.activity.MyAddressActivity;
 import com.example.shoppingsystem.activity.MyCollectionActivity;
 import com.example.shoppingsystem.activity.MyHistoryActivity;
 import com.example.shoppingsystem.activity.MyOrderActivity;
-import com.example.shoppingsystem.emtity.User;
+import com.example.shoppingsystem.Entity.User;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

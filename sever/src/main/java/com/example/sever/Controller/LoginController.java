@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("/login")
 @RestController
-public class Login {
+public class LoginController {
 
     @Autowired
     private UserService userService;

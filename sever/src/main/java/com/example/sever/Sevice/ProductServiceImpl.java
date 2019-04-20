@@ -29,6 +29,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findKeyByPrice(String key) {
+        return productRepo.findKeyByPrice(key);
+    }
+
+    @Override
+    public List<Product> findKeyBySale(String key) {
+        return productRepo.findKeyBySale(key);
+    }
+
+    @Override
     public int add(Product product) {
         return 0;
     }

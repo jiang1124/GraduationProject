@@ -12,13 +12,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.shoppingsystem.Application.BaseApplication;
 import com.example.shoppingsystem.R;
-import com.example.shoppingsystem.emtity.Product;
+import com.example.shoppingsystem.Entity.Product;
+import com.example.shoppingsystem.util.HttpUtil;
+import com.example.shoppingsystem.util.LogUtil;
 import com.example.shoppingsystem.util.ToastUtil;
+
+import java.io.IOException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
+import okhttp3.Response;
 
 public class ProductActivity extends BaseActivity{
     @InjectView(R.id.collect_button)
@@ -46,6 +52,10 @@ public class ProductActivity extends BaseActivity{
     @InjectView(R.id.iv_product_image_detail)
     ImageView productImageView;
 
+    private Product product;
+    private int user_id;
+    private String Web = "http://10.0.2.2:8080";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +65,8 @@ public class ProductActivity extends BaseActivity{
          * 接收上一活动传输的数据
          */
         Intent intent = getIntent();
-        Product product = (Product) intent.getSerializableExtra("Product");
+        product = (Product) intent.getSerializableExtra("Product");
+        user_id=intent.getIntExtra("user_id",-1);
         /*
          * 设置图片及文本内容
          */
@@ -98,7 +109,35 @@ public class ProductActivity extends BaseActivity{
                 ToastUtil.makeText(v.getContext(),"已收藏");
                 break;
             case R.id.in_shopping_cart_button:
-                ToastUtil.makeText(v.getContext(),"已入购物车");
+                if(user_id!=-1) {
+                    String websiteAddress = Web+"/addProduct?user_id=" + user_id + "&product_id=" + product.getProduct_id();
+                    HttpUtil.sendOkHttpRequest(websiteAddress, new okhttp3.Callback() {
+                        @Override
+                        public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                            String responseText = response.body().string();
+                            LogUtil.d("addProduct:", responseText);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.makeText(BaseApplication.getContext(), "已加入购物车");
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onFailure(okhttp3.Call call, IOException e) {
+                            e.printStackTrace();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ToastUtil.makeText(BaseApplication.getContext(), "获取数据失败");
+                                }
+                            });
+                        }
+                    });
+                }else {
+                    ToastUtil.makeText(v.getContext(), "请先登陆");
+                }
                 break;
             case R.id.buy_button:
                 ToastUtil.makeText(v.getContext(),"Buy");
@@ -107,4 +146,5 @@ public class ProductActivity extends BaseActivity{
                 break;
         }
     }
+
 }

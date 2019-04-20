@@ -12,7 +12,9 @@ public interface ProductRepo {
 
     public List<Product> findSortMany(String sort);
 
-    public Product test(int id);
+    public List<Product> findKeyByPrice(String key);
+
+    public List<Product> findKeyBySale(String key);
 
     public int add(Product product);
 

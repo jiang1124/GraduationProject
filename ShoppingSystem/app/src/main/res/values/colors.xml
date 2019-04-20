@@ -5,7 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
-    <color name="transparent">#00000000</color>
     <color name="trantracent">#22000000</color>
     <color name="trantracent_wode">#55000000</color>
     <color name="deep_transparent">#bb000000</color>
@@ -14,6 +13,98 @@
     <color name="original_border_color">#F18459</color>
     <color name="grey_normal_bg">#EEEEEE</color>
 
+    <color name="colorBlack">#000000</color>
 
+    <color name="colorWhite">#FFFFFF</color>
+    <!--主色-->
+    <color name="colorMain">#45a989</color>
+    <!--不可点击-->
+    <color name="colorUnClickable">#9fd1c1</color>
+    <!--背景色-->
+    <color name="colorBackground">#F6F6F6</color>
+    <!--分割线-->
+    <color name="colorDivide">#F6F6F6</color>
+    <!--辅助色-->
+    <color name="colorBlue">#219dff</color>
+    <!--辅助色-->
+    <color name="colorGreen">#77bd02</color>
+    <!--辅助色-->
+    <color name="colorYellow">#ffb703</color>
+
+    <color name="colorRed">#FA6344</color>
+    <!--按钮被选中的颜色-->
+    <color name="colorUnSelected">#7Dff6400</color>
+    <!--头像边框颜色-->
+    <color name="colorAvatarBorder">#e4e4e4</color>
+
+    <color name="colorRoute">#0FC200</color>
+
+    <!--dialog使用的白色透明-->
+    <color name="white_transparent_f4">#f4ffffff</color>
+    <!--黑色透明-->
+    <color name="black_transparent_aa">#88000000</color>
+
+    <!--深灰字体颜色-->
+    <color name="colorTextDeep">#333333</color>
+    <!--中灰字体颜色-->
+    <color name="colorTextMiddle">#666666</color>
+    <!--浅灰字体颜色-->
+    <color name="colorTextSmall">#999999</color>
+    <!--hint文字颜色-->
+    <color name="colorTextHint">#cdcdcd</color>
+
+    <color name="color_text_gray">#989898</color>
+    <!--灰色失效-->
+    <color name="text_color_invalid">#b3b3b3</color>
+    <!--深灰_提示性文字-->
+    <color name="btn_green_noraml">#77bd02</color>
+    <!-- 透明 -->
+    <color name="transparent">#00000000</color>
+    <!-- 退出按钮 -->
+    <color name="logout">#FF5555</color>
+
+    <!--更新迭代处理-->
+    <color name="color_8a8a8a">#8a8a8a</color>
+    <color name="color_333333">#333333</color>
+    <color name="color_eeeeee">#eeeeee</color>
+    <color name="color_ff6b11">#ff6b11</color>
+    <color name="color_f5f5f5">#f5f5f5</color>
+    <color name="color_f3f5f5">#f3f5f5</color>
+    <color name="color_148ca6">#148ca6</color>
+    <color name="color_ab72e1">#ab72e1</color>
+    <color name="color_ff8308">#ff8308</color>
+    <color name="color_FFBA00">#FFBA00</color>
+    <color name="color_009ffa">#009ffa</color>
+    <color name="color_4CC2FF">#4CC2FF</color>
+    <color name="color_3a3a3a">#3a3a3a</color>
+    <color name="color_5c5c5c">#5c5c5c</color>
+    <color name="color_cccccc">#cccccc</color>
+    <color name="color_ff6b47">#FF6B47</color>
+    <color name="color_ebf0f1">#EBF0F1</color>
+    <color name="color_bfbfbf">#bfbfbf</color>
+    <color name="color_ff6a47">#ffff0000</color>
+    <color name="color_ff4b13">#FF4B13</color>
+    <color name="color_ff7324">#ff7324</color>
+    <color name="color_1bb7ff">#1bb7ff</color>
+    <color name="color_e5e5e5">#e5e5e5</color>
+    <color name="color_62c3fa">#62c3fa</color>
+    <color name="color_9abcff">#9abcff</color>
+    <color name="color_58e8ff">#58e8ff</color>
+    <color name="color_ededed">#ededed</color>
+    <color name="color_e8e8e8">#e8e8e8</color>
+    <color name="color_4cc2ff">#4cc2ff</color>
+    <color name="color_55b9ff">#55b9ff</color>
+    <color name="color_3cd4d9">#3cd4d9</color>
+    <color name="color_ff9555">#ff9555</color>
+    <color name="color_4ede88">#4ede88</color>
+    <color name="color_1DC962">#1DC962</color>
+    <color name="color_b273ff">#b273ff</color>
+    <color name="color_1F1F1F">#1F1F1F</color>
+    <color name="color_FF7316">#FF7316</color>
+    <color name="color_A9A9A9">#A9A9A9</color>
+    <color name="color_FFA200">#FFA200</color>
+    <color name="color_40_55ceac">#4055ceac</color>
+    <color name="color_8A8A8A">#8A8A8A</color>
+    <color name="color_55ceac">#55ceac</color>
 
 </resources>

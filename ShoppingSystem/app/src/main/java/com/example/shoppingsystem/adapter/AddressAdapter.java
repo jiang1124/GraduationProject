@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.activity.EditRecipientActivity;
-import com.example.shoppingsystem.emtity.Recipient;
+import com.example.shoppingsystem.Entity.Recipient;
 
 import java.util.List;
 
@@ -71,9 +71,9 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.ViewHold
     @Override
     public void onBindViewHolder(AddressAdapter.ViewHolder holder, int position){
         Recipient recipient = mRecipient.get(position);
-        holder.recipientName.setText(recipient.getRecipientName());
-        holder.address.setText(recipient.getRecipientAddress());
-        holder.phoneNumber.setText(recipient.getRecipientPhone());
+        holder.recipientName.setText(recipient.getRecipient_name());
+        holder.address.setText(recipient.getAddress());
+        holder.phoneNumber.setText(recipient.getPhone());
     }
     @Override
     public int getItemCount(){

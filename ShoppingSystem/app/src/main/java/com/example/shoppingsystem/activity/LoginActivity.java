@@ -4,18 +4,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
+import com.example.shoppingsystem.Entity.User;
 import com.example.shoppingsystem.R;
-import com.example.shoppingsystem.emtity.User;
 import com.example.shoppingsystem.util.HttpUtil;
 import com.example.shoppingsystem.util.LogUtil;
 import com.example.shoppingsystem.util.ResponseUtil;
@@ -62,8 +59,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     private SharedPreferences.Editor editor;
     private User user;
     private boolean isLogin = false;
-    private boolean isOff = true;
+    private boolean isOn = true;
     private String type;
+    private String Web = "http://10.0.2.2:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,19 +71,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         setSupportActionBar(tbLogin);
 
         Intent intentGet =getIntent();
-        isOff = intentGet.getBooleanExtra("isOff",true);
+        isOn = intentGet.getBooleanExtra("isOn",true);
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRemember = pref.getBoolean("remember_password",false);
-        if(isRemember&&isOff) {
+        if(isRemember&&isOn) {
             //将帐号和密码都设置到文本框中
             String account = pref.getString("account", "");
             String password = pref.getString("password", "");
             accountInputEdit.setText(account);
             passwordInputEdit.setText(password);
             rememberPass.setChecked(true);
-            String webAddress = "http://10.0.2.2:8080/login/verification?name=" + account + "&password=" + password;
+            String webAddress = Web+"/login/verification?name=" + account + "&password=" + password;
             getLoginAnswer(webAddress);
-        }else if(isOff){
+        }else if(isOn){
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.putExtra("isLogin",isLogin);
             intent.putExtra("User",user);
@@ -100,14 +98,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             case R.id.btn_login:
                 String account = accountInputEdit.getText().toString();
                 String password = passwordInputEdit.getText().toString();
-                String webAddress ="http://10.0.2.2:8080/login/verification?name="+account+"&password="+password;
+                String webAddress =Web+"/login/verification?name="+account+"&password="+password;
                 type="login";
                 getLoginAnswer(webAddress);
                 break;
             case R.id.btn_registered:
                 String registeredAccount = accountInputEdit.getText().toString();
                 String registeredPassword = passwordInputEdit.getText().toString();
-                String netAddress = "http://10.0.2.2:8080/login/registered?name="+registeredAccount+"&password="+registeredPassword;
+                String netAddress = Web+"/login/registered?name="+registeredAccount+"&password="+registeredPassword;
                 type="registered";
                 getLoginAnswer(netAddress);
                 break;

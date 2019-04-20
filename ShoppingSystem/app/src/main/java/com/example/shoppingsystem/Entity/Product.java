@@ -1,4 +1,4 @@
-package com.example.shoppingsystem.emtity;
+package com.example.shoppingsystem.Entity;
 
 import java.io.Serializable;
 
@@ -105,5 +105,22 @@ public class Product implements Serializable{
 
     public void setExtra_money(double extra_money) {
         this.extra_money = extra_money;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "product_id=" + product_id +
+                ", store_id=" + store_id +
+                ", pro_name='" + pro_name + '\'' +
+                ", pro_detail='" + pro_detail + '\'' +
+                ", pro_price=" + pro_price +
+                ", pro_favl=" + pro_favl +
+                ", pro_num=" + pro_num +
+                ", type='" + type + '\'' +
+                ", pro_sale=" + pro_sale +
+                ", pro_image='" + pro_image + '\'' +
+                ", extra_money=" + extra_money +
+                '}';
     }
 }

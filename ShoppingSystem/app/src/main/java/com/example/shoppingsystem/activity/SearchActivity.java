@@ -11,14 +11,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.shoppingsystem.Entity.User;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.adapter.ProductListAdapter;
 import com.example.shoppingsystem.Application.BaseApplication;
-import com.example.shoppingsystem.emtity.Product;
+import com.example.shoppingsystem.Entity.Product;
 import com.example.shoppingsystem.util.HttpUtil;
 import com.example.shoppingsystem.util.LogUtil;
 import com.example.shoppingsystem.util.ResponseUtil;
 import com.example.shoppingsystem.util.ToastUtil;
+import com.lljjcoder.style.citylist.Toast.ToastUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,6 +47,9 @@ public class SearchActivity extends AppCompatActivity {
 
     private List<Product> productList=new ArrayList<>();
     private String netAddress;
+    private User user;
+    private String searchContentStr;
+    private String Web = "http://10.0.2.2:8080";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,13 +58,19 @@ public class SearchActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String key = intent.getStringExtra("key");
         String sort = intent.getStringExtra("sort");
+        user = (User) intent.getSerializableExtra("User");
         ButterKnife.inject(this);
 
-        netAddress = "http://10.0.2.2:8080/search";
-        if(key!=null)
-            netAddress = netAddress +"/k?key="+ key;
-        else if(sort!=null)
-            netAddress = netAddress +"/s?sort=" + sort;
+        netAddress = Web+"/search";
+        if(key!=null) {
+            netAddress = netAddress + "/k?key=" + key;
+            searchEdit.setText(key);
+        }
+        else if(sort!=null) {
+            netAddress = netAddress + "/s?sort=" + sort;
+            searchEdit.setText(sort);
+        }
+        searchContentStr=searchEdit.getText().toString();
         LogUtil.d("searchNetAddress:",netAddress);
         initSearchProductList(netAddress);
     }
@@ -68,17 +79,40 @@ public class SearchActivity extends AppCompatActivity {
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.btn_search_in_search:
-                String addressStr = "http://10.0.2.2:8080/search/k?key="+searchEdit.getText().toString();
-                initSearchProductList(addressStr);
+                searchContentStr = searchEdit.getText().toString().trim();
+                if(searchContentStr!=null) {
+                    String addressStr = Web+"/search/k?key=" + searchContentStr;
+                    initSearchProductList(addressStr);
+                }else {
+                    ToastUtil.makeText(this,"请输入搜索内容");
+                }
                 break;
             case R.id.tv_default_queue:
-                shiftQueueText(priceQueueText,salesVolumeQueueText,defaultQueueText);
+                if(searchContentStr!=null) {
+                    String addressStr = Web+"/search/k?key=" + searchContentStr;
+                    initSearchProductList(addressStr);
+                    shiftQueueText(priceQueueText,salesVolumeQueueText,defaultQueueText);
+                }else {
+                    ToastUtil.makeText(this,"请输入搜索内容");
+                }
                 break;
             case R.id.tv_price_queue:
-                shiftQueueText(defaultQueueText,salesVolumeQueueText,priceQueueText);
+                if(searchContentStr!=null) {
+                    String addressStr = Web+"/search/p?key=" + searchContentStr;
+                    initSearchProductList(addressStr);
+                    shiftQueueText(defaultQueueText,salesVolumeQueueText,priceQueueText);
+                }else {
+                    ToastUtil.makeText(this,"请输入搜索内容");
+                }
                 break;
             case R.id.tv_sales_volume_queue:
-                shiftQueueText(defaultQueueText,priceQueueText,salesVolumeQueueText);
+                if(searchContentStr!=null) {
+                    String addressStr = Web+"/search/v?key=" + searchContentStr;
+                    initSearchProductList(addressStr);
+                    shiftQueueText(defaultQueueText,priceQueueText,salesVolumeQueueText);
+                }else {
+                    ToastUtil.makeText(this,"请输入搜索内容");
+                }
                 break;
             default:
                 break;
@@ -107,6 +141,8 @@ public class SearchActivity extends AppCompatActivity {
                             GridLayoutManager layoutManager = new GridLayoutManager(BaseApplication.getContext(), 2);
                             SearchRecyclerView.setLayoutManager(layoutManager);
                             ProductListAdapter productListAdapter = new ProductListAdapter(productList);
+                            if(user!=null)
+                                productListAdapter.setUserId(user.getUser_id());
                             SearchRecyclerView.setAdapter(productListAdapter);
                             productListAdapter.notifyDataSetChanged();
                         } else {

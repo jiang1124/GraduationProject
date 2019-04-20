@@ -11,7 +11,7 @@ import com.example.shoppingsystem.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MyOrderActivity extends AppCompatActivity {
+public class MyOrderActivity extends BaseActivity {
     @InjectView(R.id.tb_order)
     Toolbar tbOrder;
 

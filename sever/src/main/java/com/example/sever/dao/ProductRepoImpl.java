@@ -46,14 +46,27 @@ public class ProductRepoImpl implements ProductRepo{
     }
 
     @Override
-    public Product test(int id) {
-        List<Product> res = jdbcTemplate.query("select pro_name from product where product_id = ?;", new Object[]{id},
-                new BeanPropertyRowMapper(Product.class));
-        if(res!=null && res.size()>0){
-            return res.get(0);
-        }else{
-            return null;
+    public List<Product> findKeyByPrice(String key) {
+        if(key !="") {
+            List<Product> res = jdbcTemplate.query("select * from product where pro_name like ? order by pro_price;", new Object[]{"%" + key + "%"},
+                    new BeanPropertyRowMapper(Product.class));
+            if (res != null && res.size() > 0) {
+                return res;
+            }
         }
+        return null;
+    }
+
+    @Override
+    public List<Product> findKeyBySale(String key) {
+        if(key !="") {
+            List<Product> res = jdbcTemplate.query("select * from product where pro_name like ? order by pro_sale desc;", new Object[]{"%" + key + "%"},
+                    new BeanPropertyRowMapper(Product.class));
+            if (res != null && res.size() > 0) {
+                return res;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -71,30 +84,6 @@ public class ProductRepoImpl implements ProductRepo{
         return 0;
     }
 
-//    @Autowired
-//    private JdbcTemplate jdbcTemplate;
-//
-//    @Override
-//    public List<CeNote> findAll() {
-//
-//        List<CeNote> res = jdbcTemplate.query("select * from usermoney", new Object[]{},
-//                new BeanPropertyRowMapper(CeNote.class));
-//
-//        return res;
-//    }
-//
-//    @Override
-//    public CeNote findOne(int id) {
-//
-//        List<CeNote> res = jdbcTemplate.query("select * from usermoney where id = ?",new Object[]{id},
-//                new BeanPropertyRowMapper(CeNote.class));
-//
-//        if(res!=null && res.size()>0){
-//            return res.get(0);
-//        }else{
-//            return null;
-//        }
-//    }
 //
 //    @Override
 //    public int add(CeNote note) {

@@ -11,7 +11,7 @@ import com.example.shoppingsystem.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MyHistoryActivity extends AppCompatActivity {
+public class MyHistoryActivity extends BaseActivity {
     @InjectView(R.id.tb_history)
     Toolbar tbHistory;
 

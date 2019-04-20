@@ -22,4 +22,8 @@
     <dimen name="spacing_tiny">6dp</dimen>
     <dimen name="spacing_tinyer">4dp</dimen>
     <dimen name="spacing_tinyest">2dp</dimen>
+
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_14">14sp</dimen>
+    <dimen name="sp_16">16sp</dimen>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.shoppingsystem.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,10 +8,12 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
+import com.example.shoppingsystem.Entity.Recipient;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.adapter.AddressAdapter;
-import com.example.shoppingsystem.emtity.Recipient;
 import com.example.shoppingsystem.util.HttpUtil;
 import com.example.shoppingsystem.util.LogUtil;
 import com.example.shoppingsystem.util.ResponseUtil;
@@ -22,15 +25,19 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 import okhttp3.Response;
 
-public class MyAddressActivity extends AppCompatActivity {
+public class MyAddressActivity extends BaseActivity {
     @InjectView(R.id.tb_address)
     Toolbar tbAddress;
     @InjectView(R.id.rv_recipient_list)
     RecyclerView recipientRecyclerView;
+    @InjectView(R.id.btn_add_address)
+    Button addAddressButton;
 
     private List<Recipient> recipientList = new ArrayList<>();
+    private String Web = "http://10.0.2.2:8080";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,8 +48,20 @@ public class MyAddressActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        requestRecipientList("http://10.0.2.2:8080/recipientTran/recipientList");
+        requestRecipientList(Web+"/recipientTran/recipientList");
 
+    }
+
+    @OnClick(R.id.btn_add_address)
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.btn_add_address:
+                Intent intent = new Intent(MyAddressActivity.this, EditRecipientActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -65,7 +84,7 @@ public class MyAddressActivity extends AppCompatActivity {
                     recipientList.clear();
                 recipientList = ResponseUtil.handleRecipientListResponse(responseText);
                 if (recipientList!=null)
-                    LogUtil.d("标记1",recipientList.get(0).getRecipientName());
+                    LogUtil.d("标记1",recipientList.get(0).getRecipient_name());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

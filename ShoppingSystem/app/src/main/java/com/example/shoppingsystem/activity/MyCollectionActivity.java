@@ -12,7 +12,7 @@ import com.example.shoppingsystem.R;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class MyCollectionActivity extends AppCompatActivity {
+public class MyCollectionActivity extends BaseActivity {
     @InjectView(R.id.tb_collection)
     Toolbar tbCollection;
 

@@ -1,9 +1,9 @@
 package com.example.shoppingsystem.util;
 
-import com.example.shoppingsystem.emtity.Product;
-import com.example.shoppingsystem.emtity.Recipient;
-import com.example.shoppingsystem.emtity.ShoppingCar;
-import com.example.shoppingsystem.emtity.User;
+import com.example.shoppingsystem.Entity.Car;
+import com.example.shoppingsystem.Entity.Product;
+import com.example.shoppingsystem.Entity.User;
+import com.example.shoppingsystem.Entity.Recipient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -75,10 +75,10 @@ public class ResponseUtil {
     /**
      * 将返回的JSon数据解析成ShoppingCar
      */
-    public static ShoppingCar handleShoppingCart(String Response){
+    public static Car handleShoppingCart(String Response){
         try{
             Gson gson = new Gson();
-            ShoppingCar shoppingCar =gson.fromJson(Response, ShoppingCar.class);
+            Car shoppingCar =gson.fromJson(Response, Car.class);
             return shoppingCar;
         }catch (Exception e){
             e.printStackTrace();

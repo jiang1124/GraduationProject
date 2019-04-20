@@ -1,34 +1,31 @@
 package com.example.shoppingsystem.activity;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.shoppingsystem.R;
-import com.example.shoppingsystem.emtity.Recipient;
-import com.example.shoppingsystem.util.ToastUtil;
+import com.example.shoppingsystem.Entity.Recipient;
 import com.lljjcoder.Interface.OnCityItemClickListener;
 import com.lljjcoder.bean.CityBean;
 import com.lljjcoder.bean.DistrictBean;
 import com.lljjcoder.bean.ProvinceBean;
-import com.lljjcoder.citywheel.CityConfig;
 import com.lljjcoder.style.cityjd.JDCityPicker;
-import com.lljjcoder.style.citypickerview.CityPickerView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-public class EditRecipientActivity extends AppCompatActivity {
+public class EditRecipientActivity extends BaseActivity {
     @InjectView(R.id.tv_select_city)
     TextView cityTV;
     @InjectView(R.id.btn_cancel_edit_recipient)
     Button cancelButton;
 
     private JDCityPicker cityPicker = new JDCityPicker();
+    private String Web = "http://10.0.2.2:8080";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
