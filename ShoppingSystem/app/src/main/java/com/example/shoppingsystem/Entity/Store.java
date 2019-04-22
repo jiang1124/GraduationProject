@@ -1,6 +1,8 @@
 package com.example.shoppingsystem.Entity;
 
-public class Store {
+import java.io.Serializable;
+
+public class Store implements Serializable {
     private int store_id;
     private String store_name;
     private String store_password;

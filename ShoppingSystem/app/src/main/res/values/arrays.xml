@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="defaultArr">
+        <item>设为默认地址</item>
+        <item> </item>
+    </string-array>
+</resources>

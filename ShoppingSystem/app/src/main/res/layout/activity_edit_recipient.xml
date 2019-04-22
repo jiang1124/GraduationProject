@@ -6,6 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_address"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin"
+            />
+    </android.support.design.widget.AppBarLayout>
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -46,7 +60,7 @@
             android:id="@+id/et_recipient_phone"
             android:layout_width="match_parent"
             android:layout_height="35sp"
-            android:hint="请输入收件人姓名"
+            android:hint="请输入收件人电话"
             android:background="#fff"
             android:maxLines="1"
             />
@@ -59,6 +73,7 @@
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:text="地址"/>
+
         <View  android:layout_height="1px"
             android:layout_width="match_parent"
             android:background="@color/trantracent"
@@ -71,7 +86,7 @@
             android:layout_height="35sp"
             android:gravity="center"
             android:background="#fff"
-            android:text="选择城市"/>
+            android:hint="选择城市"/>
 
 
 
@@ -87,6 +102,15 @@
             android:background="#fff"
             android:hint="请输入详细地址"
             />
+
+        <Spinner
+            android:id="@+id/s_default"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:popupBackground="#fff"
+            />
+
+
     </LinearLayout>
 
     <LinearLayout

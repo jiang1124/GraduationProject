@@ -1,8 +1,9 @@
 package com.example.shoppingsystem.Entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Shop {
+public class Shop implements Serializable {
     private int store_id;
     private String store_name;
     private boolean isSelect_shop;      //店铺是否在购物车中被选中

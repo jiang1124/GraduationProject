@@ -414,8 +414,12 @@ public class MainActivity extends BaseActivity {
         shoppingCarAdapter.setOnDeleteListener(new ShoppingCarAdapter.OnDeleteListener() {
             @Override
             public void onDelete(String productIds) {
-                initDelete();
-                productIdStr = productIds;
+                if(user!=null) {
+                    String webAddress = Web+"/delProduct?user_id="
+                            +user.getUser_id()+"&productIds="+productIds;
+                    showDeleteDialog(webAddress);
+                }
+                //initDelete();
             }
         });
 
@@ -478,55 +482,44 @@ public class MainActivity extends BaseActivity {
      * 通过bean类中的DatasBean的isSelect_shop属性，判断店铺是否被选中；
      * GoodsBean的isSelect属性，判断商品是否被选中，
      */
-    private List<Goods> initDelete() {
-        //判断是否有店铺或商品被选中
-        //true为有，则需要刷新数据；反之，则不需要；
-        boolean hasSelect = false;
-        //创建临时的List，用于存储没有被选中的购物车数据
-        List<Shop> storesTemp = new ArrayList<>();
-        //创建临时的List，用于存储被选中的商品数据
-        List<Goods> goodsList = new ArrayList<>();
-
-        for (int i = 0; i < stores.size(); i++) {
-            List<Goods> goods = stores.get(i).getGoods();
-            boolean isSelect_shop = stores.get(i).isSelect_shop();
-
-            if (isSelect_shop) {
-                hasSelect = true;
-                //跳出本次循环，继续下次循环。
-                goodsList.add(goods.get(i));
-                continue;
-            } else {
-                storesTemp.add(stores.get(i));
-                storesTemp.get(storesTemp.size() - 1).setGoods(new ArrayList<Goods>());
-            }
-
-            for (int y = 0; y < goods.size(); y++) {
-                Goods good = goods.get(y);
-                boolean isSelect = good.isSelect_product();
-
-                if (isSelect) {
-                    hasSelect = true;
-                } else {
-                    storesTemp.get(storesTemp.size() - 1).getGoods().add(good);
-                }
-            }
-        }
-
-        if (hasSelect) {
-            showDeleteDialog(storesTemp);
-        } else {
-            ToastUtil.makeText(MainActivity.this, "请选择要删除的商品");
-        }
-        return goodsList;
-    }
+//    private List<Shop> initPayList() {
+//        //判断是否有店铺或商品被选中
+//        //true为有，则需要刷新数据；反之，则不需要；
+//        boolean hasSelect = false;
+//        //创建临时的List，用于存储没有选中的购物车数据
+//        List<Shop> storesTemp = new ArrayList<>();
+//
+//        for (int i = 0; i < stores.size(); i++) {
+//            List<Goods> goods = stores.get(i).getGoods();
+//            boolean isSelect_shop = stores.get(i).isSelect_shop();
+//
+//            if (isSelect_shop) {
+//                hasSelect = true;
+//                //跳出本次循环，继续下次循环。
+//                storesTemp.add(stores.get(i));
+//                storesTemp.get(storesTemp.size() - 1).setGoods(new ArrayList<Goods>());
+//                continue;
+//            }
+//
+//            for (int y = 0; y < goods.size(); y++) {
+//                Goods good = goods.get(y);
+//                boolean isSelect = good.isSelect_product();
+//
+//                if (isSelect) {
+//                    hasSelect = true;
+//                    storesTemp.get(storesTemp.size() - 1).getGoods().add(good);
+//                }
+//            }
+//        }
+//        return storesTemp;
+//    }
 
     /**
      * 展示删除的dialog
      *
-     * @param storesTemp
+     * @param webAddress
      */
-    private void showDeleteDialog(final List<Shop> storesTemp) {
+    private void showDeleteDialog(final String webAddress) {
         View view = View.inflate(MainActivity.this, R.layout.dialog_two_btn, null);
         final RoundCornerDialog roundCornerDialog = new RoundCornerDialog(MainActivity.this, 0, 0, view, R.style.RoundCornerDialog);
         roundCornerDialog.show();
@@ -543,13 +536,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 roundCornerDialog.dismiss();
-                stores = storesTemp;
-//                initExpandableListViewData(stores);
-                if(user!=null) {
-                    String webAddress = Web+"/delProduct?user_id="
-                            +user.getUser_id()+"&productIds="+productIdStr;
-                    initShoppingCart(webAddress);
-                }
+                initShoppingCart(webAddress);
             }
         });
         //取消

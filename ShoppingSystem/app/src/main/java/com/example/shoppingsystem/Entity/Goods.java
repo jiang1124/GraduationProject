@@ -1,6 +1,8 @@
 package com.example.shoppingsystem.Entity;
 
-public class Goods {
+import java.io.Serializable;
+
+public class Goods implements Serializable {
     private int product_id;//商品id
     private int store_id;//商店id
     private String pro_name;//商品名

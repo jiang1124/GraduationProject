@@ -6,32 +6,116 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_pay"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin"
+            />
+    </android.support.design.widget.AppBarLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:layout_marginTop="5dp"
         android:background="#000" />
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <ListView
+        android:id="@+id/lv_order_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-        <Button
-            android:id="@+id/btn_after_pay"
-            android:layout_width="0sp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#ededed"/>
+
+    <LinearLayout
+        android:id="@+id/ll_product_list"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/return_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/return_back"/>
+        </LinearLayout>
+        <ListView
+            android:id="@+id/lv_product_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_circle_coner_orange"
-            android:text="稍后支付"/>
-        <Button
-            android:id="@+id/btn_now_pay"
-            android:layout_width="0sp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_circle_coner_orange"
-            android:text="立即支付"/>
+            android:background="#ededed"/>
 
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_total_price_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="10dp"
+                android:maxLength="12"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="￥0.00"
+                android:textColor="#333333"
+                android:textSize="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:layout_toLeftOf="@id/tv_total_price_pay"
+                android:text="合计："
+                android:textColor="#333333"
+                android:textSize="15dp" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+            <Button
+                android:id="@+id/btn_after_pay"
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_circle_coner_orange"
+                android:text="稍后支付"/>
+            <Button
+                android:id="@+id/btn_now_pay"
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_circle_coner_orange"
+                android:text="立即支付"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
 
 </LinearLayout>

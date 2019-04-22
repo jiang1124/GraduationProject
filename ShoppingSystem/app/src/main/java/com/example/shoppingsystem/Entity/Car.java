@@ -1,8 +1,9 @@
 package com.example.shoppingsystem.Entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Car {
+public class Car implements Serializable{
     private int user_id;
     private List<Shop> stores;
 

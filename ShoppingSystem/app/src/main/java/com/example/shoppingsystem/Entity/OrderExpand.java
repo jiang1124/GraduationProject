@@ -1,6 +1,8 @@
 package com.example.shoppingsystem.Entity;
 
-public class OrderExpand {
+import java.io.Serializable;
+
+public class OrderExpand implements Serializable {
     private int order_id;
     private int product_id;
     private int store_id;

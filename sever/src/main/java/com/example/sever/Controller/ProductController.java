@@ -54,29 +54,4 @@ public class ProductController {
         System.out.println("/search/p result："+products.toString());
         return products;
     }
-
-//    @Autowired
-//    private CeNoteService ceNoteService;
-//
-//    @RequestMapping("/findAll")
-//    public List<CeNote> findAll() {
-//        return ceNoteService.findAll();
-//    }
-//
-//    @RequestMapping("/findOne")
-//    public CeNote findOne(int id) {
-//        return ceNoteService.findOne(id);
-//    }
-////
-////    @PostMapping("/add")
-////    public Result add(@RequestBody CeNote note) {
-////
-////        try {
-////            ceNoteService.add(note);
-////            return new Result(true,"成功");
-////        } catch (Exception e) {
-////            return new Result(false,"失败");
-////        }
-////
-////    }
 }

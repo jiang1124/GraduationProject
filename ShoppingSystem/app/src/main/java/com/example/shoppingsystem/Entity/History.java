@@ -1,6 +1,8 @@
 package com.example.shoppingsystem.Entity;
 
-public class History {
+import java.io.Serializable;
+
+public class History implements Serializable {
     private int user_id;
     private int product_id;
     private int store_id;

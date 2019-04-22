@@ -19,6 +19,7 @@ import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.activity.PayActivity;
 import com.example.shoppingsystem.util.ToastUtil;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -217,22 +218,33 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 //创建临时的List，用于存储被选中的商品
-                List<Goods> temp = new ArrayList<>();
+                List<Shop> temp = new ArrayList<>();
                 for (int i = 0; i < storeList.size(); i++) {
-                    List<Goods> goods = storeList.get(i).getGoods();
-                    for (int y = 0; y < goods.size(); y++) {
-                        Goods good = goods.get(y);
-                        boolean isSelect = good.isSelect_product();
+                    Shop shop = new Shop();
+                    boolean isSelectShop =storeList.get(i).isSelect_shop();
+                    shop.setStore_id(storeList.get(i).getStore_id());
+                    shop.setStore_name(storeList.get(i).getStore_name());
+                    List<Goods> goods = new ArrayList<Goods>();
+                    for (int j = 0; j < storeList.get(i).getGoods().size(); j++) {
+                        Goods good = new Goods();
+                        boolean isSelect = storeList.get(i).getGoods().get(j).isSelect_product();
                         if (isSelect) {
-                            temp.add(good);
+                            good = storeList.get(i).getGoods().get(j);
+                            goods.add(good);
                         }
+                    }
+                    if(goods.size()>0) {
+                        shop.setGoods(goods);
+                        temp.add(shop);
                     }
                 }
 
+
                 if (temp != null && temp.size() > 0) {//如果有被选中的
                     Intent payIntent = new Intent(BaseApplication.getContext(), PayActivity.class);
+                    payIntent.putExtra("ShopList",(Serializable)temp);
+                    payIntent.putExtra("totalPrice",total_price);
                     BaseApplication.getContext().startActivity(payIntent);
-                    ToastUtil.makeText(context, "跳转到确认订单页面，完成后续订单流程");
                 } else {
                     ToastUtil.makeText(context, "请选择要购买的商品");
                 }
@@ -244,14 +256,14 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
             @Override
             public void onClick(View v) {
                 //创建临时的List，用于存储被选中的商品Id
-                String temp = new String();
+                String temp = "";
                 for (int i = 0; i < storeList.size(); i++) {
                     List<Goods> goods = storeList.get(i).getGoods();
                     for (int y = 0; y < goods.size(); y++) {
                         Goods good = goods.get(y);
                         boolean isSelect = good.isSelect_product();
                         if (isSelect) {
-                            temp=good.getProduct_id()+",";
+                            temp=temp+good.getProduct_id()+",";
                         }
                     }
                 }
@@ -259,7 +271,7 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
                  * 实际开发中，通过回调请求后台接口实现删除操作
                  */
                 if (mDeleteListener != null) {
-                    mDeleteListener.onDelete(temp.trim());
+                    mDeleteListener.onDelete(temp);
                 } else {
                     ToastUtil.makeText(context, "请选择要购买的商品");
                 }
