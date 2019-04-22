@@ -20,6 +20,11 @@ public class RecipientServiceIpml implements RecipientService {
     }
 
     @Override
+    public Recipient findOne(int user_id) {
+        return recipientRepo.findOne(user_id);
+    }
+
+    @Override
     public int deleteOne(int address_id) {
         return recipientRepo.deleteOne(address_id);
     }

@@ -30,12 +30,14 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
         CardView cardView;
         ImageView productImage;
         TextView productName;
+        TextView price;
 
         public ViewHolder(View view) {
             super(view);
             cardView = (CardView) view;
             productImage = (ImageView) view.findViewById(R.id.iv_product_image);
             productName = (TextView) view.findViewById(R.id.tv_product_name);
+            price = (TextView) view.findViewById(R.id.tv_price_product_card);
         }
     }
 
@@ -85,10 +87,11 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
     public void onBindViewHolder(ViewHolder holder,int position){
         Product product = mProductList.get(position);
         Glide.with(mContext)
-                .load(product.getPro_image()).override(200,200)
+                .load(product.getPro_image()).override(400,400)
                 .placeholder(R.mipmap.ic_launcher)
                 .into(holder.productImage);
         holder.productName.setText(product.getPro_name());
+        holder.price.setText(""+product.getPro_price());
     }
     @Override
     public int getItemCount(){

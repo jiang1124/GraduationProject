@@ -1,9 +1,7 @@
 package com.example.shoppingsystem.Entity;
 
-import java.io.Serializable;
-
-public class OrderMain implements Serializable {
-    private int order_id;
+public class OrderMain {
+    private String order_id;
     private int store_id;
     private int user_id;
     private String date;
@@ -11,14 +9,14 @@ public class OrderMain implements Serializable {
     private String phone;
     private String address;
     private String pay_info;
-    private String all_money;
-    private String extra_money;
+    private double all_money;
+    private String extra;
 
-    public int getOrder_id() {
+    public String getOrder_id() {
         return order_id;
     }
 
-    public void setOrder_id(int order_id) {
+    public void setOrder_id(String order_id) {
         this.order_id = order_id;
     }
 
@@ -78,19 +76,19 @@ public class OrderMain implements Serializable {
         this.pay_info = pay_info;
     }
 
-    public String getAll_money() {
+    public double getAll_money() {
         return all_money;
     }
 
-    public void setAll_money(String all_money) {
+    public void setAll_money(double all_money) {
         this.all_money = all_money;
     }
 
-    public String getExtra_money() {
-        return extra_money;
+    public String getExtra() {
+        return extra;
     }
 
-    public void setExtra_money(String extra_money) {
-        this.extra_money = extra_money;
+    public void setExtra(String extra) {
+        this.extra = extra;
     }
 }

@@ -13,46 +13,51 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activity.MainActivity"
-            android:launchMode="singleTask"
-            android:label="首页">
-        </activity>
-        <activity android:name=".activity.ProductActivity"
-            android:launchMode="singleTask"/>
+            android:label="首页"
+            android:launchMode="singleTask"></activity>
+        <activity
+            android:name=".activity.ProductActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.LoginActivity"
             android:label="登录/注册">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"
-                    android:launchMode="singleTask"/>
+                <action
+                    android:name="android.intent.action.MAIN"
+                    android:launchMode="singleTask" />
 
-                <category android:name="android.intent.category.LAUNCHER"
+                <category
+                    android:name="android.intent.category.LAUNCHER"
                     android:launchMode="singleTask" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.SearchActivity"
+        <activity
+            android:name=".activity.SearchActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.MyOrderActivity"
-            android:launchMode="singleTask"
-            android:label="我的订单" />
+            android:label="我的订单"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.MyCollectionActivity"
-            android:launchMode="singleTask"
-            android:label="我的收藏" />
+            android:label="我的收藏"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.MyHistoryActivity"
-            android:launchMode="singleTask"
-            android:label="我的足迹" />
+            android:label="我的足迹"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.MyAddressActivity"
-            android:launchMode="singleTask"
-            android:label="地址信息" />
+            android:label="地址信息"
+            android:launchMode="singleTask" />
         <activity
             android:name=".activity.EditRecipientActivity"
-            android:launchMode="singleTask"
-            android:label="编辑" />
-        <activity android:name=".activity.PayActivity"
-            android:launchMode="singleTask"></activity>
+            android:label="编辑"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".activity.PayActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".activity.SpActivity"></activity>
     </application>
 
 </manifest>

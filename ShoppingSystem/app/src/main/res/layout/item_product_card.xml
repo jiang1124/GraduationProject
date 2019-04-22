@@ -19,15 +19,29 @@
             android:scaleType="centerCrop"
             />
 
-        <TextView
-            android:id="@+id/tv_product_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="5dp"
-            android:text="This is product's name"
-            android:textSize="16sp"
-            />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_product_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="5dp"
+                android:text="This is product's name"
+                android:textSize="16sp"
+                android:layout_weight="1" />
+
+            <TextView
+                android:text="￥：价格"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_price_product_card"
+                android:textColor="@color/color_ff6a47"
+                android:textSize="18sp" />
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -156,9 +156,13 @@ public class MainActivity extends BaseActivity {
                 PageSwitch(homeView, shoppingCartView, personView, sortView);
                 break;
             case R.id.shopping_cart_button:
-                initExpandableListView();
-                initShoppingCart(Web+"/shoppingCart?id="+user.getUser_id());
-                PageSwitch(homeView, sortView, personView, shoppingCartView);
+                if(isLogin) {
+                    initExpandableListView();
+                    initShoppingCart(Web + "/shoppingCart?id=" + user.getUser_id());
+                    PageSwitch(homeView, sortView, personView, shoppingCartView);
+                }else {
+                    ToastUtil.makeText(this,"请先登陆");
+                }
                 break;
             case R.id.person_button:
                 initPerson();
@@ -248,7 +252,7 @@ public class MainActivity extends BaseActivity {
                             if(user!=null)
                                 productListAdapter.setUserId(user.getUser_id());
                             homeRecyclerView.setAdapter(productListAdapter);
-                            productListAdapter.notifyDataSetChanged();
+//                            productListAdapter.notifyDataSetChanged();
                         } else {
                             ToastUtil.makeText(BaseApplication.getContext(), "获取数据失败");
                         }
@@ -407,7 +411,7 @@ public class MainActivity extends BaseActivity {
      */
     private void initExpandableListView() {
         shoppingCarAdapter = new ShoppingCarAdapter(MainActivity.this, SelectAllCartLL, selectAllCartIV,
-                settlementCartButton, DeleteCartButton, totalPriceRL, totalPriceTV);
+                settlementCartButton, DeleteCartButton, totalPriceRL, totalPriceTV,user);
         shoppingCarELV.setAdapter(shoppingCarAdapter);
 
         //删除的回调

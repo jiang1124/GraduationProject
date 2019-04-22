@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.shoppingsystem.Application.BaseApplication;
 import com.example.shoppingsystem.Entity.Goods;
 import com.example.shoppingsystem.Entity.Shop;
+import com.example.shoppingsystem.Entity.User;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.activity.PayActivity;
 import com.example.shoppingsystem.util.ToastUtil;
@@ -43,10 +44,11 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
     private List<Shop> storeList;
     private boolean isSelectAll = false;
     private double total_price;
+    private User user;
 
     public ShoppingCarAdapter(Context context, LinearLayout SelectAllCartLL,
                               ImageView selectAllCartIV, Button settlementCartButton, Button DeleteCartButton,
-                              RelativeLayout totalPriceRL, TextView totalPriceTV) {
+                              RelativeLayout totalPriceRL, TextView totalPriceTV,User user) {
         this.context = context;
         this.SelectAllCartLL = SelectAllCartLL;
         this.selectAllCartIV = selectAllCartIV;
@@ -54,6 +56,7 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
         this.DeleteCartButton = DeleteCartButton;
         this.totalPriceRL = totalPriceRL;
         this.totalPriceTV = totalPriceTV;
+        this.user = user;
     }
 
     /**
@@ -244,6 +247,7 @@ public class ShoppingCarAdapter extends BaseExpandableListAdapter {
                     Intent payIntent = new Intent(BaseApplication.getContext(), PayActivity.class);
                     payIntent.putExtra("ShopList",(Serializable)temp);
                     payIntent.putExtra("totalPrice",total_price);
+                    payIntent.putExtra("User",user);
                     BaseApplication.getContext().startActivity(payIntent);
                 } else {
                     ToastUtil.makeText(context, "请选择要购买的商品");

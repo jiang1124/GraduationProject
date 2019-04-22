@@ -23,6 +23,15 @@ public class RecipientRepoImpl implements RecipientRepo {
     }
 
     @Override
+    public Recipient findOne(int user_id) {
+        List<Recipient> res = jdbcTemplate.query("select * from recipient where user_id = ? and state = ?",
+                new Object[]{user_id,"default"},new BeanPropertyRowMapper(Recipient.class));
+        if(res!=null&&res.size()>0)
+            return res.get(0);
+        return null;
+    }
+
+    @Override
     public int deleteOne(int address_id) {
         return jdbcTemplate.update("DELETE FROM recipient WHERE address_id=?",address_id);
     }

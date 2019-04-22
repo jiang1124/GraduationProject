@@ -4,7 +4,6 @@ package com.example.sever.Controller;
 import com.example.sever.Entity.Recipient;
 import com.example.sever.Sevice.RecipientService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +23,11 @@ public class RecipientController {
         return recipientService.findAll(user_id);
     }
 
+    @RequestMapping("/findOne")
+    public Recipient findOne(int user_id){
+        return recipientService.findOne(user_id);
+    }
+
     @RequestMapping("/delAddress")
     public List<Recipient> delAddress(int address_id,int user_id){
         System.out.println("delAddress/one address_id:"+address_id);
@@ -31,6 +35,8 @@ public class RecipientController {
         System.out.println("delAddress/one user_id:"+user_id);
         return recipientService.findAll(user_id);
     }
+
+
     @RequestMapping("updateAddress")
     public int updateAddress(int address_id, int user_id, String recipient_name,
                              String phone, String city, String address, String state){

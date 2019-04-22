@@ -13,10 +13,12 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.shoppingsystem.Application.BaseApplication;
+import com.example.shoppingsystem.Entity.Store;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.Entity.Product;
 import com.example.shoppingsystem.util.HttpUtil;
 import com.example.shoppingsystem.util.LogUtil;
+import com.example.shoppingsystem.util.ResponseUtil;
 import com.example.shoppingsystem.util.ToastUtil;
 
 import java.io.IOException;
@@ -51,10 +53,17 @@ public class ProductActivity extends BaseActivity{
     Toolbar toolbar;
     @InjectView(R.id.iv_product_image_detail)
     ImageView productImageView;
+    @InjectView(R.id.tv_product_num_detail)
+    TextView productNum;
+    @InjectView(R.id.tv_product_type_detail)
+    TextView productType;
+    @InjectView(R.id.tv_store_name_detail)
+    TextView storeName;
 
     private Product product;
     private int user_id;
     private String Web = "http://10.0.2.2:8080";
+    private Store store;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +84,8 @@ public class ProductActivity extends BaseActivity{
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        String priceStr = "价格："+product.getPro_price();
-        String salePriceStr = "促销价："+product.getPro_favl();
-        String exMoneyStr = "运费:"+product.getExtra_money();
-        String saVolumeStr = "销量：" + product.getPro_sale();
-        collapsingToolbar.setTitle(product.getPro_name());
-        Glide.with(ProductActivity.this)
-                .load(product.getPro_image())
-                .placeholder(R.mipmap.ic_launcher)
-                .into(productImageView);
-        productPriceText.setText(priceStr);
-        productSalePriceText.setText(salePriceStr);
-        additionalCharges.setText(exMoneyStr);
-        productSaleVolume.setText(saVolumeStr);
-        productNameText.setText(product.getPro_name());
-        productDetailText.setText(product.getPro_detail());
+        findStore();
+
     }
 
     @Override
@@ -147,4 +143,49 @@ public class ProductActivity extends BaseActivity{
         }
     }
 
+    public void findStore(){
+        String websiteAddress = Web+"/findStoreName?store_id=" + product.getStore_id();
+        HttpUtil.sendOkHttpRequest(websiteAddress, new okhttp3.Callback() {
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                LogUtil.d("addProduct:", responseText);
+                store = ResponseUtil.handleStore(responseText);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String priceStr = "价格："+product.getPro_price();
+                        String salePriceStr = "促销价："+product.getPro_favl();
+                        String exMoneyStr = "运费:"+product.getExtra_money();
+                        String saVolumeStr = "销量：" + product.getPro_sale();
+                        collapsingToolbar.setTitle(product.getPro_name());
+                        Glide.with(ProductActivity.this)
+                                .load(product.getPro_image())
+                                .placeholder(R.mipmap.ic_launcher)
+                                .into(productImageView);
+                        productPriceText.setText(priceStr);
+                        productSalePriceText.setText(salePriceStr);
+                        additionalCharges.setText(exMoneyStr);
+                        productSaleVolume.setText(saVolumeStr);
+                        productNameText.setText(product.getPro_name());
+                        productDetailText.setText(product.getPro_detail());
+                        productNum.setText("库存："+product.getPro_num());
+                        productType.setText(product.getType());
+                        storeName.setText(store.getStore_name());
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.makeText(BaseApplication.getContext(), "获取数据失败");
+                    }
+                });
+            }
+        });
+    }
 }

@@ -165,7 +165,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
 
-    private final void shiftQueueText(TextView textView1,TextView textView2,TextView textView3){
+    private void shiftQueueText(TextView textView1,TextView textView2,TextView textView3){
         textView1.setTextSize(15);
         textView1.setTextColor(Color.parseColor("#4c4c4c"));
         textView2.setTextSize(15);

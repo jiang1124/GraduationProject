@@ -1,7 +1,7 @@
 package com.example.sever.Entity;
 
 public class OrderExpand {
-    private int order_id;
+    private String order_id;
     private int product_id;
     private int store_id;
     private double pro_price;
@@ -10,11 +10,11 @@ public class OrderExpand {
     private String pro_image;
     private double extra_money;
 
-    public int getOrder_id() {
+    public String getOrder_id() {
         return order_id;
     }
 
-    public void setOrder_id(int order_id) {
+    public void setOrder_id(String order_id) {
         this.order_id = order_id;
     }
 

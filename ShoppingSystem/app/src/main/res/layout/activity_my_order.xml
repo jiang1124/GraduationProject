@@ -53,7 +53,7 @@
             android:text="已支付"/>
 
         <TextView
-            android:id="@+id/tv_finish_queue"
+            android:id="@+id/tv_all_queue"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
@@ -65,7 +65,7 @@
             android:lines="1"
             android:textColor="#4c4c4c"
             android:textSize="15sp"
-            android:text="已完成"/>
+            android:text="全部"/>
 
 
     </RelativeLayout>
@@ -75,6 +75,16 @@
     <ListView
         android:id="@+id/lv_order_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0sp"
+        android:layout_weight="1"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_weight="1"
+        android:visibility="gone">
+
+
+
+    </RelativeLayout>
 
 </LinearLayout>

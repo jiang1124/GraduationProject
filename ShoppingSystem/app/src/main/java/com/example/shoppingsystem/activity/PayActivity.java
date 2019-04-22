@@ -15,12 +15,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.shoppingsystem.Entity.Shop;
+import com.example.shoppingsystem.Entity.User;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.View.PayWayDialog;
 import com.example.shoppingsystem.adapter.OrderAdapter;
 import com.example.shoppingsystem.adapter.OrderDetailAdapter;
 import com.example.shoppingsystem.util.ToastUtil;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
     private int payType = 0;
     private List<Shop> shops;
     private double totalPrice;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,29 +65,8 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
         Intent intent = getIntent();
         shops = (List<Shop>) intent.getSerializableExtra("ShopList");
         totalPrice = intent.getDoubleExtra("totalPrice",0.0);
-        OrderAdapter orderAdapter = new OrderAdapter(PayActivity.this,R.layout.item_order_child,shops);
-        final ListView orderListView = (ListView) findViewById(R.id.lv_order_list);
-        orderListView.setAdapter(orderAdapter);
-        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.ll_product_list);
-        orderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Shop shop = shops.get(position);
-                OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(PayActivity.this,R.layout.item_product_order_child,shop.getGoods());
-                ListView orderDetailListView = (ListView) findViewById(R.id.lv_product_list);
-                orderDetailListView.setAdapter(orderDetailAdapter);
-                orderListView.setVisibility(View.GONE);
-                linearLayout.setVisibility(View.VISIBLE);
-                TextView backTV = (TextView) findViewById(R.id.return_back);
-                backTV.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        orderListView.setVisibility(View.VISIBLE);
-                        linearLayout.setVisibility(View.GONE);
-                    }
-                });
-            }
-        });
+        user = (User) intent.getSerializableExtra("User");
+        init();
         totalTV.setText(totalPrice+"");
     }
 
@@ -105,7 +87,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
                 pay();
                 break;
             case R.id.btn_after_pay:
-
+                actionStart("未支付");
                 break;
             default:
                 break;
@@ -129,7 +111,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
             public void onBottomItemClick(PayWayDialog dialog, View view) {
                 switch (view.getId()) {
                     case R.id.ll_pay_weichat:   //微信支付
-                        showToast("微信支付");
+                        ToastUtil.makeText(PayActivity.this,"微信支付");
                         if (PAY_TYPE_WECHAT != payType) {
                             mIvWeichatSelect.setImageDrawable(ContextCompat.getDrawable(PayActivity.this,R.drawable.select));
                             mIvAliSelect.setImageDrawable(ContextCompat.getDrawable(PayActivity.this,R.drawable.unselect));
@@ -138,7 +120,7 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
 
                         break;
                     case R.id.ll_pay_ali:  //支付宝支付
-                        showToast("支付宝支付");
+                        ToastUtil.makeText(PayActivity.this,"支付宝支付");
                         if (PAY_TYPE_ALIBABA != payType) {
                             mIvWeichatSelect.setImageDrawable(ContextCompat.getDrawable(PayActivity.this,R.drawable.unselect));
                             mIvAliSelect.setImageDrawable(ContextCompat.getDrawable(PayActivity.this,R.drawable.select));
@@ -147,13 +129,14 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
                         break;
                     case R.id.tv_confirm:  //确认支付
                         //TODO 支付
-                        showToast("确认支付");
-                        //重置
+                        //ToastUtil.makeText(PayActivity.this,"确认支付");
+                        actionStart("已支付");
                         payType = PAY_TYPE_WECHAT;
                         dialog.cancel();
+                        finish();
                         break;
                     case R.id.tv_cancel:  //取消支付
-                        showToast("取消支付");
+                       // ToastUtil.makeText(PayActivity.this,"取消支付");
                         //重置
                         payType = PAY_TYPE_WECHAT;
                         dialog.cancel();
@@ -163,8 +146,38 @@ public class PayActivity extends BaseActivity implements View.OnClickListener {
         });
     }
 
-    private void showToast(String s) {
-        ToastUtil.makeText(this, s);
+    private void init(){
+        OrderAdapter orderAdapter = new OrderAdapter(PayActivity.this,R.layout.item_order_child,shops);
+        final ListView orderListView = (ListView) findViewById(R.id.lv_order_list);
+        orderListView.setAdapter(orderAdapter);
+        final LinearLayout linearLayout = (LinearLayout) findViewById(R.id.ll_product_list);
+        orderListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Shop shop = shops.get(position);
+                OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(PayActivity.this,R.layout.item_product_order_child,shop.getGoods());
+                ListView orderDetailListView = (ListView) findViewById(R.id.lv_product_list);
+                orderDetailListView.setAdapter(orderDetailAdapter);
+                orderListView.setVisibility(View.GONE);
+                linearLayout.setVisibility(View.VISIBLE);
+                TextView backTV = (TextView) findViewById(R.id.return_back);
+                backTV.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        orderListView.setVisibility(View.VISIBLE);
+                        linearLayout.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
+    }
+
+    public void actionStart(String state){
+        Intent intent = new Intent(PayActivity.this,SpActivity.class);
+        intent.putExtra("ShopList",(Serializable) shops);
+        intent.putExtra("state",state);
+        intent.putExtra("User",user);
+        startActivity(intent);
     }
 }
 

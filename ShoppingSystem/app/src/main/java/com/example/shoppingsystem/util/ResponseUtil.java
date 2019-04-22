@@ -1,7 +1,9 @@
 package com.example.shoppingsystem.util;
 
 import com.example.shoppingsystem.Entity.Car;
+import com.example.shoppingsystem.Entity.OrderMain;
 import com.example.shoppingsystem.Entity.Product;
+import com.example.shoppingsystem.Entity.Store;
 import com.example.shoppingsystem.Entity.User;
 import com.example.shoppingsystem.Entity.Recipient;
 import com.google.gson.Gson;
@@ -80,6 +82,33 @@ public class ResponseUtil {
             Gson gson = new Gson();
             Car shoppingCar =gson.fromJson(Response, Car.class);
             return shoppingCar;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /**
+     * 将返回的JSon数据解析成ProductList
+     */
+    public static List<OrderMain> handleOrderMainList(String Response){
+        try{
+            Gson gson = new Gson();
+            List<OrderMain> orderMainList = new ArrayList<>();
+            orderMainList =gson.fromJson(Response, new TypeToken<List<OrderMain>>() {}.getType());
+            return orderMainList;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /**
+     * 将返回的JSon数据解析成ShoppingCar
+     */
+    public static Store handleStore(String Response){
+        try{
+            Gson gson = new Gson();
+            Store store =gson.fromJson(Response, Store.class);
+            return store;
         }catch (Exception e){
             e.printStackTrace();
         }
