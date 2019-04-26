@@ -85,7 +85,7 @@ public class ProductActivity extends BaseActivity{
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         findStore();
-
+        addHistory();
     }
 
     @Override
@@ -102,6 +102,7 @@ public class ProductActivity extends BaseActivity{
     public void onClick(View v){
         switch (v.getId()){
             case R.id.collect_button:
+                addCollection();
                 ToastUtil.makeText(v.getContext(),"已收藏");
                 break;
             case R.id.in_shopping_cart_button:
@@ -172,6 +173,62 @@ public class ProductActivity extends BaseActivity{
                         productNum.setText("库存："+product.getPro_num());
                         productType.setText(product.getType());
                         storeName.setText(store.getStore_name());
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.makeText(BaseApplication.getContext(), "获取数据失败");
+                    }
+                });
+            }
+        });
+    }
+
+    public void addHistory(){
+        String websiteAddress = Web+"/addHistory?user_id=" + user_id + "&product_id=" + product.getProduct_id()+"&store_id="+product.getStore_id();
+        HttpUtil.sendOkHttpRequest(websiteAddress, new okhttp3.Callback() {
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                LogUtil.d("addHistory:", responseText);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.makeText(BaseApplication.getContext(), "获取数据失败");
+                    }
+                });
+            }
+        });
+    }
+
+    public void addCollection(){
+        String websiteAddress = Web+"/addCollection?user_id=" + user_id + "&product_id=" + product.getProduct_id()+"&store_id="+product.getStore_id();
+        HttpUtil.sendOkHttpRequest(websiteAddress, new okhttp3.Callback() {
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                LogUtil.d("addCollection:", responseText);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //
                     }
                 });
             }

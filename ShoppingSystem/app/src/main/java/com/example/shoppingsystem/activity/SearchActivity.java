@@ -2,10 +2,13 @@ package com.example.shoppingsystem.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +35,8 @@ import butterknife.OnClick;
 import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
+    @InjectView(R.id.tb_search)
+    Toolbar searchTB;
     @InjectView(R.id.rv_search_list)
     RecyclerView SearchRecyclerView;
     @InjectView(R.id.et_search_in_search)
@@ -60,6 +65,11 @@ public class SearchActivity extends AppCompatActivity {
         String sort = intent.getStringExtra("sort");
         user = (User) intent.getSerializableExtra("User");
         ButterKnife.inject(this);
+        setSupportActionBar(searchTB);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         netAddress = Web+"/search";
         if(key!=null) {
@@ -172,5 +182,15 @@ public class SearchActivity extends AppCompatActivity {
         textView2.setTextColor(Color.parseColor("#4c4c4c"));
         textView3.setTextSize(18);
         textView3.setTextColor(Color.parseColor("#1a1a1a"));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

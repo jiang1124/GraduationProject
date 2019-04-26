@@ -6,6 +6,7 @@ import com.example.sever.Sevice.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin//跨域所用
@@ -53,5 +54,43 @@ public class ProductController {
         List<Product> products = productService.findKeyBySale(key);
         System.out.println("/search/p result："+products.toString());
         return products;
+    }
+
+    @RequestMapping(path = "/history")
+    public List<Product> findHistory(int user_id){
+        System.out.println("/history user_id:"+user_id);
+        List<Product> products = new ArrayList<>();
+        products = productService.findHistory(user_id);
+        System.out.println("/history result："+products.toString());
+        return products;
+    }
+
+    @RequestMapping(path = "/collection")
+    public List<Product> findCollection(int user_id){
+        System.out.println("/collection user_id:"+user_id);
+        List<Product> products = new ArrayList<>();
+        products = productService.findCollection(user_id);
+        System.out.println("/collection result："+products.toString());
+        return products;
+    }
+
+    @RequestMapping("/addCollection")
+    public int addCollection(int user_id,int product_id,int store_id){
+        return productService.addCollection(user_id, product_id, store_id);
+    }
+
+    @RequestMapping("/addHistory")
+    public int addHistory(int user_id,int product_id,int store_id){
+        return productService.addHistory(user_id,product_id,store_id);
+    }
+
+    @RequestMapping("/deleteCollection")
+    public int deleteCollection(int user_id,int product_id){
+        return productService.deleteCollection(user_id, product_id);
+    }
+
+    @RequestMapping("/deleteHistory")
+    public int deleteHistory(int user_id,int product_id){
+        return productService.deleteHistory(user_id,product_id);
     }
 }

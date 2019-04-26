@@ -74,22 +74,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         isOn = intentGet.getBooleanExtra("isOn",true);
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRemember = pref.getBoolean("remember_password",false);
-//        if(isRemember&&isOn) {
+        if(isRemember&&isOn) {
             //将帐号和密码都设置到文本框中
             String account = pref.getString("account", "");
             String password = pref.getString("password", "");
             accountInputEdit.setText(account);
             passwordInputEdit.setText(password);
             rememberPass.setChecked(true);
-//            String webAddress = Web+"/login/verification?name=" + account + "&password=" + password;
-//            getLoginAnswer(webAddress);
-//        }else if(isOn){
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            intent.putExtra("isLogin",isLogin);
-//            intent.putExtra("User",user);
-//            startActivity(intent);
-//            finish();
-//        }
+            String webAddress = Web+"/login/verification?name=" + account + "&password=" + password;
+            getLoginAnswer(webAddress);
+        }
     }
 
     @OnClick({R.id.btn_login,R.id.btn_login_to_registered,R.id.btn_registered_to_login,R.id.btn_registered})
@@ -167,6 +161,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("isLogin",isLogin);
+                        intent.putExtra("User",user);
+                        startActivity(intent);
+                        finish();
                         ToastUtil.makeText(LoginActivity.this, "网络出错");
                     }
                 });

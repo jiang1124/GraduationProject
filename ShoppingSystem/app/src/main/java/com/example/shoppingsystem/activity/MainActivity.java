@@ -241,7 +241,7 @@ public class MainActivity extends BaseActivity {
                 if(productList!=null)
                     productList.clear();
                 productList = ResponseUtil.handleProductList(responseText);
-//                LogUtil.d("Main标记1",productList.get(0).getPro_name());
+                LogUtil.d("Main标记1",productList.get(0).getPro_name());
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -252,7 +252,7 @@ public class MainActivity extends BaseActivity {
                             if(user!=null)
                                 productListAdapter.setUserId(user.getUser_id());
                             homeRecyclerView.setAdapter(productListAdapter);
-//                            productListAdapter.notifyDataSetChanged();
+                            productListAdapter.notifyDataSetChanged();
                         } else {
                             ToastUtil.makeText(BaseApplication.getContext(), "获取数据失败");
                         }
@@ -517,7 +517,7 @@ public class MainActivity extends BaseActivity {
 //        }
 //        return storesTemp;
 //    }
-
+//
     /**
      * 展示删除的dialog
      *

@@ -19,9 +19,9 @@
             app:layout_collapseMode="pin"
             />
     </android.support.design.widget.AppBarLayout>
-    <TextView
+    <ListView
+        android:id="@+id/lv_history_product_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="足迹页面"/>
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>

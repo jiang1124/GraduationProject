@@ -39,17 +39,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public int add(Product product) {
-        return 0;
+    public List<Product> findHistory(int user_id) {
+        return productRepo.findHistory(user_id);
     }
 
     @Override
-    public int update(Product product) {
-        return 0;
+    public List<Product> findCollection(int user_id) {
+        return productRepo.findCollection(user_id);
     }
 
     @Override
-    public int delete(int id) {
-        return 0;
+    public int addCollection(int user_id, int product_id, int store_id) {
+        return productRepo.addCollection(user_id, product_id, store_id);
+    }
+
+    @Override
+    public int addHistory(int user_id, int product_id, int store_id) {
+        return productRepo.addHistory(user_id, product_id, store_id);
+    }
+
+    @Override
+    public int deleteCollection(int user_id, int product_id) {
+        return productRepo.deleteCollection(user_id, product_id);
+    }
+
+    @Override
+    public int deleteHistory(int user_id, int product_id) {
+        return productRepo.deleteHistory(user_id, product_id);
     }
 }

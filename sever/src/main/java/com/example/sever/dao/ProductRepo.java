@@ -16,9 +16,15 @@ public interface ProductRepo {
 
     public List<Product> findKeyBySale(String key);
 
-    public int add(Product product);
+    public List<Product> findHistory(int user_id);
 
-    public int update(Product product);
+    public List<Product> findCollection(int user_id);
 
-    public int delete(int id);
+    public int addCollection(int user_id,int product_id,int store_id);
+
+    public int addHistory(int user_id,int product_id,int store_id);
+
+    public int deleteCollection(int user_id,int product_id);
+
+    public int deleteHistory(int user_id,int product_id);
 }

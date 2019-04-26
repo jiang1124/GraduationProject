@@ -71,7 +71,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:hint="输入密码"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:inputType="textPassword" />
 
         </LinearLayout>
         <View
@@ -164,7 +165,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="4"
                 android:hint="输入密码"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                android:inputType="textPassword"/>
 
         </LinearLayout>
         <View
