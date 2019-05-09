@@ -1,20 +1,20 @@
 package com.example.store.Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.store.Application.BaseApplication;
 import com.example.store.Entity.Product;
@@ -23,6 +23,7 @@ import com.example.store.R;
 import com.example.store.Utils.HttpUtil;
 import com.example.store.Utils.LogUtil;
 import com.example.store.Utils.ResponseUtil;
+import com.example.store.Utils.RoundCornerDialog;
 import com.example.store.Utils.ToastUtil;
 import com.example.store.adapter.ProductListAdapter;
 
@@ -30,16 +31,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.OnClick;
 import okhttp3.Response;
 
 public class ProductListActivity extends BaseActivity {
 
     private List<Product> productList = new ArrayList<>();
     private Store store;
-    private String Web = "http://10.0.2.2:8080";
+    private String Web = ResponseUtil.Web;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,19 +50,23 @@ public class ProductListActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        initProducts(Web + "?store_id=" + store.getStore_id());
-//        ProductListAdapter productListAdapter = new ProductListAdapter(ProductListActivity.this,R.layout.item_product,productList);
-//        ListView listView = (ListView) findViewById(R.id.lv_product_list);
-//        listView.setAdapter(productListAdapter);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Product product = productList.get(position);
-//                Intent intent = new Intent(ProductListActivity.this,ProductDetail.class);
-//                intent.putExtra("Product",product);
-//                startActivity(intent);
-//            }
-//        });
+
+        //悬浮按钮
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProductListActivity.this,ProductDetail.class);
+                intent.putExtra("Store",store);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        initProducts(Web + "/storeProducts?store_id=" + store.getStore_id());
     }
 
     @Override
@@ -93,7 +95,6 @@ public class ProductListActivity extends BaseActivity {
                 //
                 return true;
             }
-
             @Override
             public boolean onQueryTextSubmit(String query){
                 ToastUtil.makeText(BaseApplication.getContext(),"You want to search "+query);
@@ -133,7 +134,16 @@ public class ProductListActivity extends BaseActivity {
                                     Product product = productList.get(position);
                                     Intent intent = new Intent(ProductListActivity.this,ProductDetail.class);
                                     intent.putExtra("Product",product);
+                                    intent.putExtra("Store",store);
                                     startActivity(intent);
+                                }
+                            });
+                            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                                @Override
+                                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                                    Product product = productList.get(position);
+                                    showDeleteDialog(Web + "/deleteProduct?product_id=" + product.getProduct_id());
+                                    return true;
                                 }
                             });
                         }
@@ -152,4 +162,74 @@ public class ProductListActivity extends BaseActivity {
             }
         });
     }
+
+    private void delProducts(String webAddress){
+        HttpUtil.sendOkHttpRequest(webAddress,new okhttp3.Callback(){
+            @Override
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                LogUtil.d("回应结果：",responseText);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initProducts(Web + "/storeProducts?store_id=" + store.getStore_id());
+                    }
+                });
+            }
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.makeText(BaseApplication.getContext(), "网络出错");
+                    }
+                });
+            }
+        });
+    }
+
+    /**
+     * 展示删除的dialog
+     *
+     * @param webAddress
+     */
+    private void showDeleteDialog(final String webAddress) {
+        View view = View.inflate(BaseApplication.getContext(), R.layout.dialog_two_btn, null);
+        final RoundCornerDialog roundCornerDialog = new RoundCornerDialog(BaseApplication.getContext(), 0, 0, view, R.style.RoundCornerDialog);
+        roundCornerDialog.show();
+        roundCornerDialog.setCanceledOnTouchOutside(false);// 设置点击屏幕Dialog不消失
+        roundCornerDialog.setOnKeyListener(keyListener);//设置点击返回键Dialog不消失
+
+        TextView tv_message = (TextView) view.findViewById(R.id.tv_message);
+        TextView tv_logout_confirm = (TextView) view.findViewById(R.id.tv_logout_confirm);
+        TextView tv_logout_cancel = (TextView) view.findViewById(R.id.tv_logout_cancel);
+        tv_message.setText("确定要删除商品吗？");
+
+        //确定
+        tv_logout_confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                roundCornerDialog.dismiss();
+                delProducts(webAddress);
+            }
+        });
+        //取消
+        tv_logout_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                roundCornerDialog.dismiss();
+            }
+        });
+    }
+
+    DialogInterface.OnKeyListener keyListener = new DialogInterface.OnKeyListener() {
+        public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
 }

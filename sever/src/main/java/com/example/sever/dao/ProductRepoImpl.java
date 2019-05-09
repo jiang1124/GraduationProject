@@ -16,6 +16,13 @@ public class ProductRepoImpl implements ProductRepo{
     private JdbcTemplate jdbcTemplate;
 
     @Override
+    public List<Product> findStoreProducts(int store_id) {
+        List<Product> res = jdbcTemplate.query("select * from product where store_id = ?", new Object[]{store_id},
+                new BeanPropertyRowMapper(Product.class));
+        return res;
+    }
+
+    @Override
     public List<Product> findSVTopFive() {
         List<Product> res = jdbcTemplate.query("select * from product order by pro_sale desc  limit 10", new Object[]{},
                 new BeanPropertyRowMapper(Product.class));
@@ -138,5 +145,26 @@ public class ProductRepoImpl implements ProductRepo{
         //拼接成字符串输出
         String date=year+"-"+month+"-"+day+" "+hour+":"+minute+":"+second;
         return date;
+    }
+
+    @Override
+    public String updateProduct(int product_id, String product_name, double product_price, double product_favl, double extra_money, String type) {
+        jdbcTemplate.update("update product set pro_name = ?,pro_price = ?,pro_favl=?,extra_money=?,type=? where product_id=? ",
+                product_name, product_price, product_favl, extra_money,type,product_id);
+        return "成功";
+    }
+
+    @Override
+    public String addProduct(int store_id, String product_name, double product_price, double product_favl, double extra_money, String type) {
+        jdbcTemplate.update("INSERT INTO product(pro_name,pro_price,pro_favl,extra_money,type,store_id)VALUE (?,?,?,?,?,?);",
+                product_name,product_price,product_favl,extra_money,type,store_id);
+        return "成功";
+    }
+
+    @Override
+    public String delProduct(int product_id) {
+        jdbcTemplate.update("delete from product where product_id =?;",
+                product_id);
+        return "成功";
     }
 }

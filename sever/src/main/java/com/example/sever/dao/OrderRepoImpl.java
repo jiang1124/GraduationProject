@@ -1,6 +1,7 @@
 package com.example.sever.dao;
 
 import com.example.sever.Entity.Goods;
+import com.example.sever.Entity.OrderExpand;
 import com.example.sever.Entity.OrderMain;
 import com.example.sever.Entity.Recipient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,5 +107,24 @@ public class OrderRepoImpl implements OrderRepo{
         if(res!=null&&res.size()>0)
             return res.get(0);
         return null;
+    }
+
+    @Override
+    public List<OrderMain> storeFindOrderMain(int store_id) {
+        return jdbcTemplate.query("select * from order_main where store_id = ? and pay_info!='未支付'",
+                new Object[]{store_id},new BeanPropertyRowMapper(OrderMain.class));
+    }
+
+    @Override
+    public List<OrderExpand> findOrderProduct(String order_id) {
+        return jdbcTemplate.query("select * from order_expand where order_id = ?",
+                new Object[]{order_id},new BeanPropertyRowMapper(OrderExpand.class));
+    }
+
+    @Override
+    public String updateOrderState(String order_id, String extra) {
+         jdbcTemplate.update("update order_main set pay_info = '已处理',extra=? where order_id=? ",
+                 extra,order_id);
+        return "成功";
     }
 }

@@ -1,6 +1,8 @@
 package com.example.sever.Entity;
 
-public class OrderMain {
+import java.io.Serializable;
+
+public class OrderMain implements Serializable {
     private String order_id;
     private int store_id;
     private int user_id;

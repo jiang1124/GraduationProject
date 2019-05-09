@@ -1,6 +1,7 @@
 package com.example.sever.Sevice;
 
 import com.example.sever.Entity.Goods;
+import com.example.sever.Entity.OrderExpand;
 import com.example.sever.Entity.OrderMain;
 import com.example.sever.dao.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,20 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public int updateOrderMain(int order_id, String state) {
         return orderRepo.updateOrderMain(order_id,state);
+    }
+
+    @Override
+    public List<OrderMain> storeFindOrderMain(int store_id) {
+        return orderRepo.storeFindOrderMain(store_id);
+    }
+
+    @Override
+    public List<OrderExpand> findOrderProduct(String order_id) {
+        return orderRepo.findOrderProduct(order_id);
+    }
+
+    @Override
+    public String updateOrderState(String order_id, String extra) {
+        return orderRepo.updateOrderState(order_id, extra);
     }
 }

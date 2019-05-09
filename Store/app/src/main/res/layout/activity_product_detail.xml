@@ -1,13 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_product_detail"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.store.Activity.ProductDetail">
+    android:layout_height="match_parent">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_collapseMode="pin" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/appBar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="商品名:"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:id="@+id/tv_product_name"
+                android:textSize="18sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="保温杯"
+                android:id="@+id/et_product_name" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="定价:"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:id="@+id/tv_product_price"
+                android:textSize="18sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="价格"
+                android:id="@+id/et_product_price"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="促销价:"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:id="@+id/tv_product_favl"
+                android:textSize="18sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="价格"
+                android:id="@+id/et_product_favl"
+                android:inputType="numberDecimal" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="分类:"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:id="@+id/tv_product_type"
+                android:textSize="18sp" />
+
+            <Spinner
+                android:layout_width="match_parent"
+                android:id="@+id/sp_product_type"
+                android:layout_weight="1"
+                android:layout_height="30dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:text="运费:"
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:id="@+id/tv_product_extra"
+                android:textSize="18sp" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="运费"
+                android:id="@+id/et_extra_money"
+                android:layout_weight="1"
+                android:inputType="numberSigned" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                app:srcCompat="@drawable/upload"
+                android:id="@+id/iv_upload"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:text="确定"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_sure"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

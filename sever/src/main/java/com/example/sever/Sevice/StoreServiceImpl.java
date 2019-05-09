@@ -19,4 +19,14 @@ public class StoreServiceImpl implements StoreService {
     public Store findOne(String store_name, String password) {
         return storeRepo.findOne(store_name, password);
     }
+
+    @Override
+    public String addOne(String store_name, String password) {
+        return storeRepo.addOne(store_name, password);
+    }
+
+    @Override
+    public Store update(int store_id,String store_name, String password, String store_detail, String address) {
+        return storeRepo.update(store_id,store_name, password, store_detail, address);
+    }
 }

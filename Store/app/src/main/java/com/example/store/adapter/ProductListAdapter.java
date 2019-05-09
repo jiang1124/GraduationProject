@@ -50,7 +50,7 @@ public class ProductListAdapter extends ArrayAdapter<Product> {
                 .into(viewHolder.productImage);
         viewHolder.productName.setText(product.getPro_name());
         viewHolder.priceValue.setText(product.getPro_favl()+"");
-        viewHolder.productNum.setText(product.getPro_sale());
+        viewHolder.productNum.setText(product.getPro_sale()+"");
         return view;
     }
 

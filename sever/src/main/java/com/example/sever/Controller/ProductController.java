@@ -93,4 +93,24 @@ public class ProductController {
     public int deleteHistory(int user_id,int product_id){
         return productService.deleteHistory(user_id,product_id);
     }
+
+    @RequestMapping("/storeProducts")
+    public List<Product> storeProducts(int store_id){
+        return productService.findStoreProducts(store_id);
+    }
+
+    @RequestMapping("/updateProduct")
+    public String updateProduct(int product_id, String product_name,double product_price,double product_favl,double extra_money,String type){
+        return productService.updateProduct(product_id, product_name, product_price, product_favl, extra_money, type);
+    }
+
+    @RequestMapping("/addProductDetail")
+    public String addProduct(int store_id, String product_name,double product_price,double product_favl,double extra_money,String type){
+        return productService.addProduct(store_id, product_name, product_price, product_favl, extra_money, type);
+    }
+
+    @RequestMapping("/deleteProduct")
+    public String delProduct(int product_id){
+        return productService.delProduct(product_id);
+    }
 }

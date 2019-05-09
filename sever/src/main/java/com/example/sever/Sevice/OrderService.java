@@ -1,6 +1,7 @@
 package com.example.sever.Sevice;
 
 import com.example.sever.Entity.Goods;
+import com.example.sever.Entity.OrderExpand;
 import com.example.sever.Entity.OrderMain;
 
 import java.util.List;
@@ -17,4 +18,10 @@ public interface OrderService {
     public int addOrder(int store_id,int user_id,String pay_info,double all_money, String goodsStr);
 
     public int updateOrderMain(int order_id,String state);
+
+    public List<OrderMain> storeFindOrderMain(int store_id);
+
+    public List<OrderExpand> findOrderProduct(String order_id);
+
+    public String updateOrderState(String order_id,String extra);
 }

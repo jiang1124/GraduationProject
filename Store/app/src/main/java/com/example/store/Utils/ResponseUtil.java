@@ -1,5 +1,6 @@
 package com.example.store.Utils;
 
+import com.example.store.Entity.OrderExpand;
 import com.example.store.Entity.OrderMain;
 import com.example.store.Entity.Product;
 import com.example.store.Entity.Recipient;
@@ -15,6 +16,7 @@ import java.util.List;
  */
 
 public class ResponseUtil {
+    final static public String Web = "http://10.0.2.2:8080";
 
     /**
      * 将返回的JSon数据解析成RecipientList
@@ -61,7 +63,7 @@ public class ResponseUtil {
     }
 
     /**
-     * 将返回的JSon数据解析成ProductList
+     * 将返回的JSon数据解析成orderMainList
      */
     public static List<OrderMain> handleOrderMainList(String Response){
         try{
@@ -82,6 +84,20 @@ public class ResponseUtil {
             Gson gson = new Gson();
             Store store =gson.fromJson(Response, Store.class);
             return store;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+    /**
+     * 将返回的JSon数据解析成orderExpandList
+     */
+    public static List<OrderExpand> handleOrderExpandList(String Response){
+        try{
+            Gson gson = new Gson();
+            List<OrderExpand> orderExpandList = new ArrayList<>();
+            orderExpandList =gson.fromJson(Response, new TypeToken<List<OrderExpand>>() {}.getType());
+            return orderExpandList;
         }catch (Exception e){
             e.printStackTrace();
         }

@@ -1,6 +1,8 @@
 package com.example.sever.Entity;
 
-public class OrderExpand {
+import java.io.Serializable;
+
+public class OrderExpand implements Serializable {
     private String order_id;
     private int product_id;
     private int store_id;

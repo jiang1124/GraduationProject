@@ -1,5 +1,6 @@
 package com.example.sever.Controller;
 
+import com.example.sever.Entity.OrderExpand;
 import com.example.sever.Entity.OrderMain;
 import com.example.sever.Sevice.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,5 +32,20 @@ public class OrderController {
         }else {
             return orderService.findOrderMainAll(user_id);
         }
+    }
+
+    @RequestMapping("/storeOrderList")
+    public List<OrderMain> storeFindOrderMain(int store_id){
+        return orderService.storeFindOrderMain(store_id);
+    }
+
+    @RequestMapping("/findOrderProduct")
+    public List<OrderExpand> findOrderProduct(String order_id){
+        return orderService.findOrderProduct(order_id);
+    }
+
+    @RequestMapping("/updateOrderState")
+    public String updateOrderState(String order_id,String extra){
+        return orderService.updateOrderState(order_id,extra);
     }
 }

@@ -14,6 +14,11 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepo productRepo;
 
     @Override
+    public List<Product> findStoreProducts(int store_id) {
+        return productRepo.findStoreProducts(store_id);
+    }
+
+    @Override
     public List<Product> findSVTopFive() {
         return productRepo.findSVTopFive();
     }
@@ -66,5 +71,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public int deleteHistory(int user_id, int product_id) {
         return productRepo.deleteHistory(user_id, product_id);
+    }
+
+    @Override
+    public String updateProduct(int product_id, String product_name, double product_price, double product_favl, double extra_money, String type) {
+        return productRepo.updateProduct(product_id, product_name, product_price, product_favl, extra_money, type);
+    }
+
+    @Override
+    public String addProduct(int store_id, String product_name, double product_price, double product_favl, double extra_money, String type) {
+        return productRepo.addProduct(store_id, product_name, product_price, product_favl, extra_money, type);
+    }
+
+    @Override
+    public String delProduct(int product_id) {
+        return productRepo.delProduct(product_id);
     }
 }

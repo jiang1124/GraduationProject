@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ProductService {
 
+        public List<Product> findStoreProducts(int store_id);
 
         public List<Product> findSVTopFive();
 
@@ -28,5 +29,11 @@ public interface ProductService {
         public int deleteCollection(int user_id,int product_id);
 
         public int deleteHistory(int user_id,int product_id);
+
+        public String updateProduct(int product_id, String product_name,double product_price,double product_favl,double extra_money,String type);
+
+        public String addProduct(int store_id, String product_name,double product_price,double product_favl,double extra_money,String type);
+
+        public String delProduct(int product_id);
 
 }

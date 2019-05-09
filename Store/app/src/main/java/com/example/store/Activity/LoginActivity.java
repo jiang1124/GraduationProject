@@ -46,7 +46,8 @@ public class LoginActivity extends BaseActivity {
     private String account = "";
     private String password = "";
     private Store store;
-    private String Web = "http://10.0.2.2:8080";
+    private String Web = ResponseUtil.Web;
+    private boolean isOn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,8 @@ public class LoginActivity extends BaseActivity {
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRemember = pref.getBoolean("rememberPassword",false);
         boolean isAutoLogin = pref.getBoolean("autoLogin",false);
+        Intent getIntent = getIntent();
+        isOn = getIntent.getBooleanExtra("isOn",false);
         if(isRemember){
             account = pref.getString("account","");
             password = pref.getString("password","");
@@ -64,8 +67,10 @@ public class LoginActivity extends BaseActivity {
             rememberCheckBox.setChecked(true);
             if(isAutoLogin&&!account.equals("")&&!password.equals("")) {
                 autoLoginCheckButton.setChecked(true);
-                initStore(Web + "?account=" + accountEdit.getText().toString().trim()+"&password="+passwordEdit.getText().toString().trim());
             }
+        }
+        if(!isOn) {
+            initStore(Web + "/storeLogin?account=" + accountEdit.getText().toString().trim() + "&password=" + passwordEdit.getText().toString().trim());
         }
     }
 
@@ -75,7 +80,7 @@ public class LoginActivity extends BaseActivity {
             case R.id.btn_login:
                 account = accountEdit.getText().toString().trim();
                 password = passwordEdit.getText().toString().trim();
-                Login();
+                initStore(Web + "/storeLogin?account=" + account+"&password="+password);
                 break;
             case R.id.tv_re:
                 Intent intentRegister = new Intent(BaseApplication.getContext(),RegisterActivity.class);
@@ -100,10 +105,12 @@ public class LoginActivity extends BaseActivity {
         }
         editor.apply();
         Intent intentMain = new Intent(BaseApplication.getContext(), MainActivity.class);
+        intentMain.putExtra("Store",store);
         startActivity(intentMain);
     }
 
     public void initStore(String webAddress){
+        LogUtil.d("url：",webAddress);
         HttpUtil.sendOkHttpRequest(webAddress,new okhttp3.Callback(){
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
@@ -115,6 +122,8 @@ public class LoginActivity extends BaseActivity {
                     public void run() {
                         if(store != null){
                             Login();
+                        }else {
+                            ToastUtil.makeText(BaseApplication.getContext(),"账号或密码出错");
                         }
                     }
                 });
