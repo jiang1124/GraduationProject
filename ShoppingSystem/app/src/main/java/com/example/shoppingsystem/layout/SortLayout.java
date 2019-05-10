@@ -49,7 +49,7 @@ public class SortLayout extends LinearLayout /*implements AdapterView.OnItemClic
 //     */
 //    private void initSort(){
 //        sortData = Arrays.copyOf(sortData, sortData.length+1);
-//        sortData[sortData.length-1] = "水果"; //在链接好数据库的实战中，这个地方水果可以改为re.title
+//        sortData[sortData.length-1] = "水果";
 //        sortData = Arrays.copyOf(sortData, sortData.length+1);
 //        sortData[sortData.length-1] = "休闲零食";
 //        sortData = Arrays.copyOf(sortData, sortData.length+1);

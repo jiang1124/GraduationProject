@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.shoppingsystem.Application.BaseApplication;
 import com.example.shoppingsystem.Entity.Car;
-import com.example.shoppingsystem.Entity.Goods;
 import com.example.shoppingsystem.Entity.Product;
 import com.example.shoppingsystem.Entity.Shop;
 import com.example.shoppingsystem.Entity.User;
@@ -112,8 +111,7 @@ public class MainActivity extends BaseActivity {
     private User user;
     private List<Product> productList;
     private List<String> sortData = new ArrayList<>();
-    private String productIdStr;
-    private String Web = "http://10.0.2.2:8080";
+    private String Web = ResponseUtil.Web;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

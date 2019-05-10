@@ -2,6 +2,7 @@ package com.example.shoppingsystem.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,11 +20,12 @@ import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.adapter.ProductListAdapter;
 import com.example.shoppingsystem.Application.BaseApplication;
 import com.example.shoppingsystem.Entity.Product;
+import com.example.shoppingsystem.adapter.ProductListsAdapter;
 import com.example.shoppingsystem.util.HttpUtil;
+import com.example.shoppingsystem.util.ILoadMoreData;
 import com.example.shoppingsystem.util.LogUtil;
 import com.example.shoppingsystem.util.ResponseUtil;
 import com.example.shoppingsystem.util.ToastUtil;
-import com.lljjcoder.style.citylist.Toast.ToastUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import okhttp3.Response;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements ILoadMoreData{
     @InjectView(R.id.tb_search)
     Toolbar searchTB;
     @InjectView(R.id.rv_search_list)
@@ -54,7 +56,14 @@ public class SearchActivity extends AppCompatActivity {
     private String netAddress;
     private User user;
     private String searchContentStr;
-    private String Web = "http://10.0.2.2:8080";
+    private String Web =ResponseUtil.Web;
+    private String addressStr;
+
+    private GridLayoutManager layoutManager;
+    private ProductListsAdapter productListAdapter;
+    private int page =0;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +83,7 @@ public class SearchActivity extends AppCompatActivity {
         netAddress = Web+"/search";
         if(key!=null) {
             netAddress = netAddress + "/k?key=" + key;
+            addressStr = netAddress;
             searchEdit.setText(key);
         }
         else if(sort!=null) {
@@ -82,7 +92,15 @@ public class SearchActivity extends AppCompatActivity {
         }
         searchContentStr=searchEdit.getText().toString();
         LogUtil.d("searchNetAddress:",netAddress);
-        initSearchProductList(netAddress);
+        initSearchProductList(netAddress+"&page="+page);
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        page=0;
+        initRefresh(addressStr);
+        initRecyclerView();
     }
 
     @OnClick({R.id.btn_search_in_search,R.id.tv_default_queue,R.id.tv_price_queue,R.id.tv_sales_volume_queue})
@@ -90,35 +108,35 @@ public class SearchActivity extends AppCompatActivity {
         switch (v.getId()) {
             case R.id.btn_search_in_search:
                 searchContentStr = searchEdit.getText().toString().trim();
-                if(searchContentStr!=null) {
-                    String addressStr = Web+"/search/k?key=" + searchContentStr;
-                    initSearchProductList(addressStr);
+                if(searchContentStr.length()>0) {
+                    addressStr = Web+"/search/k?key=" + searchContentStr;
+                    getList(addressStr);
                 }else {
                     ToastUtil.makeText(this,"请输入搜索内容");
                 }
                 break;
             case R.id.tv_default_queue:
-                if(searchContentStr!=null) {
-                    String addressStr = Web+"/search/k?key=" + searchContentStr;
-                    initSearchProductList(addressStr);
+                if(searchContentStr.length()>0) {
+                    addressStr = Web+"/search/k?key=" + searchContentStr;
+                    getList(addressStr);
                     shiftQueueText(priceQueueText,salesVolumeQueueText,defaultQueueText);
                 }else {
                     ToastUtil.makeText(this,"请输入搜索内容");
                 }
                 break;
             case R.id.tv_price_queue:
-                if(searchContentStr!=null) {
-                    String addressStr = Web+"/search/p?key=" + searchContentStr;
-                    initSearchProductList(addressStr);
+                if(searchContentStr.length()>0) {
+                    addressStr = Web+"/search/p?key=" + searchContentStr;
+                    getList(addressStr);
                     shiftQueueText(defaultQueueText,salesVolumeQueueText,priceQueueText);
                 }else {
                     ToastUtil.makeText(this,"请输入搜索内容");
                 }
                 break;
             case R.id.tv_sales_volume_queue:
-                if(searchContentStr!=null) {
-                    String addressStr = Web+"/search/v?key=" + searchContentStr;
-                    initSearchProductList(addressStr);
+                if(searchContentStr.length()>0) {
+                    addressStr = Web+"/search/v?key=" + searchContentStr;
+                    getList(addressStr);
                     shiftQueueText(defaultQueueText,priceQueueText,salesVolumeQueueText);
                 }else {
                     ToastUtil.makeText(this,"请输入搜索内容");
@@ -129,9 +147,63 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
+    private void getList(String addressStr){
+        page = 0;
+        productList.clear();
+        initSearchProductList(addressStr+"&page="+page);
+    }
+
     /*
      * 初始化
      */
+    private void initRecyclerView() {
+        layoutManager = new GridLayoutManager(BaseApplication.getContext(), 2);
+        SearchRecyclerView.setLayoutManager(layoutManager);
+        productListAdapter = new ProductListsAdapter(this, this, SearchRecyclerView, productList);
+        if(user!=null)
+            productListAdapter.setUserId(user.getUser_id());
+        SearchRecyclerView.setAdapter(productListAdapter);
+    }
+
+    private void initRefresh(final String webAddress){
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.green,
+                R.color.red
+        );
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+            @Override
+            public void onRefresh(){
+                refreshOrderList(webAddress);
+            }
+        });
+    }
+
+    private void refreshOrderList(final String webAddress){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        page=0;
+                        productList.clear();
+                        initSearchProductList(webAddress + "&page=" + page);
+                        productListAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }.start();
+    }
+
     private void initSearchProductList(String websiteAddress) {
         LogUtil.d("搜索内容：",websiteAddress);
         HttpUtil.sendOkHttpRequest(websiteAddress, new okhttp3.Callback() {
@@ -139,24 +211,19 @@ public class SearchActivity extends AppCompatActivity {
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 String responseText = response.body().string();
                 LogUtil.d("searchStr:",responseText);
-                if(productList!=null)
-                    productList.clear();
-                productList = ResponseUtil.handleProductList(responseText);
-                if(productList!=null)
-                    LogUtil.d("searchResult:",productList.toString());
+                final List<Product> products = ResponseUtil.handleProductList(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (productList != null) {
-                            GridLayoutManager layoutManager = new GridLayoutManager(BaseApplication.getContext(), 2);
-                            SearchRecyclerView.setLayoutManager(layoutManager);
-                            ProductListAdapter productListAdapter = new ProductListAdapter(productList);
-                            if(user!=null)
-                                productListAdapter.setUserId(user.getUser_id());
-                            SearchRecyclerView.setAdapter(productListAdapter);
+                        page+=1;
+                        if (products != null) {
+                            productList.addAll(products);
+                            productListAdapter.setIsAll(false);
                             productListAdapter.notifyDataSetChanged();
                         } else {
-                            ToastUtil.makeText(BaseApplication.getContext(), "没有该商品");
+                            productListAdapter.setIsAll(true);
+                            if(productList==null)
+                                ToastUtil.makeText(BaseApplication.getContext(), "没有该商品");
                         }
                     }
                 });
@@ -192,5 +259,10 @@ public class SearchActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void loadMoreData() {
+        initSearchProductList(addressStr+"&page="+page);
+        productListAdapter.notifyDataSetChanged();
     }
 }

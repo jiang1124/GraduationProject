@@ -106,5 +106,7 @@
     <color name="color_40_55ceac">#4055ceac</color>
     <color name="color_8A8A8A">#8A8A8A</color>
     <color name="color_55ceac">#55ceac</color>
+    <color name="green">#0f0</color>
+    <color name="red">#f00</color>
 
 </resources>

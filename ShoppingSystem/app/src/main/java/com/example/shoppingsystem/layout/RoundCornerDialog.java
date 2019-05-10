@@ -27,16 +27,4 @@ public class RoundCornerDialog extends Dialog {
         params.gravity = Gravity.CENTER;
         window.setAttributes(params);
     }
-
-    //圆角的dialog样式，在values——》styles中设置
-//    <style name="RoundCornerDialog" parent="@android:style/Theme.Dialog">
-//    <item name="android:windowFrame">@null</item>
-//    <item name="android:windowIsFloating">true</item>
-//    <item name="android:windowIsTranslucent">true</item>
-//    <item name="android:windowNoTitle">true</item>
-//    <item name="android:background">@android:color/transparent</item>
-//    <item name="android:windowBackground">@android:color/transparent</item>
-//    <item name="android:backgroundDimEnabled">true</item>
-//    <item name="android:backgroundDimAmount">0.6</item>
-//    </style>
 }

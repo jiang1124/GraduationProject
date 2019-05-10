@@ -25,35 +25,27 @@ public class ProductController {
     }
 
     @RequestMapping(path = "/search/k")
-    public List<Product> searchKeyProductList(String key){
+    public List<Product> searchKeyProductList(String key,int page){
         System.out.println("/search/k key:"+key);
-        List<Product> products = productService.findKeyMany(key);
-        System.out.println("/search/k result："+products.toString());
-        return products;
+        return productService.findKeyMany(key,page);
     }
 
     @RequestMapping(path = "/search/s")
-    public List<Product> searchSortProductList(String sort){
+    public List<Product> searchSortProductList(String sort,int page){
         System.out.println("/search/s sort:"+sort);
-        List<Product> products = productService.findSortMany(sort);
-        System.out.println("/search/s result："+products.toString());
-        return products;
+        return productService.findSortMany(sort,page);
     }
 
     @RequestMapping(path = "/search/p")
-    public List<Product> findKeyByPrice(String key){
+    public List<Product> findKeyByPrice(String key,int page){
         System.out.println("/search/p sort:"+key);
-        List<Product> products = productService.findKeyByPrice(key);
-        System.out.println("/search/p result："+products.toString());
-        return products;
+        return productService.findKeyByPrice(key,page);
     }
 
     @RequestMapping(path = "/search/v")
-    public List<Product> findKeyBySale(String key){
+    public List<Product> findKeyBySale(String key,int page){
         System.out.println("/search/p sort:"+key);
-        List<Product> products = productService.findKeyBySale(key);
-        System.out.println("/search/p result："+products.toString());
-        return products;
+        return  productService.findKeyBySale(key,page);
     }
 
     @RequestMapping(path = "/history")
@@ -95,8 +87,13 @@ public class ProductController {
     }
 
     @RequestMapping("/storeProducts")
-    public List<Product> storeProducts(int store_id){
-        return productService.findStoreProducts(store_id);
+    public List<Product> storeProducts(int store_id,int page){
+        return productService.findStoreProducts(store_id,page);
+    }
+
+    @RequestMapping("/storeSearchProducts")
+    public List<Product> storeSearchProducts(int store_id,String product_name,int page){
+        return productService.findStoreProducts(store_id,product_name,page);
     }
 
     @RequestMapping("/updateProduct")

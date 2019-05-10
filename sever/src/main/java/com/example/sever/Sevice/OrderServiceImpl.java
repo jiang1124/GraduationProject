@@ -46,13 +46,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderMain> storeFindOrderMain(int store_id) {
-        return orderRepo.storeFindOrderMain(store_id);
+    public List<OrderMain> storeFindOrderMain(int store_id,int page) {
+        return orderRepo.storeFindOrderMain(store_id,page);
     }
 
     @Override
-    public List<OrderExpand> findOrderProduct(String order_id) {
-        return orderRepo.findOrderProduct(order_id);
+    public List<OrderExpand> findOrderProduct(String order_id,int page) {
+        return orderRepo.findOrderProduct(order_id,page);
     }
 
     @Override

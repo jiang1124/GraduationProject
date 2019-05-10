@@ -14,8 +14,13 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepo productRepo;
 
     @Override
-    public List<Product> findStoreProducts(int store_id) {
-        return productRepo.findStoreProducts(store_id);
+    public List<Product> findStoreProducts(int store_id,int page) {
+        return productRepo.findStoreProducts(store_id,page);
+    }
+
+    @Override
+    public List<Product> findStoreProducts(int store_id,String pro_name,int page){
+        return productRepo.findStoreProducts(store_id,pro_name,page);
     }
 
     @Override
@@ -24,23 +29,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findKeyMany(String key) {
-        return productRepo.findKeyMany(key);
+    public List<Product> findKeyMany(String key,int page) {
+        return productRepo.findKeyMany(key,page);
     }
 
     @Override
-    public List<Product> findSortMany(String sort) {
-        return productRepo.findSortMany(sort);
+    public List<Product> findSortMany(String sort,int page) {
+        return productRepo.findSortMany(sort,page);
     }
 
     @Override
-    public List<Product> findKeyByPrice(String key) {
-        return productRepo.findKeyByPrice(key);
+    public List<Product> findKeyByPrice(String key,int page) {
+        return productRepo.findKeyByPrice(key,page);
     }
 
     @Override
-    public List<Product> findKeyBySale(String key) {
-        return productRepo.findKeyBySale(key);
+    public List<Product> findKeyBySale(String key,int page) {
+        return productRepo.findKeyBySale(key,page);
     }
 
     @Override

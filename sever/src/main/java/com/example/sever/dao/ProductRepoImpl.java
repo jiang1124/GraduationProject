@@ -16,9 +16,18 @@ public class ProductRepoImpl implements ProductRepo{
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public List<Product> findStoreProducts(int store_id) {
-        List<Product> res = jdbcTemplate.query("select * from product where store_id = ?", new Object[]{store_id},
-                new BeanPropertyRowMapper(Product.class));
+    public List<Product> findStoreProducts(int store_id,int page) {
+        int index=3;
+        List<Product> res = jdbcTemplate.query("select * from product where store_id = ? limit ?,?;",
+                new Object[]{store_id,page*index,index},new BeanPropertyRowMapper(Product.class));
+        return res;
+    }
+
+    @Override
+    public List<Product> findStoreProducts(int store_id, String pro_name, int page) {
+        int index=3;
+        List<Product> res = jdbcTemplate.query("select * from product where store_id = ? and pro_name like ? limit ?,?;",
+                new Object[]{store_id,"%"+pro_name+"%",page*index,index},new BeanPropertyRowMapper(Product.class));
         return res;
     }
 
@@ -31,9 +40,11 @@ public class ProductRepoImpl implements ProductRepo{
     }
 
     @Override
-    public List<Product> findKeyMany(String key) {
+    public List<Product> findKeyMany(String key,int page) {
+        int index = 5;
         if(key !="") {
-            List<Product> res = jdbcTemplate.query("select * from product where pro_name like ?;", new Object[]{"%" + key + "%"},
+            List<Product> res = jdbcTemplate.query("select * from product where pro_name like ? limit ?,?;",
+                    new Object[]{"%" + key + "%",page*index,index},
                     new BeanPropertyRowMapper(Product.class));
             if (res != null && res.size() > 0) {
                 return res;
@@ -43,9 +54,10 @@ public class ProductRepoImpl implements ProductRepo{
     }
 
     @Override
-    public List<Product> findSortMany(String sort) {
-        List<Product> res = jdbcTemplate.query("select * from product where type = ?;", new Object[]{sort},
-                new BeanPropertyRowMapper(Product.class));
+    public List<Product> findSortMany(String sort,int page) {
+        int index =5;
+        List<Product> res = jdbcTemplate.query("select * from product where type = ? limit ?,?;",
+                new Object[]{sort,page*index,index}, new BeanPropertyRowMapper(Product.class));
         if(res!=null && res.size()>0){
             return res;
         }else{
@@ -54,10 +66,11 @@ public class ProductRepoImpl implements ProductRepo{
     }
 
     @Override
-    public List<Product> findKeyByPrice(String key) {
+    public List<Product> findKeyByPrice(String key,int page) {
+        int index =5;
         if(key !="") {
-            List<Product> res = jdbcTemplate.query("select * from product where pro_name like ? order by pro_price;", new Object[]{"%" + key + "%"},
-                    new BeanPropertyRowMapper(Product.class));
+            List<Product> res = jdbcTemplate.query("select * from product where pro_name like ? order by pro_price limit ?,?;",
+                    new Object[]{"%" + key + "%",page*index,index}, new BeanPropertyRowMapper(Product.class));
             if (res != null && res.size() > 0) {
                 return res;
             }
@@ -66,10 +79,11 @@ public class ProductRepoImpl implements ProductRepo{
     }
 
     @Override
-    public List<Product> findKeyBySale(String key) {
+    public List<Product> findKeyBySale(String key,int page) {
+        int index =5;
         if(key !="") {
-            List<Product> res = jdbcTemplate.query("select * from product where pro_name like ? order by pro_sale desc;", new Object[]{"%" + key + "%"},
-                    new BeanPropertyRowMapper(Product.class));
+            List<Product> res = jdbcTemplate.query("select * from product where pro_name like ? order by pro_sale desc limit ?,?;",
+                    new Object[]{"%" + key + "%",page*index,index}, new BeanPropertyRowMapper(Product.class));
             if (res != null && res.size() > 0) {
                 return res;
             }

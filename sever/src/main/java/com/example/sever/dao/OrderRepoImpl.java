@@ -110,15 +110,17 @@ public class OrderRepoImpl implements OrderRepo{
     }
 
     @Override
-    public List<OrderMain> storeFindOrderMain(int store_id) {
-        return jdbcTemplate.query("select * from order_main where store_id = ? and pay_info!='未支付'",
-                new Object[]{store_id},new BeanPropertyRowMapper(OrderMain.class));
+    public List<OrderMain> storeFindOrderMain(int store_id,int page) {
+        int index =10;
+        return jdbcTemplate.query("select * from order_main where store_id = ? and pay_info!='未支付' limit ?,?",
+                new Object[]{store_id,page*index,index},new BeanPropertyRowMapper(OrderMain.class));
     }
 
     @Override
-    public List<OrderExpand> findOrderProduct(String order_id) {
-        return jdbcTemplate.query("select * from order_expand where order_id = ?",
-                new Object[]{order_id},new BeanPropertyRowMapper(OrderExpand.class));
+    public List<OrderExpand> findOrderProduct(String order_id,int page) {
+        int index =3;
+        return jdbcTemplate.query("select * from order_expand where order_id = ? limit ?,?",
+                new Object[]{order_id,page*index,index},new BeanPropertyRowMapper(OrderExpand.class));
     }
 
     @Override

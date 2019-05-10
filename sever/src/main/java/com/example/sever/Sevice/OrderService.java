@@ -19,9 +19,9 @@ public interface OrderService {
 
     public int updateOrderMain(int order_id,String state);
 
-    public List<OrderMain> storeFindOrderMain(int store_id);
+    public List<OrderMain> storeFindOrderMain(int store_id,int page);
 
-    public List<OrderExpand> findOrderProduct(String order_id);
+    public List<OrderExpand> findOrderProduct(String order_id,int page);
 
     public String updateOrderState(String order_id,String extra);
 }

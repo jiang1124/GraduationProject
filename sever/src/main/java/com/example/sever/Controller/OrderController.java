@@ -35,13 +35,13 @@ public class OrderController {
     }
 
     @RequestMapping("/storeOrderList")
-    public List<OrderMain> storeFindOrderMain(int store_id){
-        return orderService.storeFindOrderMain(store_id);
+    public List<OrderMain> storeFindOrderMain(int store_id,int page){
+        return orderService.storeFindOrderMain(store_id,page);
     }
 
     @RequestMapping("/findOrderProduct")
-    public List<OrderExpand> findOrderProduct(String order_id){
-        return orderService.findOrderProduct(order_id);
+    public List<OrderExpand> findOrderProduct(String order_id,int page){
+        return orderService.findOrderProduct(order_id,page);
     }
 
     @RequestMapping("/updateOrderState")

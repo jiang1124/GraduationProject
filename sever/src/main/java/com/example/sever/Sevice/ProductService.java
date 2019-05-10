@@ -6,17 +6,19 @@ import java.util.List;
 
 public interface ProductService {
 
-        public List<Product> findStoreProducts(int store_id);
+        public List<Product> findStoreProducts(int store_id,int page);
+
+        public List<Product> findStoreProducts(int store_id,String pro_name,int page);
 
         public List<Product> findSVTopFive();
 
-        public List<Product> findKeyMany(String key);
+        public List<Product> findKeyMany(String key,int page);
 
-        public List<Product> findSortMany(String sort);
+        public List<Product> findSortMany(String sort,int page);
 
-        public List<Product> findKeyByPrice(String key);
+        public List<Product> findKeyByPrice(String key,int page);
 
-        public List<Product> findKeyBySale(String key);
+        public List<Product> findKeyBySale(String key,int page);
 
         public List<Product> findHistory(int user_id);
 

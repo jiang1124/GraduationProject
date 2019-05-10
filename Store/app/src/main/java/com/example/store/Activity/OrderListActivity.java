@@ -2,6 +2,7 @@ package com.example.store.Activity;
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.example.store.Application.BaseApplication;
 import com.example.store.Entity.OrderMain;
 import com.example.store.Entity.Product;
 import com.example.store.Entity.Store;
+import com.example.store.Layout.LoadMoreListView;
 import com.example.store.R;
 import com.example.store.Utils.HttpUtil;
 import com.example.store.Utils.LogUtil;
@@ -33,6 +35,12 @@ public class OrderListActivity extends BaseActivity {
     private List<OrderMain> orderMainList = new ArrayList<>();
     private Store store;
     private String Web = ResponseUtil.Web;
+    //下拉加载
+    private OrderListAdapter orderListAdapter;
+    private LoadMoreListView listView;
+    private int page = 0;
+    //上拉刷新
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +54,14 @@ public class OrderListActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        initListView();
+        initRefresh();
     }
     @Override
     protected void onStart(){
         super.onStart();
-        initOrder(Web + "/storeOrderList?store_id=" + store.getStore_id());
+        page=0;
+        initOrder(Web + "/storeOrderList?store_id=" + store.getStore_id()+"&page="+page);
     }
 
     @Override
@@ -64,35 +75,103 @@ public class OrderListActivity extends BaseActivity {
         }
     }
 
+    private void initListView(){
+        orderListAdapter = new OrderListAdapter(OrderListActivity.this, R.layout.item_order_child, orderMainList);
+        listView = (LoadMoreListView) findViewById(R.id.order_list);
+        listView.setAdapter(orderListAdapter);
+        listView.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                new Thread(){
+                    @Override
+                    public void run() {
+                        super.run();
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initOrder(Web + "/storeOrderList?store_id=" + store.getStore_id()+"&page="+page);
+                                orderListAdapter.notifyDataSetChanged();
+                                listView.setLoadCompleted();
+                            }
+                        });
+                    }
+                }.start();
+            }
+        });
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                OrderMain orderMain = orderMainList.get(position);
+                Intent intent = new Intent(OrderListActivity.this, OrderDetailActivity.class);
+                intent.putExtra("OrderMain", orderMain);
+                intent.putExtra("Store", store);
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void initRefresh(){
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.green,
+                R.color.red
+        );
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+            @Override
+            public void onRefresh(){
+                refreshOrderList();
+            }
+        });
+    }
+
+    private void refreshOrderList(){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        page=0;
+                        orderMainList.clear();
+                        initOrder(Web + "/storeOrderList?store_id=" + store.getStore_id()+"&page="+page);
+                        orderListAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }.start();
+    }
+
     private void initOrder(String webAddress) {
         HttpUtil.sendOkHttpRequest(webAddress, new okhttp3.Callback() {
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 String responseText = response.body().string();
-                LogUtil.d("ProductListActivity 回应结果：", responseText);
-                orderMainList = ResponseUtil.handleOrderMainList(responseText);
+                LogUtil.d("OrderListActivity 回应结果：", responseText);
+                final List<OrderMain> orderMains = ResponseUtil.handleOrderMainList(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (orderMainList != null) {
-                            OrderListAdapter orderListAdapter = new OrderListAdapter(OrderListActivity.this, R.layout.item_order_child, orderMainList);
-                            ListView listView = (ListView) findViewById(R.id.order_list);
-                            listView.setAdapter(orderListAdapter);
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    OrderMain orderMain = orderMainList.get(position);
-                                    Intent intent = new Intent(OrderListActivity.this, OrderDetailActivity.class);
-                                    intent.putExtra("OrderMain", orderMain);
-                                    intent.putExtra("Store", store);
-                                    startActivity(intent);
-                                }
-                            });
+                        page+=1;
+                        if (orderMains != null) {
+                            orderMainList.addAll(orderMains);
+                            orderListAdapter.notifyDataSetChanged();
                         }
                     }
                 });
             }
-
             @Override
             public void onFailure(okhttp3.Call call, IOException e) {
                 e.printStackTrace();

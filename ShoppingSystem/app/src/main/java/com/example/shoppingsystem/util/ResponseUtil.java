@@ -17,6 +17,7 @@ import java.util.List;
  */
 
 public class ResponseUtil {
+    final static public String Web = "http://10.0.2.2:8080";
 
     /**
      * 将返回的JSon数据解析成RecipientList

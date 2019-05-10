@@ -1,6 +1,7 @@
 package com.example.store.Activity;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +15,7 @@ import com.example.store.Application.BaseApplication;
 import com.example.store.Entity.OrderExpand;
 import com.example.store.Entity.OrderMain;
 import com.example.store.Entity.Store;
+import com.example.store.Layout.LoadMoreListView;
 import com.example.store.R;
 import com.example.store.Utils.HttpUtil;
 import com.example.store.Utils.LogUtil;
@@ -52,6 +54,13 @@ public class OrderDetailActivity extends BaseActivity {
     private OrderMain orderMain;
     private List<OrderExpand> orderExpandList = new ArrayList<>();
 
+
+    private OrderDetailAdapter orderDetailAdapter;
+    private LoadMoreListView listView;
+    private int page=0;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +75,13 @@ public class OrderDetailActivity extends BaseActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        page = 0;
+        getOrderExpand(Web+"/findOrderProduct?"+"order_id="+orderMain.getOrder_id()+ "&page=" + page);
         init();
     }
 
@@ -112,7 +128,77 @@ public class OrderDetailActivity extends BaseActivity {
         price.setText(orderMain.getAll_money() + "");
         String orderId = "order_id="+orderMain.getOrder_id();
         String webAddress = Web+"/findOrderProduct?"+orderId;
-        getOrderExpand(webAddress);
+        initListView(webAddress);
+        initRefresh(webAddress);
+    }
+
+    private void initListView(final String webAddress) {
+        orderDetailAdapter = new OrderDetailAdapter(OrderDetailActivity.this, R.layout.item_product_order_child, orderExpandList);
+        listView = (LoadMoreListView) findViewById(R.id.lv_order_expand);
+        listView.setAdapter(orderDetailAdapter);
+        listView.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                getOrderExpand(webAddress + "&page=" + page);
+                                orderDetailAdapter.notifyDataSetChanged();
+                                listView.setLoadCompleted();
+                            }
+                        });
+                    }
+                }.start();
+            }
+        });
+    }
+
+    private void initRefresh(final String webAddress){
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.green,
+                R.color.red
+        );
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+            @Override
+            public void onRefresh(){
+                refreshOrderList(webAddress);
+            }
+        });
+    }
+
+    private void refreshOrderList(final String webAddress){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        page=0;
+                        orderExpandList.clear();
+                        getOrderExpand(webAddress + "&page=" + page);
+                        orderDetailAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }.start();
     }
 
     private void getOrderExpand(String webAddress) {
@@ -120,15 +206,15 @@ public class OrderDetailActivity extends BaseActivity {
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 String responseText = response.body().string();
-                LogUtil.d("ProductListActivity 回应结果：", responseText);
-                orderExpandList = ResponseUtil.handleOrderExpandList(responseText);
+                LogUtil.d("OrderDetail 回应结果：", responseText);
+                final List<OrderExpand> orderExpands= ResponseUtil.handleOrderExpandList(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (orderExpandList!=null) {
-                            OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(OrderDetailActivity.this,R.layout.item_product_order_child,orderExpandList);
-                            ListView listView = (ListView) findViewById(R.id.lv_order_expand);
-                            listView.setAdapter(orderDetailAdapter);
+                        page+=1;
+                        if (orderExpands!=null) {
+                            orderExpandList.addAll(orderExpands);
+                            orderDetailAdapter.notifyDataSetChanged();
                         }
                     }
                 });

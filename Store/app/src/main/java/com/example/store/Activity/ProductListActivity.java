@@ -3,6 +3,7 @@ package com.example.store.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -13,12 +14,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.store.Application.BaseApplication;
 import com.example.store.Entity.Product;
 import com.example.store.Entity.Store;
+import com.example.store.Layout.LoadMoreListView;
 import com.example.store.R;
 import com.example.store.Utils.HttpUtil;
 import com.example.store.Utils.LogUtil;
@@ -38,6 +39,13 @@ public class ProductListActivity extends BaseActivity {
     private List<Product> productList = new ArrayList<>();
     private Store store;
     private String Web = ResponseUtil.Web;
+
+    ProductListAdapter productListAdapter;
+    LoadMoreListView listView;
+    private int page=0;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +74,99 @@ public class ProductListActivity extends BaseActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        initProducts(Web + "/storeProducts?store_id=" + store.getStore_id());
+        page = 0;
+        String webAddress = Web + "/storeProducts?store_id=" + store.getStore_id();
+        initProducts(webAddress+"&page="+page);
+        initListView(webAddress);
+        initRefresh(webAddress);
     }
 
+    private void initListView(final String webAddress) {
+        productListAdapter = new ProductListAdapter(ProductListActivity.this,R.layout.item_product,productList);
+        listView = (LoadMoreListView) findViewById(R.id.lv_product_list);
+        listView.setAdapter(productListAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Product product = productList.get(position);
+                Intent intent = new Intent(ProductListActivity.this,ProductDetail.class);
+                intent.putExtra("Product",product);
+                intent.putExtra("Store",store);
+                startActivity(intent);
+            }
+        });
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Product product = productList.get(position);
+                showDeleteDialog(Web + "/deleteProduct?product_id=" + product.getProduct_id());
+                return true;
+            }
+        });
+        listView.setOnLoadMoreListener(new LoadMoreListView.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        super.run();
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initProducts(webAddress + "&page=" + page);
+                                productListAdapter.notifyDataSetChanged();
+                                listView.setLoadCompleted();
+                            }
+                        });
+                    }
+                }.start();
+            }
+        });
+    }
+
+    private void initRefresh(final String webAddress){
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.colorPrimary,
+                R.color.green,
+                R.color.red
+        );
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+            @Override
+            public void onRefresh(){
+                refreshOrderList(webAddress);
+            }
+        });
+    }
+
+    private void refreshOrderList(final String webAddress){
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        page=0;
+                        productList.clear();
+                        initProducts(webAddress + "&page=" + page);
+                        productListAdapter.notifyDataSetChanged();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+            }
+        }.start();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_search, menu);
@@ -120,32 +218,14 @@ public class ProductListActivity extends BaseActivity {
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 String responseText = response.body().string();
                 LogUtil.d("ProductListActivity 回应结果：",responseText);
-                productList = ResponseUtil.handleProductList(responseText);
+                final List<Product> products = ResponseUtil.handleProductList(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(productList != null){
-                            ProductListAdapter productListAdapter = new ProductListAdapter(ProductListActivity.this,R.layout.item_product,productList);
-                            ListView listView = (ListView) findViewById(R.id.lv_product_list);
-                            listView.setAdapter(productListAdapter);
-                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                    Product product = productList.get(position);
-                                    Intent intent = new Intent(ProductListActivity.this,ProductDetail.class);
-                                    intent.putExtra("Product",product);
-                                    intent.putExtra("Store",store);
-                                    startActivity(intent);
-                                }
-                            });
-                            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                                @Override
-                                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                                    Product product = productList.get(position);
-                                    showDeleteDialog(Web + "/deleteProduct?product_id=" + product.getProduct_id());
-                                    return true;
-                                }
-                            });
+                        page+=1;
+                        if(products != null){
+                            productList.addAll(products);
+                            productListAdapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -172,7 +252,7 @@ public class ProductListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initProducts(Web + "/storeProducts?store_id=" + store.getStore_id());
+                        initRefresh(Web + "/storeProducts?store_id=" + store.getStore_id());
                     }
                 });
             }
