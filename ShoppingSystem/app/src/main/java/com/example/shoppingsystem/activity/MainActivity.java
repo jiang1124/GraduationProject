@@ -145,26 +145,26 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.home_button:
                 initHome(Web+"/home");
-                PageSwitch(sortView, shoppingCartView, personView, homeView);
+                PageSwitch(sortView, shoppingCartView, personView, homeView,"home");
                 break;
             case R.id.sort_button:
                 initSort();
                 ArrayAdapter<String> sortAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,sortData);
                 sortListView.setAdapter(sortAdapter);
-                PageSwitch(homeView, shoppingCartView, personView, sortView);
+                PageSwitch(homeView, shoppingCartView, personView, sortView,"sort");
                 break;
             case R.id.shopping_cart_button:
                 if(isLogin) {
                     initExpandableListView();
                     initShoppingCart(Web + "/shoppingCart?id=" + user.getUser_id());
-                    PageSwitch(homeView, sortView, personView, shoppingCartView);
+                    PageSwitch(homeView, sortView, personView, shoppingCartView,"car");
                 }else {
                     ToastUtil.makeText(this,"请先登陆");
                 }
                 break;
             case R.id.person_button:
                 initPerson();
-                PageSwitch(homeView, sortView, shoppingCartView, personView);
+                PageSwitch(homeView, sortView, shoppingCartView, personView,"user");
                 break;
             case R.id.tv_my_address:
                 if(isLogin) {
@@ -218,11 +218,24 @@ public class MainActivity extends BaseActivity {
     /**
      * 页面切换
      */
-    public final void PageSwitch(View goneView1,View goneView2,View goneView3,View visibleView){
+    public void PageSwitch(View goneView1,View goneView2,View goneView3,View visibleView,String type){
         goneView1.setVisibility(View.GONE);
         goneView2.setVisibility(View.GONE);
         goneView3.setVisibility(View.GONE);
         visibleView.setVisibility(View.VISIBLE);
+        homeButton.setBackgroundResource(R.drawable.home);
+        sortButton.setBackgroundResource(R.drawable.classify);
+        shoppingCartButton.setBackgroundResource(R.drawable.shopping);
+        personButton.setBackgroundResource(R.drawable.user);
+        if(type.equals("home")){
+            homeButton.setBackgroundResource(R.drawable.home_selected);
+        }else if(type.equals("sort")){
+            sortButton.setBackgroundResource(R.drawable.classify_selected);
+        }else if(type.equals("car")){
+            shoppingCartButton.setBackgroundResource(R.drawable.shopping_selected);
+        }else if(type.equals("user")){
+            personButton.setBackgroundResource(R.drawable.user_selected);
+        };
     }
 
 //-----------------------------------------------------------------------------------------------
@@ -300,13 +313,12 @@ public class MainActivity extends BaseActivity {
     * 初始化分类项
     */
     private void initSort(){
-        sortData.add("水果"); //在链接好数据库的实战中，这个地方水果可以改为re.title
         sortData.add("休闲零食");
-        sortData.add("茶酒冲饮");
-        sortData.add("粮油干货");
-        sortData.add("居家日用");
-        sortData.add("餐饮用具");
-        sortData.add("厨房烹饪");
+        sortData.add("茶水饮料");
+        sortData.add("粮油调味");
+        sortData.add("生活日用");
+        sortData.add("水具酒具");
+        sortData.add("厨房用具");
         sortData.add("清洁用具");
     }
 
@@ -365,9 +377,6 @@ public class MainActivity extends BaseActivity {
                 });
             }
         });
-//        Car shoppingCar=initShoppingCartStr();
-//        stores = shoppingCar.getStores();
-//        initExpandableListViewData(stores);
     }
 
     /**
@@ -480,43 +489,6 @@ public class MainActivity extends BaseActivity {
     }
 
     /**
-     * 判断是否要弹出删除的dialog
-     * 通过bean类中的DatasBean的isSelect_shop属性，判断店铺是否被选中；
-     * GoodsBean的isSelect属性，判断商品是否被选中，
-     */
-//    private List<Shop> initPayList() {
-//        //判断是否有店铺或商品被选中
-//        //true为有，则需要刷新数据；反之，则不需要；
-//        boolean hasSelect = false;
-//        //创建临时的List，用于存储没有选中的购物车数据
-//        List<Shop> storesTemp = new ArrayList<>();
-//
-//        for (int i = 0; i < stores.size(); i++) {
-//            List<Goods> goods = stores.get(i).getGoods();
-//            boolean isSelect_shop = stores.get(i).isSelect_shop();
-//
-//            if (isSelect_shop) {
-//                hasSelect = true;
-//                //跳出本次循环，继续下次循环。
-//                storesTemp.add(stores.get(i));
-//                storesTemp.get(storesTemp.size() - 1).setGoods(new ArrayList<Goods>());
-//                continue;
-//            }
-//
-//            for (int y = 0; y < goods.size(); y++) {
-//                Goods good = goods.get(y);
-//                boolean isSelect = good.isSelect_product();
-//
-//                if (isSelect) {
-//                    hasSelect = true;
-//                    storesTemp.get(storesTemp.size() - 1).getGoods().add(good);
-//                }
-//            }
-//        }
-//        return storesTemp;
-//    }
-//
-    /**
      * 展示删除的dialog
      *
      * @param webAddress
@@ -559,31 +531,4 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
-
-//    public Car initShoppingCartStr() {
-//        Car shoppingCar =new Car();
-//        Goods good = new Goods();
-//        good.setProduct_id(1);
-//        good.setPro_name("Apple");
-//        good.setPro_favl(12);
-//        good.setExtra_money(10);
-//        good.setPro_detail("苹果");
-//        good.setPro_image(Web+"/image/product/apple_pic.png");
-//        good.setType("水果");
-//        good.setStore_id(1);
-//        good.setPro_sale(10);
-//        good.setPro_num(10);
-//        List<Goods>gs = new ArrayList<>();
-//        gs.add(good);
-//        Shop store =new Shop();
-//        store.setGoods(gs);
-//        store.setStore_id(1);
-//        store.setStore_name("一号店");
-//        List<Shop> ss=new ArrayList<>();
-//        ss.add(store);
-//        shoppingCar.setStores(ss);
-//        shoppingCar.setUser_id(1);
-//        return shoppingCar;
-//    }
-
 }

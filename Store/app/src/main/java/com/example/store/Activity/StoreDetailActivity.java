@@ -92,15 +92,17 @@ public class StoreDetailActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        storeNameShow.setText(store.getStore_name());
-                        passwordShow.setText("******");
-                        storeNameET.setText(store.getStore_name());
-                        passwordET.setText(store.getStore_password());
-                        if(store.getStore_detail()!=null) {
-                            detailShow.setText(store.getStore_detail());
-                            addressShow.setText(store.getAddress());
-                            detailET.setText(store.getStore_detail());
-                            addressET.setText(store.getAddress());
+                        if(store!=null) {
+                            storeNameShow.setText(store.getStore_name());
+                            passwordShow.setText("******");
+                            storeNameET.setText(store.getStore_name());
+                            passwordET.setText(store.getStore_password());
+                            if (store.getStore_detail() != null) {
+                                detailShow.setText(store.getStore_detail());
+                                addressShow.setText(store.getAddress());
+                                detailET.setText(store.getStore_detail());
+                                addressET.setText(store.getAddress());
+                            }
                         }
                     }
                 });

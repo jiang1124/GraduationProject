@@ -91,7 +91,7 @@ public class ProductListAdapter extends RecyclerView.Adapter<ProductListAdapter.
                 .placeholder(R.mipmap.ic_launcher)
                 .into(holder.productImage);
         holder.productName.setText(product.getPro_name());
-        holder.price.setText(""+product.getPro_price());
+        holder.price.setText("￥"+product.getPro_price());
     }
     @Override
     public int getItemCount(){

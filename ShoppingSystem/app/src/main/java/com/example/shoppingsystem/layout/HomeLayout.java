@@ -1,6 +1,7 @@
 package com.example.shoppingsystem.layout;
 
 import android.content.Context;
+import android.support.v7.widget.SearchView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;

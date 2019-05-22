@@ -1,6 +1,8 @@
 package com.example.store.Activity;
 
 import android.content.Intent;
+import android.os.Environment;
+import android.provider.SyncStateContract;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,11 +19,18 @@ import com.example.store.Application.BaseApplication;
 import com.example.store.Entity.Product;
 import com.example.store.Entity.Store;
 import com.example.store.R;
+import com.example.store.Utils.Constants;
 import com.example.store.Utils.HttpUtil;
 import com.example.store.Utils.LogUtil;
 import com.example.store.Utils.ResponseUtil;
 import com.example.store.Utils.ToastUtil;
+import com.example.store.Utils.UploadUtil;
+import com.wildma.pictureselector.ImageUtils;
+import com.wildma.pictureselector.PictureSelector;
 
+import org.json.JSONObject;
+
+import java.io.File;
 import java.io.IOException;
 
 import butterknife.ButterKnife;
@@ -48,7 +57,7 @@ public class ProductDetail extends BaseActivity {
     private Product product;
     private Store store;
     private String Web = ResponseUtil.Web;
-    String[] type = {"水果","休闲零食","茶酒冲饮","粮油干货","居家日用","餐饮用具","厨房烹饪","清洁用具"};
+    String[] type = {"休闲零食","茶水饮料","粮油调味","生活日用","水具酒具","厨房用具","清洁用具"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,14 +90,40 @@ public class ProductDetail extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.btn_sure)
+    @OnClick({R.id.btn_sure,R.id.iv_upload})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.btn_sure:
                 submit();
                 break;
+            case R.id.iv_upload:
+                /**
+                 * create()方法参数一是上下文，在activity中传activity.this，在fragment中传fragment.this。参数二为请求码，用于结果回调onActivityResult中判断
+                 * selectPicture()方法参数分别为 是否裁剪、裁剪后图片的宽(单位px)、裁剪后图片的高、宽比例、高比例。都不传则默认为裁剪，宽200，高200，宽高比例为1：1。
+                 */
+                PictureSelector
+                        .create(ProductDetail.this, PictureSelector.SELECT_REQUEST_CODE)
+                        .selectPicture(true, 200, 200, 1, 1);
+
+                break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        /*结果回调*/
+        if (requestCode == PictureSelector.SELECT_REQUEST_CODE) {
+            if (data != null) {
+                String picturePath = data.getStringExtra(PictureSelector.PICTURE_PATH);
+
+//                Glide.with(ProductDetail.this)
+//                        .load(PictureSelector.PICTURE_PATH)
+//                        .error(R.drawable.upload)
+//                        .into(upload);
+            }
         }
     }
 
@@ -105,8 +140,8 @@ public class ProductDetail extends BaseActivity {
         productTypeSp.setSelection(i);
         Glide.with(ProductDetail.this)
                 .load(product.getPro_image())
+                .error(R.drawable.upload)
                 .into(upload);
-
     }
 
     private void submit(){

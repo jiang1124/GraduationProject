@@ -20,6 +20,7 @@ public class StoreController {
 
     @RequestMapping("/storeLogin")
     public Store storeLogin(String account,String password){
+        System.out.println("a:"+account+",p:"+password);
         return storeService.findOne(account, password);
     }
 

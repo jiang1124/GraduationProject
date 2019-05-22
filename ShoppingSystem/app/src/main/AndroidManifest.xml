@@ -14,13 +14,13 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="首页"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask"/>
         <activity
             android:name=".activity.ProductActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.LoginActivity"
-            android:label="登录/注册">
+            android:label="登录">
             <intent-filter>
                 <action
                     android:name="android.intent.action.MAIN"
@@ -33,7 +33,8 @@
         </activity>
         <activity
             android:name=".activity.SearchActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:label="搜索"/>
         <activity
             android:name=".activity.MyOrderActivity"
             android:label="我的订单"
@@ -56,8 +57,12 @@
             android:launchMode="singleTask" />
         <activity
             android:name=".activity.PayActivity"
-            android:launchMode="singleTask" />
-        <activity android:name=".activity.SpActivity"></activity>
+            android:launchMode="singleTask"
+            android:label="商品"/>
+        <activity
+            android:name=".activity.SpActivity"
+            android:launchMode="singleTask"
+            android:label="结算"/>
     </application>
 
 </manifest>

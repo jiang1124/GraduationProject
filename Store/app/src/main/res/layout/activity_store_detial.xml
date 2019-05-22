@@ -23,7 +23,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -93,8 +93,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:text="简介："
@@ -106,13 +105,12 @@
             <TextView
                 android:text="简介"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/tv_detail_show"
                 android:layout_weight="1"
                 android:textSize="18sp" />
 
             <EditText
-                android:text="简介"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/et_detail"
@@ -120,15 +118,15 @@
                 android:textSize="18sp"
                 android:maxLength="255"
                 android:minLines="3"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:hint="请输入简介" />
 
         </LinearLayout>
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_height="wrap_content">
 
             <TextView
                 android:text="地址："
@@ -146,7 +144,6 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:text="地址"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/et_address"

@@ -38,7 +38,6 @@ public class ProductListsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int TYPE_FOOTER = 1;  //底部FootView
     private static final int TYPE_FINISH = -1;  //完成FootView
     private int lastVisibleItemPosition;  //最后各一个项目位置
-    private MyViewHolder mvHolder;
     private MyProgressViewHolder mpHolder;
     private RecyclerView.LayoutParams param;
     private ILoadMoreData iLoadMoreData;
@@ -130,7 +129,7 @@ public class ProductListsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 mContext = parent.getContext();
             }
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product_card, parent, false);
-            mvHolder = new MyViewHolder(view);
+            final MyViewHolder mvHolder = new MyViewHolder(view);
             mvHolder.cardView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -175,7 +174,7 @@ public class ProductListsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .placeholder(R.mipmap.ic_launcher)
                     .into(myViewHolder.productImage);
             myViewHolder.productName.setText(product.getPro_name());
-            myViewHolder.price.setText("" + product.getPro_price());
+            myViewHolder.price.setText("￥" + product.getPro_price());
         }
     }
 

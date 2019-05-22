@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.store">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:name=".Application.BaseApplication"
@@ -11,7 +11,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activity.LoginActivity"
+        <activity
+            android:name=".Activity.LoginActivity"
             android:label="登陆">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,27 +20,34 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MainActivity"
+        <activity
+            android:name=".Activity.MainActivity"
             android:label="主页"
             android:launchMode="singleTask" />
-        <activity android:name=".Activity.RegisterActivity"
+        <activity
+            android:name=".Activity.RegisterActivity"
             android:label="注册"
             android:launchMode="singleTask" />
-        <activity android:name=".Activity.ProductListActivity"
+        <activity
+            android:name=".Activity.ProductListActivity"
             android:label="商品"
             android:launchMode="singleTask" />
-        <activity android:name=".Activity.ProductDetail"
+        <activity
+            android:name=".Activity.ProductDetail"
             android:label="详情"
             android:launchMode="singleTask" />
-        <activity android:name=".Activity.StoreDetailActivity"
+        <activity
+            android:name=".Activity.StoreDetailActivity"
             android:label="编辑"
             android:launchMode="singleTask" />
-        <activity android:name=".Activity.OrderListActivity"
+        <activity
+            android:name=".Activity.OrderListActivity"
             android:label="订单"
             android:launchMode="singleTask" />
-        <activity android:name=".Activity.OrderDetailActivity"
+        <activity
+            android:name=".Activity.OrderDetailActivity"
             android:label="详情"
-            android:launchMode="singleTask"></activity>
+            android:launchMode="singleTask" />
     </application>
 
 </manifest>

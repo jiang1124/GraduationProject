@@ -157,7 +157,7 @@ public class ProductActivity extends BaseActivity{
                     public void run() {
                         String priceStr = "价格："+product.getPro_price();
                         String salePriceStr = "促销价："+product.getPro_favl();
-                        String exMoneyStr = "运费:"+product.getExtra_money();
+                        String exMoneyStr = "运费: "+product.getExtra_money();
                         String saVolumeStr = "销量：" + product.getPro_sale();
                         collapsingToolbar.setTitle(product.getPro_name());
                         Glide.with(ProductActivity.this)

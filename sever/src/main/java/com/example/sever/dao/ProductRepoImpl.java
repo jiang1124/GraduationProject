@@ -33,7 +33,7 @@ public class ProductRepoImpl implements ProductRepo{
 
     @Override
     public List<Product> findSVTopFive() {
-        List<Product> res = jdbcTemplate.query("select * from product order by pro_sale desc  limit 10", new Object[]{},
+        List<Product> res = jdbcTemplate.query("select * from product order by pro_sale desc  limit 20", new Object[]{},
                 new BeanPropertyRowMapper(Product.class));
 
         return res;

@@ -29,8 +29,9 @@ public class StoreRepoImpl implements StoreRepo {
                 new Object[]{store_name,password}, new BeanPropertyRowMapper(Store.class));
         if (res != null && res.size() > 0) {
             return res.get(0);
+        }else {
+            return null;
         }
-        return null;
     }
 
     @Override

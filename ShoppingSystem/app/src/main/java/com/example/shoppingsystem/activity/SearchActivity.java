@@ -53,7 +53,6 @@ public class SearchActivity extends AppCompatActivity implements ILoadMoreData{
     TextView salesVolumeQueueText;
 
     private List<Product> productList=new ArrayList<>();
-    private String netAddress;
     private User user;
     private String searchContentStr;
     private String Web =ResponseUtil.Web;
@@ -80,33 +79,32 @@ public class SearchActivity extends AppCompatActivity implements ILoadMoreData{
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        netAddress = Web+"/search";
+        addressStr = Web+"/search";
         if(key!=null) {
-            netAddress = netAddress + "/k?key=" + key;
-            addressStr = netAddress;
+            addressStr = addressStr + "/k?key=" + key;
             searchEdit.setText(key);
         }
         else if(sort!=null) {
-            netAddress = netAddress + "/s?sort=" + sort;
+            addressStr = addressStr + "/s?sort=" + sort;
             searchEdit.setText(sort);
         }
         searchContentStr=searchEdit.getText().toString();
-        LogUtil.d("searchNetAddress:",netAddress);
-        initSearchProductList(netAddress+"&page="+page);
+        LogUtil.d("searchNetAddress:",addressStr);
+        initSearchProductList(addressStr+"&page="+page);
+        initRefresh();
+        initRecyclerView();
     }
 
     @Override
     protected void onStart(){
         super.onStart();
-        page=0;
-        initRefresh(addressStr);
-        initRecyclerView();
     }
 
     @OnClick({R.id.btn_search_in_search,R.id.tv_default_queue,R.id.tv_price_queue,R.id.tv_sales_volume_queue})
     public void onClick(View v){
         switch (v.getId()) {
             case R.id.btn_search_in_search:
+                page=0;
                 searchContentStr = searchEdit.getText().toString().trim();
                 if(searchContentStr.length()>0) {
                     addressStr = Web+"/search/k?key=" + searchContentStr;
@@ -165,7 +163,7 @@ public class SearchActivity extends AppCompatActivity implements ILoadMoreData{
         SearchRecyclerView.setAdapter(productListAdapter);
     }
 
-    private void initRefresh(final String webAddress){
+    private void initRefresh(){
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setColorSchemeResources(
                 R.color.colorPrimary,
@@ -175,7 +173,7 @@ public class SearchActivity extends AppCompatActivity implements ILoadMoreData{
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
             @Override
             public void onRefresh(){
-                refreshOrderList(webAddress);
+                refreshOrderList(addressStr);
             }
         });
     }

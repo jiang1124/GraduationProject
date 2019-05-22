@@ -75,6 +75,7 @@ public class ProductListActivity extends BaseActivity {
     protected void onStart(){
         super.onStart();
         page = 0;
+        productList.clear();
         String webAddress = Web + "/storeProducts?store_id=" + store.getStore_id();
         initProducts(webAddress+"&page="+page);
         initListView(webAddress);

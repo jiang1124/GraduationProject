@@ -3,6 +3,7 @@ package com.example.store.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -54,6 +55,10 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         pref = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isRemember = pref.getBoolean("rememberPassword",false);
         boolean isAutoLogin = pref.getBoolean("autoLogin",false);
@@ -107,6 +112,7 @@ public class LoginActivity extends BaseActivity {
         Intent intentMain = new Intent(BaseApplication.getContext(), MainActivity.class);
         intentMain.putExtra("Store",store);
         startActivity(intentMain);
+        finish();
     }
 
     public void initStore(String webAddress){
@@ -115,7 +121,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 String responseText = response.body().string();
-                LogUtil.d("ProductListActivity 回应结果：",responseText);
+                LogUtil.d("LoginActivity 回应结果：",responseText);
                 store = ResponseUtil.handleStore(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
