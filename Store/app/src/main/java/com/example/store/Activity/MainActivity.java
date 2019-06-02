@@ -46,6 +46,7 @@ public class MainActivity extends BaseActivity {
         ButterKnife.inject(this);
         Intent getIntent = getIntent();
         store = (Store) getIntent.getSerializableExtra("Store");
+        headIV.setImageResource(R.mipmap.store);
     }
 
     @OnClick({R.id.tv_edit_mine, R.id.tv_product_setting, R.id.tv_order_setting, R.id.btn_quit})

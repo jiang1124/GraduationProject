@@ -1,9 +1,10 @@
-package com.example.shoppingsystem.activity;
+package com.example.shoppingsystem.Activity;
 
 import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,6 +60,8 @@ public class ProductActivity extends BaseActivity{
     TextView productType;
     @InjectView(R.id.tv_store_name_detail)
     TextView storeName;
+    @InjectView(R.id.cv_store_name)
+    CardView cardView;
 
     private Product product;
     private int user_id;
@@ -98,7 +101,7 @@ public class ProductActivity extends BaseActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick({R.id.collect_button,R.id.in_shopping_cart_button,R.id.buy_button})
+    @OnClick({R.id.collect_button,R.id.in_shopping_cart_button,R.id.buy_button,R.id.cv_store_name})
     public void onClick(View v){
         switch (v.getId()){
             case R.id.collect_button:
@@ -138,6 +141,11 @@ public class ProductActivity extends BaseActivity{
                 break;
             case R.id.buy_button:
                 ToastUtil.makeText(v.getContext(),"Buy");
+                break;
+            case R.id.cv_store_name:
+                Intent storeIntent = new Intent(ProductActivity.this,StoreProductsActivity.class);
+                storeIntent.putExtra("store_id",product.getStore_id());
+                startActivity(storeIntent);
                 break;
             default:
                 break;

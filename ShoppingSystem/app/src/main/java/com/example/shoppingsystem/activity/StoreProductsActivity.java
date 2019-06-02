@@ -1,32 +1,27 @@
-package com.example.store.Activity;
+package com.example.shoppingsystem.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
-import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
-import com.example.store.Application.BaseApplication;
-import com.example.store.Entity.Product;
-import com.example.store.Entity.Store;
-import com.example.store.Layout.LoadMoreListView;
-import com.example.store.R;
-import com.example.store.Utils.HttpUtil;
-import com.example.store.Utils.LogUtil;
-import com.example.store.Utils.ResponseUtil;
-import com.example.store.Utils.RoundCornerDialog;
-import com.example.store.Utils.ToastUtil;
-import com.example.store.adapter.ProductListAdapter;
+import com.example.shoppingsystem.Application.BaseApplication;
+import com.example.shoppingsystem.Entity.Product;
+import com.example.shoppingsystem.R;
+import com.example.shoppingsystem.View.LoadMoreListView;
+import com.example.shoppingsystem.adapter.ProductsAdapter;
+import com.example.shoppingsystem.layout.RoundCornerDialog;
+import com.example.shoppingsystem.util.HttpUtil;
+import com.example.shoppingsystem.util.LogUtil;
+import com.example.shoppingsystem.util.ResponseUtil;
+import com.example.shoppingsystem.util.ToastUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,42 +29,29 @@ import java.util.List;
 
 import okhttp3.Response;
 
-public class ProductListActivity extends BaseActivity {
-
+public class StoreProductsActivity extends BaseActivity {
     private List<Product> productList = new ArrayList<>();
-    private Store store;
     private String Web = ResponseUtil.Web;
 
-    private ProductListAdapter productListAdapter;
+    private ProductsAdapter productsAdapter;
     private LoadMoreListView listView;
     private int page=0;
-    private String webAddress;
 
+    private int store_id;
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_product_list);
+        setContentView(R.layout.activity_store_products);
         Intent getIntent = getIntent();
-        store = (Store) getIntent.getSerializableExtra("Store");
+        store_id = getIntent.getIntExtra("store_id",-1);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-
-        //悬浮按钮
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProductListActivity.this,ProductDetail.class);
-                intent.putExtra("Store",store);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -77,23 +59,22 @@ public class ProductListActivity extends BaseActivity {
         super.onStart();
         page = 0;
         productList.clear();
-        webAddress = Web + "/storeProducts?store_id=" + store.getStore_id();
+        String webAddress = Web + "/storeProducts?store_id=" + store_id;
         initProducts(webAddress+"&page="+page);
         initListView(webAddress);
         initRefresh(webAddress);
     }
 
     private void initListView(final String webAddress) {
-        productListAdapter = new ProductListAdapter(ProductListActivity.this,R.layout.item_product,productList);
-        listView = (LoadMoreListView) findViewById(R.id.lv_product_list);
-        listView.setAdapter(productListAdapter);
+        productsAdapter = new ProductsAdapter(StoreProductsActivity.this,R.layout.item_product,productList);
+        listView = (LoadMoreListView) findViewById(R.id.lv_store_product_list);
+        listView.setAdapter(productsAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Product product = productList.get(position);
-                Intent intent = new Intent(ProductListActivity.this,ProductDetail.class);
+                Intent intent = new Intent(StoreProductsActivity.this,ProductActivity.class);
                 intent.putExtra("Product",product);
-                intent.putExtra("Store",store);
                 startActivity(intent);
             }
         });
@@ -121,7 +102,7 @@ public class ProductListActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 initProducts(webAddress + "&page=" + page);
-                                productListAdapter.notifyDataSetChanged();
+                                productsAdapter.notifyDataSetChanged();
                                 listView.setLoadCompleted();
                             }
                         });
@@ -162,55 +143,14 @@ public class ProductListActivity extends BaseActivity {
                         page=0;
                         productList.clear();
                         initProducts(webAddress + "&page=" + page);
-                        productListAdapter.notifyDataSetChanged();
+                        productsAdapter.notifyDataSetChanged();
                         swipeRefreshLayout.setRefreshing(false);
                     }
                 });
             }
         }.start();
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_search, menu);
-        //找到SearchView并配置相关参数
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-        SearchView mSearchView = (SearchView) searchItem.getActionView();
-        //搜索图标是否显示在搜索框内
-        mSearchView.setIconifiedByDefault(true);
-        //设置搜索框展开时是否显示提交按钮，可不显示
-        mSearchView.setSubmitButtonEnabled(true);
-        //让键盘的回车键设置成搜索
-        mSearchView.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
-        //搜索框是否展开，false表示展开
-        mSearchView.setIconified(false);
-        //获取焦点
-        mSearchView.setFocusable(true);
-        mSearchView.requestFocusFromTouch();
-        //设置提示词
-        mSearchView.setQueryHint("请输入关键字");
-        // 设置搜索文本监听
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            // 当点击搜索按钮时触发该方法
-            @Override
-            public boolean onQueryTextSubmit(String query) {
 
-                //清除焦点，收软键盘
-                page = 0;
-                productList.clear();
-                webAddress = Web + "/storeSearchProducts?store_id=" + store.getStore_id()+"&key="+query;
-                initProducts(webAddress+"&page="+page);
-                productListAdapter.notifyDataSetChanged();
-
-                return false;
-            }
-            // 当搜索内容改变时触发该方法
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-        return true;
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -235,7 +175,7 @@ public class ProductListActivity extends BaseActivity {
                         page+=1;
                         if(products != null){
                             productList.addAll(products);
-                            productListAdapter.notifyDataSetChanged();
+                            productsAdapter.notifyDataSetChanged();
                         }
                     }
                 });
@@ -262,7 +202,7 @@ public class ProductListActivity extends BaseActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initRefresh(Web + "/storeProducts?store_id=" + store.getStore_id());
+                        initRefresh(Web + "/storeProducts?store_id=" + store_id);
                     }
                 });
             }
@@ -286,7 +226,7 @@ public class ProductListActivity extends BaseActivity {
      */
     private void showDeleteDialog(final String webAddress) {
         View view = View.inflate(BaseApplication.getContext(), R.layout.dialog_two_btn, null);
-        final RoundCornerDialog roundCornerDialog = new RoundCornerDialog(ProductListActivity.this, 0, 0, view, R.style.RoundCornerDialog);
+        final RoundCornerDialog roundCornerDialog = new RoundCornerDialog(StoreProductsActivity.this, 0, 0, view, R.style.RoundCornerDialog);
         roundCornerDialog.show();
         roundCornerDialog.setCanceledOnTouchOutside(false);// 设置点击屏幕Dialog不消失
         roundCornerDialog.setOnKeyListener(keyListener);//设置点击返回键Dialog不消失

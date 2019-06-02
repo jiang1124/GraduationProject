@@ -11,11 +11,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.shoppingsystem.R;
-import com.example.shoppingsystem.activity.LoginActivity;
-import com.example.shoppingsystem.activity.MyAddressActivity;
-import com.example.shoppingsystem.activity.MyCollectionActivity;
-import com.example.shoppingsystem.activity.MyHistoryActivity;
-import com.example.shoppingsystem.activity.MyOrderActivity;
+import com.example.shoppingsystem.Activity.LoginActivity;
+import com.example.shoppingsystem.Activity.MyAddressActivity;
+import com.example.shoppingsystem.Activity.MyCollectionActivity;
+import com.example.shoppingsystem.Activity.MyHistoryActivity;
+import com.example.shoppingsystem.Activity.MyOrderActivity;
 import com.example.shoppingsystem.Entity.User;
 
 import butterknife.ButterKnife;

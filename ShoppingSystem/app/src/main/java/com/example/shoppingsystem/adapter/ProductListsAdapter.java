@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.shoppingsystem.R;
-import com.example.shoppingsystem.activity.ProductActivity;
+import com.example.shoppingsystem.Activity.ProductActivity;
 import com.example.shoppingsystem.Entity.Product;
 import com.example.shoppingsystem.util.ILoadMoreData;
 

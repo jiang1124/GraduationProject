@@ -1,4 +1,4 @@
-package com.example.shoppingsystem.activity;
+package com.example.shoppingsystem.Activity;
 
 import android.content.Intent;
 import android.graphics.Color;

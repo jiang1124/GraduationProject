@@ -6,7 +6,7 @@ import android.os.Environment;
  * Created by 79124 on 2019/5/10.
  */
 
-public abstract class Constants {
+public abstract class Photo {
     // 相册的RequestCode
     public static final int INTENT_REQUEST_CODE_ALBUM = 0;
     // 照相的RequestCode

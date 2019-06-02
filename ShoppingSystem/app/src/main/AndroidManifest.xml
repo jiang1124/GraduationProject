@@ -3,6 +3,7 @@
     package="com.example.shoppingsystem">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".Application.BaseApplication"
@@ -12,14 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".Activity.MainActivity"
             android:label="首页"
-            android:launchMode="singleTask"/>
-        <activity
-            android:name=".activity.ProductActivity"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".Activity.ProductActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".Activity.LoginActivity"
             android:label="登录">
             <intent-filter>
                 <action
@@ -32,37 +33,52 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.SearchActivity"
-            android:launchMode="singleTask"
-            android:label="搜索"/>
+            android:name=".Activity.SearchActivity"
+            android:label="搜索"
+            android:launchMode="singleTask" />
         <activity
-            android:name=".activity.MyOrderActivity"
+            android:name=".Activity.MyOrderActivity"
             android:label="我的订单"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.MyCollectionActivity"
+            android:name=".Activity.MyCollectionActivity"
             android:label="我的收藏"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.MyHistoryActivity"
+            android:name=".Activity.MyHistoryActivity"
             android:label="我的足迹"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.MyAddressActivity"
+            android:name=".Activity.MyAddressActivity"
             android:label="地址信息"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.EditRecipientActivity"
+            android:name=".Activity.EditRecipientActivity"
             android:label="编辑"
             android:launchMode="singleTask" />
         <activity
-            android:name=".activity.PayActivity"
-            android:launchMode="singleTask"
-            android:label="商品"/>
+            android:name=".Activity.PayActivity"
+            android:label="商品"
+            android:launchMode="singleTask" />
         <activity
-            android:name=".activity.SpActivity"
-            android:launchMode="singleTask"
-            android:label="结算"/>
+            android:name=".Activity.SpActivity"
+            android:label="结算"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".Activity.RegisterActivity"
+            android:label="注册"/>
+        <activity
+            android:name=".Activity.StoreProductsActivity"
+            android:label="商店"/>
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.shoppingsystem"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

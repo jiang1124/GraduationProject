@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.example.shoppingsystem.Entity.User;
 import com.example.shoppingsystem.R;
-import com.example.shoppingsystem.activity.EditRecipientActivity;
+import com.example.shoppingsystem.Activity.EditRecipientActivity;
 import com.example.shoppingsystem.Entity.Recipient;
 
 import java.util.List;

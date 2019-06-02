@@ -14,19 +14,19 @@ public class LoginController {
     private UserService userService;
 
     @RequestMapping("/verification")
-    public User Verification(String name,String password){
-        System.out.println("login_name:"+name);
+    public User Verification(String account,String password){
+        System.out.println("login_name:"+account);
         System.out.println("login_password:"+password);
-        User user =userService.findOne(name,password);
+        User user =userService.findOne(account,password);
         System.out.println(user);
         return user;
     }
 
     @RequestMapping("/registered")
-    public User Registered(String name,String password){
-        System.out.println("registered_name:"+name);
+    public User Registered(String account,String password){
+        System.out.println("registered_name:"+account);
         System.out.println("registered_password:"+password);
-        User user =userService.add(name,password);
+        User user =userService.add(account,password);
         System.out.println(user);
         return user;
     }

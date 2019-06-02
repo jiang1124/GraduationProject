@@ -17,17 +17,17 @@ public class ProductRepoImpl implements ProductRepo{
 
     @Override
     public List<Product> findStoreProducts(int store_id,int page) {
-        int index=3;
+        int index=6;
         List<Product> res = jdbcTemplate.query("select * from product where store_id = ? limit ?,?;",
                 new Object[]{store_id,page*index,index},new BeanPropertyRowMapper(Product.class));
         return res;
     }
 
     @Override
-    public List<Product> findStoreProducts(int store_id, String pro_name, int page) {
-        int index=3;
+    public List<Product> findStoreProducts(int store_id, String key, int page) {
+        int index=6;
         List<Product> res = jdbcTemplate.query("select * from product where store_id = ? and pro_name like ? limit ?,?;",
-                new Object[]{store_id,"%"+pro_name+"%",page*index,index},new BeanPropertyRowMapper(Product.class));
+                new Object[]{store_id,"%"+key+"%",page*index,index},new BeanPropertyRowMapper(Product.class));
         return res;
     }
 
@@ -162,17 +162,19 @@ public class ProductRepoImpl implements ProductRepo{
     }
 
     @Override
-    public String updateProduct(int product_id, String product_name, double product_price, double product_favl, double extra_money, String type) {
-        jdbcTemplate.update("update product set pro_name = ?,pro_price = ?,pro_favl=?,extra_money=?,type=? where product_id=? ",
-                product_name, product_price, product_favl, extra_money,type,product_id);
+    public String updateProduct(int product_id, String product_name, double product_price, double product_favl, double extra_money, String type,String detail) {
+        jdbcTemplate.update("update product set pro_name = ?,pro_price = ?,pro_favl=?,extra_money=?,type=?,pro_detail=? where product_id=? ",
+                product_name, product_price, product_favl, extra_money,type,product_id,detail);
         return "成功";
     }
 
     @Override
-    public String addProduct(int store_id, String product_name, double product_price, double product_favl, double extra_money, String type) {
-        jdbcTemplate.update("INSERT INTO product(pro_name,pro_price,pro_favl,extra_money,type,store_id)VALUE (?,?,?,?,?,?);",
-                product_name,product_price,product_favl,extra_money,type,store_id);
-        return "成功";
+    public String addProduct(int store_id, String product_name, double product_price, double product_favl, double extra_money, String type,String detail) {
+        int id = 11221;
+        String image ="http://10.0.2.2:8080/image/product/"+id+".jpg";
+        jdbcTemplate.update("INSERT INTO product(product_id,pro_name,pro_price,pro_favl,extra_money,type,store_id,pro_image,pro_detail)VALUE (?,?,?,?,?,?,?,?,?);",
+                id,product_name,product_price,product_favl,extra_money,type,store_id,image,detail);
+        return ""+id;
     }
 
     @Override

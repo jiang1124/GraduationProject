@@ -19,8 +19,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findStoreProducts(int store_id,String pro_name,int page){
-        return productRepo.findStoreProducts(store_id,pro_name,page);
+    public List<Product> findStoreProducts(int store_id,String key,int page){
+        return productRepo.findStoreProducts(store_id,key,page);
     }
 
     @Override
@@ -79,13 +79,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String updateProduct(int product_id, String product_name, double product_price, double product_favl, double extra_money, String type) {
-        return productRepo.updateProduct(product_id, product_name, product_price, product_favl, extra_money, type);
+    public String updateProduct(int product_id, String product_name, double product_price, double product_favl, double extra_money, String type,String detail) {
+        return productRepo.updateProduct(product_id, product_name, product_price, product_favl, extra_money, type,detail);
     }
 
     @Override
-    public String addProduct(int store_id, String product_name, double product_price, double product_favl, double extra_money, String type) {
-        return productRepo.addProduct(store_id, product_name, product_price, product_favl, extra_money, type);
+    public String addProduct(int store_id, String product_name, double product_price, double product_favl, double extra_money, String type,String detail) {
+        return productRepo.addProduct(store_id, product_name, product_price, product_favl, extra_money, type,detail);
     }
 
     @Override

@@ -1,9 +1,22 @@
-package com.example.shoppingsystem.activity;
+package com.example.shoppingsystem.Activity;
 
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -72,10 +85,6 @@ public class MainActivity extends BaseActivity {
     TextView myNameTV;
     @InjectView(R.id.tv_my_order)
     TextView myOrderTV;
-    @InjectView(R.id.tv_my_grade)
-    TextView myGrade;
-    @InjectView(R.id.tv_my_score)
-    TextView myScore;
     @InjectView(R.id.iv_my_head)
     ImageView myHead;
     @InjectView(R.id.tv_edit_cart)
@@ -104,14 +113,24 @@ public class MainActivity extends BaseActivity {
     TextView RefreshTV;
     @InjectView(R.id.sort_list_view)
     ListView sortListView;
+    @InjectView(R.id.btn_login)
+    Button loginButton;
+    @InjectView(R.id.btn_offline)
+    Button outButton;
 
     private List<Shop> stores;
     private ShoppingCarAdapter shoppingCarAdapter;
-    private boolean isLogin;
+    private boolean isOn;
     private User user;
     private List<Product> productList;
     private List<String> sortData = new ArrayList<>();
     private String Web = ResponseUtil.Web;
+
+
+    public static final int TAKE_PHOTO = 1;
+    public static final int CHOOSE_PHOTO = 2;
+    private String imagePath;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,9 +138,9 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.inject(this);
         Intent intent =getIntent();
-        isLogin = intent.getBooleanExtra("isLogin",false);
+        isOn = intent.getBooleanExtra("isOn",false);
         user = (User) intent.getSerializableExtra("User");
-        LogUtil.d("Main isLogin:","is "+isLogin);
+        LogUtil.d("Main isOn:","is "+isOn);
         initHome(Web+"/home");
     }
 
@@ -132,7 +151,7 @@ public class MainActivity extends BaseActivity {
      */
     @OnClick({R.id.home_button,R.id.search_button,R.id.sort_button,R.id.shopping_cart_button,
             R.id.person_button,R.id.tv_my_address,R.id.tv_my_collection,R.id.tv_my_history,
-            R.id.tv_my_order,R.id.iv_my_head})
+            R.id.tv_my_order,R.id.iv_my_head,R.id.btn_offline,R.id.btn_login})
     public void onClick(View v){
         switch (v.getId()){
             case R.id.search_button:
@@ -154,7 +173,7 @@ public class MainActivity extends BaseActivity {
                 PageSwitch(homeView, shoppingCartView, personView, sortView,"sort");
                 break;
             case R.id.shopping_cart_button:
-                if(isLogin) {
+                if(isOn) {
                     initExpandableListView();
                     initShoppingCart(Web + "/shoppingCart?id=" + user.getUser_id());
                     PageSwitch(homeView, sortView, personView, shoppingCartView,"car");
@@ -167,7 +186,7 @@ public class MainActivity extends BaseActivity {
                 PageSwitch(homeView, sortView, shoppingCartView, personView,"user");
                 break;
             case R.id.tv_my_address:
-                if(isLogin) {
+                if(isOn) {
                     Intent addressIntent = new Intent(MainActivity.this, MyAddressActivity.class);
                     addressIntent.putExtra("User", user);
                     startActivity(addressIntent);
@@ -176,7 +195,7 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_my_collection:
-                if(isLogin) {
+                if(isOn) {
                     Intent collectionIntent = new Intent(MainActivity.this, MyCollectionActivity.class);
                     collectionIntent.putExtra("User", user);
                     startActivity(collectionIntent);
@@ -185,7 +204,7 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_my_history:
-                if(isLogin) {
+                if(isOn) {
                     Intent historyIntent = new Intent(MainActivity.this, MyHistoryActivity.class);
                     historyIntent.putExtra("User", user);
                     startActivity(historyIntent);
@@ -194,7 +213,7 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.tv_my_order:
-                if(isLogin) {
+                if(isOn) {
                     Intent orderIntent = new Intent(MainActivity.this, MyOrderActivity.class);
                     orderIntent.putExtra("User", user);
                     startActivity(orderIntent);
@@ -203,10 +222,29 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.iv_my_head:
-                Intent headIntent = new Intent(MainActivity.this, LoginActivity.class);
-                headIntent.putExtra("User",user);
-                headIntent.putExtra("isOn",false);
-                startActivity(headIntent);
+                if(user!=null) {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+                    } else {
+                        openAlbum();
+                    }
+                }
+                break;
+            case R.id.btn_login:
+                if(user==null) {
+                    Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+                    loginIntent.putExtra("isOn", false);
+                    startActivity(loginIntent);
+                    finish();
+                }
+                break;
+            case R.id.btn_offline:
+                if(user!=null)
+                {
+                    user=null;
+                    isOn=false;
+                    initPerson();
+                }
                 break;
             default:
                 break;
@@ -289,21 +327,25 @@ public class MainActivity extends BaseActivity {
      * 个人页面初始化
      */
     private void initPerson(){
-        if (isLogin){
+        if(user!=null) {
+            outButton.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.GONE);
+        }
+        else{
+            outButton.setVisibility(View.GONE);
+            loginButton.setVisibility(View.VISIBLE);
+        }
+        if (isOn){
             Glide.with(MainActivity.this)
                     .load(user.getHead_image())
-                    .placeholder(R.mipmap.ic_launcher)
+                    .placeholder(R.drawable.head)
                     .into(myHead);
             myNameTV.setText(user.getUser_name());
-            myGrade.setText("等级"+user.getUser_grade());
-            myGrade.setVisibility(View.VISIBLE);
-            myScore.setText("积分"+user.getUser_score()+"");
-            myScore.setVisibility(View.VISIBLE);
         }else{
             myNameTV.setText("未登录");
-            myHead.setImageResource(R.mipmap.ic_launcher);
-            myGrade.setVisibility(View.GONE);
-            myScore.setVisibility(View.GONE);
+            Glide.with(MainActivity.this)
+                    .load(R.drawable.head)
+                    .into(myHead);
         }
     }
 
@@ -531,4 +573,120 @@ public class MainActivity extends BaseActivity {
             }
         }
     };
+
+
+
+
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, CHOOSE_PHOTO); // 打开相册
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openAlbum();
+                } else {
+                    ToastUtil.makeText(this, "You denied the permission");
+                }
+                break;
+            default:
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        // 将拍摄的照片显示出来
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                        myHead.setImageBitmap(bitmap);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    // 判断手机系统版本号
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        // 4.4及以上系统使用这个方法处理图片
+                        imagePath = handleImageOnKitKat(data);
+                    } else {
+                        // 4.4以下系统使用这个方法处理图片
+                        imagePath = handleImageBeforeKitKat(data);
+                    }
+                    String WebAddr = Web + "/filesUpload";
+                    String name = user.getUser_id() + "";
+                    if (imagePath != null) {
+                        Upload.uploadFile(imagePath, WebAddr, name);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @TargetApi(19)
+    private String handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        LogUtil.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1]; // 解析出数字格式的id
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是content类型的Uri，则使用普通方式处理
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是file类型的Uri，直接获取图片路径即可
+            imagePath = uri.getPath();
+        }
+        displayImage(imagePath);
+        return imagePath; // 根据图片路径显示图片
+    }
+
+    private String handleImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri, null);
+        displayImage(imagePath);
+        return imagePath;
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private void displayImage(String imagePath) {
+        if (imagePath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            myHead.setImageBitmap(bitmap);
+        } else {
+            ToastUtil.makeText(this, "failed to get image");
+        }
+    }
+
 }

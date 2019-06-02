@@ -17,7 +17,7 @@ import com.example.shoppingsystem.Entity.Goods;
 import com.example.shoppingsystem.Entity.Shop;
 import com.example.shoppingsystem.Entity.User;
 import com.example.shoppingsystem.R;
-import com.example.shoppingsystem.activity.PayActivity;
+import com.example.shoppingsystem.Activity.PayActivity;
 import com.example.shoppingsystem.util.ToastUtil;
 
 import java.io.Serializable;

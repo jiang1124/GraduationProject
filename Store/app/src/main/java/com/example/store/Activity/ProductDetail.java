@@ -1,8 +1,20 @@
 package com.example.store.Activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.ProgressDialog;
+import android.content.ContentUris;
 import android.content.Intent;
-import android.os.Environment;
-import android.provider.SyncStateContract;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,18 +31,12 @@ import com.example.store.Application.BaseApplication;
 import com.example.store.Entity.Product;
 import com.example.store.Entity.Store;
 import com.example.store.R;
-import com.example.store.Utils.Constants;
 import com.example.store.Utils.HttpUtil;
 import com.example.store.Utils.LogUtil;
 import com.example.store.Utils.ResponseUtil;
 import com.example.store.Utils.ToastUtil;
-import com.example.store.Utils.UploadUtil;
-import com.wildma.pictureselector.ImageUtils;
-import com.wildma.pictureselector.PictureSelector;
+import com.example.store.Utils.Upload;
 
-import org.json.JSONObject;
-
-import java.io.File;
 import java.io.IOException;
 
 import butterknife.ButterKnife;
@@ -53,11 +59,24 @@ public class ProductDetail extends BaseActivity {
     Button sureButton;
     @InjectView(R.id.sp_product_type)
     Spinner productTypeSp;
+    @InjectView(R.id.et_product_detail)
+    EditText productDetail;
+
+    private ProgressDialog progressDialog;
 
     private Product product;
     private Store store;
     private String Web = ResponseUtil.Web;
     String[] type = {"休闲零食","茶水饮料","粮油调味","生活日用","水具酒具","厨房用具","清洁用具"};
+
+    public static final int TAKE_PHOTO = 1;
+
+    public static final int CHOOSE_PHOTO = 2;
+
+    private Uri imageUri;
+
+    private String imagePath;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,33 +116,14 @@ public class ProductDetail extends BaseActivity {
                 submit();
                 break;
             case R.id.iv_upload:
-                /**
-                 * create()方法参数一是上下文，在activity中传activity.this，在fragment中传fragment.this。参数二为请求码，用于结果回调onActivityResult中判断
-                 * selectPicture()方法参数分别为 是否裁剪、裁剪后图片的宽(单位px)、裁剪后图片的高、宽比例、高比例。都不传则默认为裁剪，宽200，高200，宽高比例为1：1。
-                 */
-                PictureSelector
-                        .create(ProductDetail.this, PictureSelector.SELECT_REQUEST_CODE)
-                        .selectPicture(true, 200, 200, 1, 1);
-
+                if (ContextCompat.checkSelfPermission(ProductDetail.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(ProductDetail.this, new String[]{ Manifest.permission. WRITE_EXTERNAL_STORAGE }, 1);
+                } else {
+                    openAlbum();
+                }
                 break;
             default:
                 break;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        /*结果回调*/
-        if (requestCode == PictureSelector.SELECT_REQUEST_CODE) {
-            if (data != null) {
-                String picturePath = data.getStringExtra(PictureSelector.PICTURE_PATH);
-
-//                Glide.with(ProductDetail.this)
-//                        .load(PictureSelector.PICTURE_PATH)
-//                        .error(R.drawable.upload)
-//                        .into(upload);
-            }
         }
     }
 
@@ -151,14 +151,28 @@ public class ProductDetail extends BaseActivity {
         String productFavl = "product_favl="+productFavlET.getText().toString().trim();
         String extraMoney = "extra_money="+extraMoneyET.getText().toString().trim();
         String type = "type="+productTypeSp.getSelectedItem();
+        String detail = "detail="+productDetail.getText().toString();
         if(product!=null){
             String productId = "product_id="+product.getProduct_id();
-            webAddress = Web+"/updateProduct?"+productId+"&"+productName+"&"+productPrice+"&"+productFavl+"&"+extraMoney+"&"+type;
+            webAddress = Web+"/updateProduct?"+productId+"&"+productName+"&"+productPrice+"&"+productFavl+"&"+extraMoney+"&"+type+"&"+detail;
         }else {
-            String storeId = "store_id="+store.getStore_id();
-            webAddress = Web+"/addProductDetail?"+storeId+"&"+productName+"&"+productPrice+"&"+productFavl+"&"+extraMoney+"&"+type;
+            if(imagePath!=null) {
+                String storeId = "store_id=" + store.getStore_id();
+                webAddress = Web + "/addProductDetail?" + storeId + "&" + productName + "&" + productPrice + "&" + productFavl + "&" + extraMoney + "&" + type+"&"+detail;
+            }else {
+                webAddress="fail";
+            }
         }
-        toServer(webAddress);
+        if(webAddress.equals("fail")){
+            ToastUtil.makeText(BaseApplication.getContext(),"请选择图片");
+        }else {
+            progressDialog = new ProgressDialog(ProductDetail.this);
+            progressDialog.setTitle("正在上传信息，请勿关闭");
+            progressDialog.setMessage("上传中");
+            progressDialog.setCancelable(true);
+            progressDialog.show();
+            toServer(webAddress);
+        }
     }
 
     private void toServer(String webAddress){
@@ -166,15 +180,18 @@ public class ProductDetail extends BaseActivity {
             @Override
             public void onResponse(okhttp3.Call call, Response response) throws IOException {
                 String responseText = response.body().string();
-                LogUtil.d("ProductListActivity 回应结果：",responseText);
+                LogUtil.d("ProductDetail 回应结果：",responseText);
                 final String res = responseText;
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(res.equals("add")){
-                            ToastUtil.makeText(BaseApplication.getContext(),"添加成功");
-                        }else if (res.equals("update")){
-                            ToastUtil.makeText(BaseApplication.getContext(),"修改成功");
+                        if(res!=null){
+                            String WebAddr = Web+"/filesUpload";
+                            if(imagePath!=null) {
+                                Upload.uploadFile(imagePath, WebAddr,res);
+                            }
+                            ToastUtil.makeText(BaseApplication.getContext(),"成功");
+                            progressDialog.dismiss();
                         }
                         Intent intent = new Intent(BaseApplication.getContext(),ProductListActivity.class);
                         intent.putExtra("Store",store);
@@ -194,5 +211,112 @@ public class ProductDetail extends BaseActivity {
                 });
             }
         });
+    }
+
+    private void openAlbum() {
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, CHOOSE_PHOTO); // 打开相册
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    openAlbum();
+                } else {
+                    ToastUtil.makeText(this, "You denied the permission");
+                }
+                break;
+            default:
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case TAKE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        // 将拍摄的照片显示出来
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imageUri));
+                        upload.setImageBitmap(bitmap);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case CHOOSE_PHOTO:
+                if (resultCode == RESULT_OK) {
+                    // 判断手机系统版本号
+                    if (Build.VERSION.SDK_INT >= 19) {
+                        // 4.4及以上系统使用这个方法处理图片
+                        imagePath = handleImageOnKitKat(data);
+                    } else {
+                        // 4.4以下系统使用这个方法处理图片
+                        imagePath = handleImageBeforeKitKat(data);
+                    }
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @TargetApi(19)
+    private String handleImageOnKitKat(Intent data) {
+        String imagePath = null;
+        Uri uri = data.getData();
+        LogUtil.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1]; // 解析出数字格式的id
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是content类型的Uri，则使用普通方式处理
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是file类型的Uri，直接获取图片路径即可
+            imagePath = uri.getPath();
+        }
+        displayImage(imagePath);
+        return imagePath; // 根据图片路径显示图片
+    }
+
+    private String handleImageBeforeKitKat(Intent data) {
+        Uri uri = data.getData();
+        String imagePath = getImagePath(uri, null);
+        displayImage(imagePath);
+        return imagePath;
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+    private void displayImage(String imagePath) {
+        if (imagePath != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            upload.setImageBitmap(bitmap);
+        } else {
+            ToastUtil.makeText(this, "failed to get image");
+        }
     }
 }

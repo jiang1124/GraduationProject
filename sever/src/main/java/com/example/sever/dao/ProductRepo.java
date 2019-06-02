@@ -10,7 +10,7 @@ public interface ProductRepo {
 
     public List<Product> findStoreProducts(int store_id,int page);
 
-    public List<Product> findStoreProducts(int store_id,String pro_name,int page);
+    public List<Product> findStoreProducts(int store_id,String key,int page);
 
     public List<Product> findKeyMany(String key,int page);
 
@@ -32,9 +32,9 @@ public interface ProductRepo {
 
     public int deleteHistory(int user_id,int product_id);
 
-    public String updateProduct(int product_id, String product_name,double product_price,double product_favl,double extra_money,String type);
+    public String updateProduct(int product_id, String product_name,double product_price,double product_favl,double extra_money,String type,String detail);
 
-    public String addProduct(int store_id, String product_name,double product_price,double product_favl,double extra_money,String type);
+    public String addProduct(int store_id, String product_name,double product_price,double product_favl,double extra_money,String type,String detail);
 
     public String delProduct(int product_id);
 }

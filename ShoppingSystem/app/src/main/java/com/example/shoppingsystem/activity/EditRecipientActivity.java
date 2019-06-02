@@ -1,4 +1,4 @@
-package com.example.shoppingsystem.activity;
+package com.example.shoppingsystem.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.Entity.Recipient;
 import com.example.shoppingsystem.util.HttpUtil;
 import com.example.shoppingsystem.util.LogUtil;
+import com.example.shoppingsystem.util.ResponseUtil;
 import com.example.shoppingsystem.util.ToastUtil;
 import com.lljjcoder.Interface.OnCityItemClickListener;
 import com.lljjcoder.bean.CityBean;
@@ -49,7 +50,7 @@ public class EditRecipientActivity extends BaseActivity {
     Spinner spinner;
 
     private JDCityPicker cityPicker = new JDCityPicker();
-    private String Web = "http://10.0.2.2:8080";
+    private String Web = ResponseUtil.Web;
     private ActionBar actionBar;
     private Recipient recipient;
     private User user;

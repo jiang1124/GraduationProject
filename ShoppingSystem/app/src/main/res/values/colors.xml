@@ -15,7 +15,7 @@
 
     <color name="colorBlack">#000000</color>
 
-    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhite">#ffffff</color>
     <!--主色-->
     <color name="colorMain">#45a989</color>
     <!--不可点击-->

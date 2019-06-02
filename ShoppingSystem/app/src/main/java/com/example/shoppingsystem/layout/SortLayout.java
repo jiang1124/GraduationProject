@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.shoppingsystem.R;
-import com.example.shoppingsystem.activity.SearchActivity;
+import com.example.shoppingsystem.Activity.SearchActivity;
 import com.example.shoppingsystem.Application.BaseApplication;
 
 import java.util.Arrays;

@@ -1,16 +1,16 @@
-package com.example.shoppingsystem.activity;
+package com.example.shoppingsystem.Activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
+import com.example.shoppingsystem.Application.BaseApplication;
 import com.example.shoppingsystem.Entity.User;
 import com.example.shoppingsystem.R;
 import com.example.shoppingsystem.util.HttpUtil;
@@ -23,150 +23,129 @@ import java.io.IOException;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
-import okhttp3.Call;
 import okhttp3.Response;
 
-public class LoginActivity extends BaseActivity implements View.OnClickListener{
-
-    @InjectView(R.id.et_login_account)
-    EditText accountInputEdit;
-    @InjectView(R.id.et_login_password)
-    EditText passwordInputEdit;
-    @InjectView(R.id.cb_remember_pass)
-    CheckBox rememberPass;
+public class LoginActivity extends BaseActivity {
     @InjectView(R.id.btn_login)
     Button loginButton;
-    @InjectView(R.id.btn_login_to_registered)
-    Button loginToRegisteredButton;
-    @InjectView(R.id.et_registered_account)
-    EditText registeredAccountInputEdit;
-    @InjectView(R.id.et_registered_password)
-    EditText registeredPasswordInputEdit;
-    @InjectView(R.id.cb_registered_remember_pass)
-    CheckBox registeredRememberPass;
-    @InjectView(R.id.btn_registered)
-    Button registeredButton;
-    @InjectView(R.id.btn_registered_to_login)
-    Button RegisteredToLoginButton;
-    @InjectView(R.id.tb_login)
-    Toolbar tbLogin;
-    @InjectView(R.id.ll_login)
-    LinearLayout loginLinearLayout;
-    @InjectView(R.id.ll_registered)
-    LinearLayout registeredLinearLayout;
+    @InjectView(R.id.et_user_name)
+    EditText accountEdit;
+    @InjectView(R.id.et_password)
+    EditText passwordEdit;
+    @InjectView(R.id.cb_rm_pass)
+    CheckBox rememberCheckBox;
+    @InjectView(R.id.cb_auto_login)
+    CheckBox autoLoginCheckButton;
 
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    private String account = "";
+    private String password = "";
     private User user;
-    private boolean isLogin = false;
+    private String Web = ResponseUtil.Web;
     private boolean isOn = true;
-    private String type;
-    private String Web = "http://10.0.2.2:8080";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.inject(this);
-        setSupportActionBar(tbLogin);
-
-        Intent intentGet =getIntent();
-        isOn = intentGet.getBooleanExtra("isOn",true);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         pref = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isRemember = pref.getBoolean("remember_password",false);
-        if(isRemember&&isOn) {
-            //将帐号和密码都设置到文本框中
-            String account = pref.getString("account", "");
-            String password = pref.getString("password", "");
-            accountInputEdit.setText(account);
-            passwordInputEdit.setText(password);
-            rememberPass.setChecked(true);
-            String webAddress = Web+"/login/verification?name=" + account + "&password=" + password;
-            getLoginAnswer(webAddress);
+        boolean isRemember = pref.getBoolean("rememberPassword",false);
+        boolean isAutoLogin = pref.getBoolean("autoLogin",false);
+        Intent getIntent = getIntent();
+        isOn = getIntent.getBooleanExtra("isOn",true);
+        user = (User) getIntent.getSerializableExtra("User");
+        if(user!=null){
+            accountEdit.setText(user.getUser_name());
+            passwordEdit.setText(user.getUser_password());
+        }else if(isRemember){
+            account = pref.getString("account","");
+            password = pref.getString("password","");
+            accountEdit.setText(account);
+            passwordEdit.setText(password);
+            rememberCheckBox.setChecked(true);
+            if(isAutoLogin&&!account.equals("")&&!password.equals("")) {
+                autoLoginCheckButton.setChecked(true);
+            }
+        }
+        if(isAutoLogin&&isOn) {
+            initUser(Web + "/login/verification?account=" + accountEdit.getText().toString().trim() + "&password=" + passwordEdit.getText().toString().trim());
+        }else if(!isAutoLogin&&isOn){
+            Intent intentMain = new Intent(BaseApplication.getContext(), MainActivity.class);
+            startActivity(intentMain);
+            finish();
         }
     }
 
-    @OnClick({R.id.btn_login,R.id.btn_login_to_registered,R.id.btn_registered_to_login,R.id.btn_registered})
-    public void onClick(View v){
-        switch (v.getId()) {
+    @OnClick({R.id.btn_login,R.id.tv_re})
+    public void onClick(View view){
+        switch (view.getId()) {
             case R.id.btn_login:
-                String account = accountInputEdit.getText().toString();
-                String password = passwordInputEdit.getText().toString();
-                String webAddress =Web+"/login/verification?name="+account+"&password="+password;
-                type="login";
-                getLoginAnswer(webAddress);
+                account = accountEdit.getText().toString().trim();
+                password = passwordEdit.getText().toString().trim();
+                initUser(Web + "/login/verification?account=" + account+"&password="+password);
                 break;
-            case R.id.btn_registered:
-                String registeredAccount = accountInputEdit.getText().toString();
-                String registeredPassword = passwordInputEdit.getText().toString();
-                String netAddress = Web+"/login/registered?name="+registeredAccount+"&password="+registeredPassword;
-                type="registered";
-                getLoginAnswer(netAddress);
-                break;
-            case R.id.btn_login_to_registered:
-                loginLinearLayout.setVisibility(View.GONE);
-                registeredLinearLayout.setVisibility(View.VISIBLE);
-                break;
-            case R.id.btn_registered_to_login:
-                loginLinearLayout.setVisibility(View.VISIBLE);
-                registeredLinearLayout.setVisibility(View.GONE);
+            case R.id.tv_re:
+                Intent intentRegister = new Intent(BaseApplication.getContext(),RegisterActivity.class);
+                startActivity(intentRegister);
                 break;
             default:
                 break;
         }
     }
 
-    public void getLoginAnswer(final String webAddress){
+    private void Login() {
+        editor = pref.edit();
+        if (rememberCheckBox.isChecked()) {
+            if (autoLoginCheckButton.isChecked()) {
+                editor.putBoolean("autoLogin", true);
+            }
+            editor.putBoolean("rememberPassword", true);
+            editor.putString("account", account);
+            editor.putString("password", password);
+        } else {
+            editor.clear();
+        }
+        editor.apply();
+        Intent intentMain = new Intent(BaseApplication.getContext(), MainActivity.class);
+        intentMain.putExtra("User",user);
+        isOn = true;
+        intentMain.putExtra("isOn",isOn);
+        startActivity(intentMain);
+        finish();
+    }
+
+    public void initUser(String webAddress){
+        LogUtil.d("url：",webAddress);
         HttpUtil.sendOkHttpRequest(webAddress,new okhttp3.Callback(){
             @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                LogUtil.d("注册/登陆地址：",webAddress);
-                final String responseText = response.body().string();
-                LogUtil.d("loginHttp:",responseText);
+            public void onResponse(okhttp3.Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                LogUtil.d("LoginActivity 回应结果：",responseText);
                 user = ResponseUtil.handleUser(responseText);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(user!=null){
-                            isLogin = true;
-                            editor = pref.edit();
-                            if (rememberPass.isChecked()) {
-                                editor.putBoolean("remember_password", true);
-                                editor.putString("account", user.getUser_name());
-                                editor.putString("password", user.getUser_password());
-                            } else {
-                                editor.clear();
-                            }
-                            editor.apply();
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            intent.putExtra("isLogin",isLogin);
-                            intent.putExtra("User",user);
-                            startActivity(intent);
-                            finish();
-                        }
-                        else {
-                            if(type == "login") {
-                                ToastUtil.makeText(LoginActivity.this, "帐号或密码错误");
-                            }else {
-                                ToastUtil.makeText(LoginActivity.this, "错误");
-                            }
+                        if(user != null){
+                            Login();
+                        }else {
+                            ToastUtil.makeText(BaseApplication.getContext(),"账号或密码出错");
                         }
                     }
                 });
             }
-
             @Override
-            public void onFailure(Call call, IOException e) {
+            public void onFailure(okhttp3.Call call, IOException e) {
                 e.printStackTrace();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        intent.putExtra("isLogin",isLogin);
-                        intent.putExtra("User",user);
-                        startActivity(intent);
-                        finish();
-                        ToastUtil.makeText(LoginActivity.this, "网络出错");
+                        ToastUtil.makeText(BaseApplication.getContext(), "网络出错");
                     }
                 });
             }
